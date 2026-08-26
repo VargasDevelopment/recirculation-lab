@@ -54,3 +54,56 @@ metadata.
 Runtime and development dependencies remain under their own licenses. Notably,
 PyTorch is BSD-3-Clause, Transformers/Datasets/Hugging Face Hub are Apache-2.0,
 and this repository does not redistribute those packages.
+
+## Capability evaluation harness and benchmarks
+
+The Gemma 3 1B IT capability milestone uses EleutherAI's
+`lm-evaluation-harness` at commit
+`dd417662e5bda6a247489ec28d2ff46a45d1c42c` as an installed dependency. The
+harness is MIT-licensed; no harness source is copied into this repository.
+
+The committed capability result artifacts contain the selected task documents,
+canonical rendered prompts, targets, and model responses emitted by the harness.
+They are retained for paired auditability under their upstream terms:
+
+- MMLU-Pro: Apache-2.0, TIGER-AI-Lab. Dataset revision
+  `b189ec765aa7ed75c8acfea42df31fdae71f97be`.
+  <https://github.com/TIGER-AI-Lab/MMLU-Pro>
+- GSM8K: MIT, Copyright (c) 2021 OpenAI. Dataset revision
+  `740312add88f781978c0658806c59bc2815b9866`.
+  <https://github.com/openai/grade-school-math>
+- IFEval: Apache-2.0, Google Research Authors. Dataset revision
+  `966cd89545d6b6acfd7638bc708b98261ca58e84`.
+  <https://github.com/google-research/google-research/tree/master/instruction_following_eval>
+- HellaSwag: MIT, Copyright (c) 2019 Rowan Zellers. Dataset revision
+  `218ec52e09a7e7462a5400043bb9a69a41d06b76`.
+  <https://github.com/rowanz/hellaswag>
+
+The repository license applies only to repository-authored work and does not
+relicense benchmark material embedded in the result records.
+
+### MIT notices
+
+Copyright (c) 2020 EleutherAI
+
+Copyright (c) 2021 OpenAI
+
+Copyright (c) 2019 Rowan Zellers
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
+
+The above copyright notices and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

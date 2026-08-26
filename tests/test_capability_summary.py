@@ -52,6 +52,12 @@ def _result(condition: str, values: list[float]) -> dict:
         "harness_configs": {},
         "harness_versions": {},
         "harness_n_shot": {},
+        "harness_results": {
+            "fixture_task": {
+                "sample_len": len(values),
+                "acc,none": sum(values) / len(values),
+            }
+        },
         "samples": {"fixture_task": samples},
         "call_events": events,
         "verification": {

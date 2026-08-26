@@ -53,3 +53,25 @@ No model weights, Hugging Face caches, or full PG-19 dataset files are committed
 The Gemma checkpoint is governed by Google's Gemma terms. The original PG-19
 benchmark repository declares Apache-2.0; the pinned mirror declares no separate
 license metadata. See `THIRD_PARTY_NOTICES.md` for the release boundary.
+
+## Downstream capability milestone
+
+- Instruction-tuned model:
+  <https://huggingface.co/google/gemma-3-1b-it>, revision
+  `dcc83ea841ab6100d6b47a070329e1ba4cf78752`
+- Weight-file SHA-256:
+  `3d4ef8d71c14db7e448a09ebe891cfb6bf32c57a9b44499ae0d1c098e48516b6`
+- EleutherAI `lm-evaluation-harness`:
+  <https://github.com/EleutherAI/lm-evaluation-harness>, commit
+  `dd417662e5bda6a247489ec28d2ff46a45d1c42c`
+- MMLU-Pro: <https://github.com/TIGER-AI-Lab/MMLU-Pro>
+- GSM8K: <https://github.com/openai/grade-school-math>
+- IFEval:
+  <https://github.com/google-research/google-research/tree/master/instruction_following_eval>
+- HellaSwag: <https://github.com/rowanz/hellaswag>
+
+Exact task versions, Hub dataset commits, selected document identifiers/hashes,
+chat-template hash, seeds, and canonical harness settings are frozen in
+`experiments/capability_locked_manifest.json`. The five-example-per-task smoke
+artifacts are plumbing evidence only and are kept separate under
+`results/capability_smoke/`.

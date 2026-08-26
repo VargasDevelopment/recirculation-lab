@@ -139,6 +139,23 @@ def _classify_metric(delta_pp: float, favorable: int, unfavorable: int) -> str:
     return "MIXED / INCONCLUSIVE"
 
 
+def _harness_metric_score(result: dict[str, Any], metric: str) -> float:
+    aggregate = result["harness_results"].get(result["benchmark"])
+    if aggregate is not None and metric in aggregate:
+        return float(aggregate[metric])
+    weighted_sum = 0.0
+    sample_count = 0
+    for task_result in result["harness_results"].values():
+        if metric not in task_result:
+            continue
+        task_samples = int(task_result["sample_len"])
+        weighted_sum += float(task_result[metric]) * task_samples
+        sample_count += task_samples
+    if sample_count == 0:
+        raise ValueError(f"canonical harness result omits metric {metric}")
+    return weighted_sum / sample_count
+
+
 def _validate_pair(
     benchmark: str,
     baseline: dict[str, Any],
@@ -242,6 +259,14 @@ def _summarize_metric(
     pairs = [(ordinary[key][1], recurrent[key][1]) for key in ordinary]
     baseline_score = _score([pair[0] for pair in pairs])
     recirculation_score = _score([pair[1] for pair in pairs])
+    baseline_harness_score = _harness_metric_score(baseline, metric)
+    recirculation_harness_score = _harness_metric_score(recirculation, metric)
+    if not math.isclose(baseline_score, baseline_harness_score, abs_tol=1e-12):
+        raise ValueError(f"sample-derived baseline score disagrees with {metric}")
+    if not math.isclose(
+        recirculation_score, recirculation_harness_score, abs_tol=1e-12
+    ):
+        raise ValueError(f"sample-derived recirculation score disagrees with {metric}")
     paired_values = [
         (baseline_value, recirculation_value)
         for baseline, recirculation in pairs
@@ -259,6 +284,7 @@ def _summarize_metric(
         "paired_scored_units": len(paired_values),
         "baseline_score": baseline_score,
         "recirculation_score": recirculation_score,
+        "canonical_harness_scores_reproduced_from_samples": True,
         "absolute_delta_percentage_points": delta_pp,
         "relative_delta_percent": (
             None
@@ -295,6 +321,8 @@ def _changed_examples(
                 "doc_hash": baseline_sample["doc_hash"],
                 "prompt_hash": baseline_sample["prompt_hash"],
                 "target_hash": baseline_sample["target_hash"],
+                "document": baseline_sample["doc"],
+                "target": baseline_sample["target"],
                 "direction": (
                     "baseline_wrong_to_recirculation_right"
                     if baseline_value < recirculation_value
