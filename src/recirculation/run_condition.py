@@ -112,7 +112,7 @@ def run(condition: str, manifest_path: Path) -> dict:
     observed_tensor_bytes = torch.mps.current_allocated_memory()
 
     with torch.inference_mode():
-        for window in manifest["windows"]:
+        for ordinal, window in enumerate(manifest["windows"], start=1):
             input_ids = torch.tensor(
                 [window["token_ids"]], dtype=torch.long, device=DEVICE_NAME
             )
@@ -144,6 +144,14 @@ def run(condition: str, manifest_path: Path) -> dict:
                     "perplexity": perplexity(nll, predicted_tokens),
                     "runtime_seconds": window_seconds,
                 }
+            )
+            print(
+                f"{condition}: window {ordinal}/{len(manifest['windows'])} "
+                f"document={window['document_index']} "
+                f"window={window['window_index_within_document']} "
+                f"runtime={window_seconds:.3f}s",
+                file=sys.stderr,
+                flush=True,
             )
             del output, nll_tensor, input_ids, attention_mask
 
