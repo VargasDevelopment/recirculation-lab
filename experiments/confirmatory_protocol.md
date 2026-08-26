@@ -1,8 +1,11 @@
 # Locked confirmatory protocol: unseen PG-19 books 2–9
 
 This protocol was written before evaluating either condition on the confirmatory
-sample. It extends commit `4f6760e` without changing its model, mechanism, or
-scoring implementation.
+sample. It originally extended local commit `4f6760e` without changing its model,
+mechanism, or scoring implementation. For public release, history was rewritten
+solely to remove an unlicensed reference-derived source file; the equivalent
+public exploratory commit is `91e35dd` and this protocol remains visible in its
+pre-result commit `e138246`.
 
 ## Locked sample
 
