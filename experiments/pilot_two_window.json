@@ -1,0 +1,13 @@
+{
+  "status": "pilot_superseded_by_locked_10_window_comparison",
+  "selection_rule": "first 1024-token window from each of the first two PG-19 test documents",
+  "evaluated_predicted_tokens": 2046,
+  "window_hashes": [
+    "f8ad0390e738305e0df6d8b6f5a676fee3a25cd64794050268954ec1d3d66e93",
+    "5d3da72afade194f448724f3da3a2dd8015b359c85b6e8bce1d64642c9255e80"
+  ],
+  "baseline_perplexity": 19.200784975313894,
+  "recirculation_perplexity": 19.276788085098193,
+  "percent_perplexity_reduction": -0.3958333468241786,
+  "decision": "Extend exactly once by a content-blind rule to the first five windows from the same two documents, then stop regardless of direction; do not tune mechanism parameters."
+}

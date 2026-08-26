@@ -1,0 +1,774 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#171816">
+  <meta name="description" content="A local Apple Silicon reproduction of fixed recirculation on frozen Gemma 3 1B PT.">
+  <meta property="og:title" content="Recirculation // M3 Field Report">
+  <meta property="og:description" content="Frozen Gemma 3 1B PT. Same tokens. 13.676% lower perplexity with fixed recirculation.">
+  <meta property="og:image" content="./og.png">
+  <meta property="og:image:alt" content="Pixel-art desert field report: 13.676% lower perplexity, PASS.">
+  <meta property="og:type" content="article">
+  <title>Recirculation // M3 Field Report</title>
+  <style>
+    :root {
+      --ink: #171816;
+      --ink-2: #20221f;
+      --ink-3: #2a2c27;
+      --sand: #e5b866;
+      --sand-2: #b98442;
+      --bone: #f2e5c3;
+      --rust: #c34f2d;
+      --rust-dark: #75311f;
+      --cyan: #7ee1d2;
+      --cyan-dark: #287d77;
+      --lime: #c7d66d;
+      --muted: #a69d86;
+      --line: #4b493e;
+      --shadow: #090a09;
+      --pixel: 4px;
+      --max: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--bone);
+      background:
+        linear-gradient(rgba(23, 24, 22, .94), rgba(23, 24, 22, .98)),
+        repeating-linear-gradient(90deg, transparent 0 31px, #423922 32px 33px),
+        repeating-linear-gradient(0deg, transparent 0 31px, #423922 32px 33px),
+        #171816;
+      font-family: ui-monospace, "SFMono-Regular", Menlo, Monaco, Consolas, monospace;
+      line-height: 1.55;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      pointer-events: none;
+      opacity: .12;
+      background: repeating-linear-gradient(0deg, transparent 0 3px, #000 3px 4px);
+      mix-blend-mode: multiply;
+    }
+
+    a { color: var(--cyan); text-underline-offset: 4px; }
+    a:hover { color: #b6fff4; }
+
+    code {
+      color: var(--cyan);
+      background: #101210;
+      padding: .12rem .32rem;
+      border: 1px solid #353933;
+    }
+
+    .wrap {
+      width: min(calc(100% - 32px), var(--max));
+      margin-inline: auto;
+    }
+
+    .rail {
+      min-height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: var(--pixel) solid #080908;
+      background: var(--sand);
+      color: #292015;
+      box-shadow: inset 0 -4px 0 var(--sand-2);
+      font-size: .76rem;
+      font-weight: 900;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+
+    .rail .wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding-block: 10px 13px;
+    }
+
+    .rail-status::before {
+      content: "";
+      display: inline-block;
+      width: 9px;
+      height: 9px;
+      margin-right: 8px;
+      background: var(--cyan-dark);
+      box-shadow: 0 0 0 3px rgba(40, 125, 119, .25);
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 74px 0 62px;
+      border-bottom: 4px solid var(--line);
+      background:
+        radial-gradient(circle at 86% 16%, var(--rust) 0 54px, #8e3924 55px 63px, transparent 64px),
+        linear-gradient(165deg, transparent 0 55%, rgba(195, 79, 45, .18) 55.2% 70%, transparent 70.2%),
+        linear-gradient(15deg, transparent 0 66%, rgba(229, 184, 102, .08) 66.2% 78%, transparent 78.2%);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 18px;
+      background: repeating-linear-gradient(135deg, var(--sand) 0 12px, #191a18 12px 24px);
+      border-top: 4px solid #080908;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.55fr) minmax(290px, .75fr);
+      gap: clamp(28px, 6vw, 78px);
+      align-items: end;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 20px;
+      color: var(--sand);
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before,
+    .eyebrow::after {
+      content: "";
+      width: 18px;
+      height: 4px;
+      background: currentColor;
+      box-shadow: 8px 8px 0 var(--rust);
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+
+    h1 {
+      margin-bottom: 24px;
+      max-width: 860px;
+      color: var(--bone);
+      font-size: clamp(2.6rem, 7vw, 6.2rem);
+      line-height: .9;
+      letter-spacing: -.075em;
+      text-transform: uppercase;
+      text-shadow: 4px 4px 0 var(--rust-dark), 8px 8px 0 #090a09;
+    }
+
+    h1 span { color: var(--sand); }
+
+    .lede {
+      max-width: 760px;
+      margin-bottom: 0;
+      color: #c9c1aa;
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      font-size: clamp(1.03rem, 2vw, 1.3rem);
+      line-height: 1.65;
+    }
+
+    .pass-plate {
+      position: relative;
+      padding: 26px;
+      border: 4px solid #090a09;
+      background: var(--sand);
+      color: #231d13;
+      box-shadow:
+        inset 6px 6px 0 #f1d18f,
+        inset -8px -8px 0 #8b632f,
+        10px 10px 0 #090a09;
+      transform: rotate(1.2deg);
+    }
+
+    .pass-plate::before,
+    .pass-plate::after {
+      content: "+";
+      position: absolute;
+      color: #6e4d28;
+      font-size: 1.2rem;
+      font-weight: 900;
+    }
+    .pass-plate::before { top: 8px; left: 11px; }
+    .pass-plate::after { right: 11px; bottom: 8px; }
+
+    .pass-kicker {
+      font-size: .7rem;
+      font-weight: 900;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .pass-word {
+      display: block;
+      margin: 8px 0 5px;
+      font-size: clamp(3.3rem, 8vw, 5.4rem);
+      font-weight: 1000;
+      line-height: .9;
+      letter-spacing: -.08em;
+      text-shadow: 3px 3px 0 #f3d695;
+    }
+
+    .pass-note { font-size: .76rem; font-weight: 800; }
+
+    main { padding: 64px 0 90px; }
+
+    .section { margin-top: 78px; }
+    .section:first-child { margin-top: 0; }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: 92px minmax(0, 1fr);
+      gap: 20px;
+      align-items: center;
+      margin-bottom: 28px;
+    }
+
+    .section-index {
+      display: grid;
+      place-items: center;
+      height: 54px;
+      border: 3px solid #080908;
+      background: var(--rust);
+      color: var(--bone);
+      box-shadow: inset 4px 4px 0 #e07048, inset -4px -4px 0 #6e2a1b, 5px 5px 0 #080908;
+      font-size: .8rem;
+      font-weight: 900;
+      letter-spacing: .1em;
+    }
+
+    h2 {
+      margin-bottom: 3px;
+      color: var(--sand);
+      font-size: clamp(1.45rem, 3vw, 2.2rem);
+      letter-spacing: -.03em;
+      text-transform: uppercase;
+    }
+
+    .section-sub {
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: .82rem;
+      letter-spacing: .04em;
+    }
+
+    .panel {
+      position: relative;
+      border: 3px solid #090a09;
+      background: var(--ink-2);
+      box-shadow: inset 4px 4px 0 #343730, inset -5px -5px 0 #111210, 7px 7px 0 #090a09;
+    }
+
+    .panel::before {
+      content: "";
+      position: absolute;
+      top: 9px;
+      right: 9px;
+      width: 7px;
+      height: 7px;
+      background: var(--line);
+      box-shadow: -1px -1px 0 #090a09, 0 0 0 2px #30332e;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+
+    .metric { padding: 22px; min-height: 160px; }
+
+    .metric-label {
+      display: block;
+      min-height: 2.6em;
+      color: var(--muted);
+      font-size: .67rem;
+      font-weight: 800;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+
+    .metric-value {
+      display: block;
+      margin: 12px 0 3px;
+      color: var(--bone);
+      font-size: clamp(1.7rem, 4vw, 2.7rem);
+      font-weight: 1000;
+      line-height: 1;
+      letter-spacing: -.06em;
+    }
+
+    .metric-value.good { color: var(--lime); }
+    .metric-value.cost { color: var(--rust); }
+    .metric-unit { color: var(--sand-2); font-size: .72rem; }
+
+    .chart-panel {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 34px;
+      margin-top: 20px;
+      padding: clamp(24px, 5vw, 44px);
+    }
+
+    .chart-title {
+      margin-bottom: 28px;
+      color: var(--bone);
+      font-size: .78rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .bar-row { margin-top: 22px; }
+    .bar-meta { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 8px; font-size: .76rem; }
+    .bar-meta strong { color: var(--bone); }
+
+    .bar-track {
+      height: 44px;
+      padding: 5px;
+      border: 3px solid #090a09;
+      background: #0f100f;
+      box-shadow: inset 3px 3px 0 #050605;
+    }
+
+    .bar-fill {
+      height: 100%;
+      background: repeating-linear-gradient(90deg, var(--rust) 0 14px, #a93c25 14px 18px);
+      box-shadow: inset 0 4px 0 #df724e, inset 0 -4px 0 #6d291c;
+    }
+
+    .bar-fill.recirc {
+      width: 86.324%;
+      background: repeating-linear-gradient(90deg, var(--cyan-dark) 0 14px, #236662 14px 18px);
+      box-shadow: inset 0 4px 0 var(--cyan), inset 0 -4px 0 #144a47;
+    }
+
+    .delta-block {
+      align-self: stretch;
+      display: grid;
+      align-content: center;
+      padding: 28px;
+      border-left: 4px dashed var(--line);
+      text-align: center;
+    }
+
+    .delta-number {
+      color: var(--lime);
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      font-weight: 1000;
+      line-height: .9;
+      letter-spacing: -.09em;
+      text-shadow: 4px 4px 0 #3d451b;
+    }
+
+    .delta-label { margin-top: 14px; color: var(--muted); font-size: .75rem; text-transform: uppercase; letter-spacing: .1em; }
+    .paper-tag { margin-top: 18px; color: var(--sand); font-size: .76rem; }
+
+    .mechanism {
+      padding: clamp(24px, 4vw, 40px);
+      overflow: hidden;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: 90px 1fr 110px 1fr 90px;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .flow-node {
+      min-height: 74px;
+      display: grid;
+      place-items: center;
+      padding: 12px;
+      border: 3px solid #090a09;
+      background: var(--ink-3);
+      box-shadow: inset 3px 3px 0 #42463f, inset -3px -3px 0 #171916;
+      color: var(--bone);
+      text-align: center;
+      font-size: .72rem;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .flow-node.hot { background: var(--rust-dark); color: #ffd8c8; }
+    .flow-node.cool { background: #174a47; color: #bafff6; }
+
+    .flow-arrow {
+      height: 10px;
+      background: repeating-linear-gradient(90deg, var(--sand) 0 10px, transparent 10px 14px);
+      position: relative;
+    }
+    .flow-arrow::after {
+      content: "";
+      position: absolute;
+      top: -7px;
+      right: -1px;
+      border-left: 12px solid var(--sand);
+      border-top: 12px solid transparent;
+      border-bottom: 12px solid transparent;
+    }
+
+    .mix-box {
+      margin-top: 28px;
+      padding: 18px;
+      border: 2px dashed var(--sand-2);
+      background: #151613;
+      color: #cbc1a8;
+      font-size: .79rem;
+      text-align: center;
+    }
+
+    .mix-box strong { color: var(--cyan); }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .ledger { padding: 26px; }
+    .ledger h3 { color: var(--sand); font-size: .83rem; letter-spacing: .1em; text-transform: uppercase; }
+    .ledger dl { margin: 0; }
+    .ledger-row {
+      display: grid;
+      grid-template-columns: minmax(120px, .8fr) minmax(0, 1.3fr);
+      gap: 18px;
+      padding: 11px 0;
+      border-bottom: 1px dashed #49483e;
+    }
+    .ledger-row:last-child { border: 0; }
+    dt { color: var(--muted); font-size: .7rem; text-transform: uppercase; letter-spacing: .07em; }
+    dd { margin: 0; color: var(--bone); font-size: .78rem; overflow-wrap: anywhere; }
+
+    .checks {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .check { padding: 22px; }
+    .check::after {
+      content: "OK";
+      display: inline-block;
+      margin-top: 18px;
+      padding: 4px 8px;
+      background: var(--cyan-dark);
+      color: #c9fff8;
+      border: 2px solid #090a09;
+      box-shadow: inset 2px 2px 0 var(--cyan);
+      font-size: .66rem;
+      font-weight: 1000;
+      letter-spacing: .12em;
+    }
+    .check strong { display: block; color: var(--bone); font-size: .82rem; text-transform: uppercase; }
+    .check p { margin: 8px 0 0; color: var(--muted); font-size: .73rem; }
+
+    .cost-grid {
+      display: grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap: 20px;
+    }
+
+    .cost-main { padding: 30px; }
+    .cost-big { color: var(--rust); font-size: clamp(3rem, 8vw, 6.8rem); font-weight: 1000; line-height: .9; letter-spacing: -.08em; }
+    .cost-copy { max-width: 680px; margin: 20px 0 0; color: #c1b8a0; font-family: ui-sans-serif, system-ui, sans-serif; }
+
+    .gauge { padding: 26px; display: grid; align-content: center; }
+    .gauge-track { height: 28px; border: 3px solid #090a09; padding: 4px; background: #111; }
+    .gauge-fill { width: 27.6%; height: 100%; background: var(--rust); box-shadow: inset 0 3px 0 #e97c57; }
+    .gauge p { margin: 12px 0 0; color: var(--muted); font-size: .72rem; }
+
+    details {
+      margin-top: 12px;
+      border: 3px solid #090a09;
+      background: var(--ink-2);
+      box-shadow: inset 3px 3px 0 #343730;
+    }
+    summary {
+      cursor: pointer;
+      padding: 18px 22px;
+      color: var(--sand);
+      font-size: .78rem;
+      font-weight: 900;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    details[open] summary { border-bottom: 2px dashed var(--line); }
+    .detail-body { padding: 20px 24px; color: #bdb49d; font-family: ui-sans-serif, system-ui, sans-serif; font-size: .91rem; }
+    .detail-body p:last-child { margin-bottom: 0; }
+
+    .next {
+      padding: clamp(28px, 6vw, 54px);
+      border-color: var(--rust-dark);
+      background:
+        linear-gradient(135deg, rgba(195, 79, 45, .16), transparent 46%),
+        var(--ink-2);
+    }
+    .next-label { color: var(--rust); font-size: .72rem; font-weight: 1000; letter-spacing: .14em; text-transform: uppercase; }
+    .next h3 { max-width: 900px; margin: 12px 0 14px; color: var(--bone); font-size: clamp(1.5rem, 4vw, 2.7rem); line-height: 1.15; }
+    .next p { max-width: 760px; margin-bottom: 0; color: var(--muted); }
+
+    footer {
+      padding: 36px 0 48px;
+      border-top: 4px solid #090a09;
+      background: var(--sand);
+      color: #2c2114;
+      box-shadow: inset 0 8px 0 var(--sand-2);
+    }
+    .footer-grid { display: flex; justify-content: space-between; gap: 24px; align-items: end; }
+    .footer-mark { font-size: 1.25rem; font-weight: 1000; letter-spacing: -.04em; text-transform: uppercase; }
+    .footer-small { max-width: 620px; margin: 8px 0 0; font-size: .7rem; }
+    footer a { color: #433019; font-weight: 900; }
+
+    @media (max-width: 900px) {
+      .hero-grid, .chart-panel, .cost-grid { grid-template-columns: 1fr; }
+      .metrics { grid-template-columns: repeat(2, 1fr); }
+      .checks { grid-template-columns: repeat(2, 1fr); }
+      .delta-block { border-left: 0; border-top: 4px dashed var(--line); }
+      .flow { grid-template-columns: 1fr; }
+      .flow-arrow { width: 10px; height: 26px; margin: auto; background: repeating-linear-gradient(0deg, var(--sand) 0 8px, transparent 8px 12px); }
+      .flow-arrow::after { top: auto; bottom: -8px; right: -7px; border-left: 12px solid transparent; border-right: 12px solid transparent; border-top: 12px solid var(--sand); border-bottom: 0; }
+    }
+
+    @media (max-width: 620px) {
+      .wrap { width: min(calc(100% - 20px), var(--max)); }
+      .rail .wrap, .footer-grid { align-items: flex-start; flex-direction: column; }
+      .hero { padding-top: 52px; }
+      .pass-plate { transform: none; }
+      .metrics, .two-col, .checks { grid-template-columns: 1fr; }
+      .section-head { grid-template-columns: 62px 1fr; gap: 12px; }
+      .section-index { height: 44px; }
+      .ledger-row { grid-template-columns: 1fr; gap: 4px; }
+    }
+
+    @media print {
+      :root { --ink: #fff; --ink-2: #fff; --ink-3: #f4efe5; --bone: #171816; --muted: #4d4c45; --shadow: #777; }
+      body { background: #fff; color: #171816; }
+      body::before, .hero::after { display: none; }
+      .hero { background: #fff; }
+      .panel { break-inside: avoid; box-shadow: none; border-color: #555; }
+      .rail, footer { background: #e5b866; }
+      a { color: #155d59; }
+    }
+  </style>
+</head>
+<body>
+  <header class="rail">
+    <div class="wrap">
+      <span>FIELD REPORT // RC-1B-PT // 2608.17981</span>
+      <span class="rail-status">M3 MAX // LOCAL RUN VERIFIED</span>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <div class="eyebrow">Frozen weights / live feedback</div>
+        <h1>Does the loop <span>pay?</span></h1>
+        <p class="lede">On identical Gemma 3 1B PT weights and identical PG-19 tokens, the paper's fixed recirculation mechanism cut perplexity by 13.676% on this Apple Silicon field run.</p>
+      </div>
+      <aside class="pass-plate" aria-label="Reproduction status: pass">
+        <span class="pass-kicker">Reproduction status</span>
+        <strong class="pass-word">PASS</strong>
+        <span class="pass-note">Direction reproduced. Magnitude within 0.734 percentage points of paper PG-19.</span>
+      </aside>
+    </div>
+  </section>
+
+  <main class="wrap">
+    <section class="section" aria-labelledby="result-title">
+      <div class="section-head">
+        <div class="section-index">01</div>
+        <div><h2 id="result-title">The result</h2><p class="section-sub">10 windows // 10,230 next-token targets // one locked comparison</p></div>
+      </div>
+
+      <div class="metrics">
+        <article class="panel metric"><span class="metric-label">Ordinary forward PPL</span><strong class="metric-value">33.452</strong><span class="metric-unit">BASELINE</span></article>
+        <article class="panel metric"><span class="metric-label">Recirculation PPL</span><strong class="metric-value good">28.877</strong><span class="metric-unit">FIXED RC</span></article>
+        <article class="panel metric"><span class="metric-label">Absolute reduction</span><strong class="metric-value good">4.575</strong><span class="metric-unit">PPL POINTS</span></article>
+        <article class="panel metric"><span class="metric-label">Windows improved</span><strong class="metric-value">8 / 10</strong><span class="metric-unit">PAIRED NLL</span></article>
+      </div>
+
+      <article class="panel chart-panel" aria-label="Perplexity comparison">
+        <div>
+          <div class="chart-title">Lower is better // same weights + same token hashes</div>
+          <div class="bar-row">
+            <div class="bar-meta"><span>Ordinary forward</span><strong>33.45225</strong></div>
+            <div class="bar-track"><div class="bar-fill" style="width:100%"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-meta"><span>Fixed recirculation</span><strong>28.87729</strong></div>
+            <div class="bar-track"><div class="bar-fill recirc"></div></div>
+          </div>
+        </div>
+        <div class="delta-block">
+          <strong class="delta-number">−13.676%</strong>
+          <span class="delta-label">perplexity</span>
+          <span class="paper-tag">Paper PG-19 reference: −14.41%</span>
+        </div>
+      </article>
+    </section>
+
+    <section class="section" aria-labelledby="mechanism-title">
+      <div class="section-head">
+        <div class="section-index">02</div>
+        <div><h2 id="mechanism-title">The mechanism</h2><p class="section-sub">A measured leak from deep state to shallow state, one token later</p></div>
+      </div>
+
+      <article class="panel mechanism">
+        <div class="flow" aria-label="Recirculation layer flow">
+          <div class="flow-node">Token<br>t</div>
+          <div class="flow-node cool">Destination<br>layer 4</div>
+          <div class="flow-arrow" aria-hidden="true"></div>
+          <div class="flow-node hot">Source<br>layer 11</div>
+          <div class="flow-node">Readout<br>first pass</div>
+        </div>
+        <div class="mix-box"><strong>d′ = (1 − α<sub>t</sub>) d + α<sub>t</sub> (‖d‖₂ / ‖s‖₂) s</strong><br>α = 0.15 // 10-token ramp // one additional iteration // hidden-axis L2 norm match</div>
+      </article>
+
+      <div class="two-col" style="margin-top:20px">
+        <article class="panel ledger">
+          <h3>Mechanical sequence</h3>
+          <dl>
+            <div class="ledger-row"><dt>01 // warmup</dt><dd>No K/V committed on the first rolling step.</dd></div>
+            <div class="ledger-row"><dt>02 // capture</dt><dd>Take residual output after destination layer 4.</dd></div>
+            <div class="ledger-row"><dt>03 // normalize</dt><dd>Rescale layer-11 source to the destination vector's L2 magnitude.</dd></div>
+            <div class="ledger-row"><dt>04 // mix</dt><dd>Convex blend at α<sub>t</sub>/β<sub>t</sub>, then inject as input to layer 5.</dd></div>
+            <div class="ledger-row"><dt>05 // advance</dt><dd>Commit only the rolling pair's left token; the newest token remains first-pass readout.</dd></div>
+          </dl>
+        </article>
+        <article class="panel ledger">
+          <h3>Fixed calibration</h3>
+          <dl>
+            <div class="ledger-row"><dt>Source → target</dt><dd>11 → 4, zero-based</dd></div>
+            <div class="ledger-row"><dt>Mix</dt><dd>α = 0.15 // β = 0.85</dd></div>
+            <div class="ledger-row"><dt>Ramp</dt><dd>α<sub>t</sub> = min(t / 10, 1) × 0.15</dd></div>
+            <div class="ledger-row"><dt>Recurrence</dt><dd>1 additional iteration</dd></div>
+            <div class="ledger-row"><dt>Weights</dt><dd>999,885,952 // frozen // unchanged</dd></div>
+          </dl>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="protocol-title">
+      <div class="section-head">
+        <div class="section-index">03</div>
+        <div><h2 id="protocol-title">Matched protocol</h2><p class="section-sub">Nothing changes between lanes except recirculation state flow</p></div>
+      </div>
+      <div class="two-col">
+        <article class="panel ledger">
+          <h3>Model lane</h3>
+          <dl>
+            <div class="ledger-row"><dt>Checkpoint</dt><dd>google/gemma-3-1b-pt</dd></div>
+            <div class="ledger-row"><dt>Revision</dt><dd>fcf18a2…d8eb29</dd></div>
+            <div class="ledger-row"><dt>Artifact hash</dt><dd>ee5250f6…69cb27</dd></div>
+            <div class="ledger-row"><dt>Numerics</dt><dd>bfloat16 model // float32 NLL</dd></div>
+            <div class="ledger-row"><dt>Backend</dt><dd>PyTorch 2.10 // MPS // eager attention</dd></div>
+          </dl>
+        </article>
+        <article class="panel ledger">
+          <h3>Data lane</h3>
+          <dl>
+            <div class="ledger-row"><dt>Corpus</dt><dd>PG-19 test, pinned parquet mirror</dd></div>
+            <div class="ledger-row"><dt>Selection</dt><dd>First 5 complete windows × first 2 books</dd></div>
+            <div class="ledger-row"><dt>Window</dt><dd>1,024 tokens // no padding</dd></div>
+            <div class="ledger-row"><dt>Scored</dt><dd>1,023 targets per window</dd></div>
+            <div class="ledger-row"><dt>Identity</dt><dd>Ordered per-window SHA-256 verified in both lanes</dd></div>
+          </dl>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="verify-title">
+      <div class="section-head">
+        <div class="section-index">04</div>
+        <div><h2 id="verify-title">Safety interlocks</h2><p class="section-sub">The positive number only counts if the machine is doing the intended computation</p></div>
+      </div>
+      <div class="checks">
+        <article class="panel check"><strong>Ordinary path</strong><p>Vendored baseline and official Transformers logits are bitwise equal on the real checkpoint.</p></article>
+        <article class="panel check"><strong>Frozen steel</strong><p>No trainable parameters; version counters remain unchanged after evaluation.</p></article>
+        <article class="panel check"><strong>Layer routing</strong><p>530 mixes for 530 fixture tokens, each with destination/source shape [1, 2, 1152].</p></article>
+        <article class="panel check"><strong>Norm coupling</strong><p>Source is rescaled per token on the hidden axis before α/β mixing.</p></article>
+        <article class="panel check"><strong>Causal seal</strong><p>Changing tokens 514–529 produces zero change through position 513, crossing the 512-token sliding-attention boundary.</p></article>
+        <article class="panel check"><strong>Cache timing</strong><p>Native cache lengths match: 511 positions in sliding layers and 529 in full-attention layers.</p></article>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="cost-title">
+      <div class="section-head">
+        <div class="section-index">05</div>
+        <div><h2 id="cost-title">Shop cost</h2><p class="section-sub">Quality went up; serial prefill throughput went through the floor</p></div>
+      </div>
+      <div class="cost-grid">
+        <article class="panel cost-main">
+          <div class="cost-big">113.9×</div>
+          <p class="cost-copy">This author-reference path walks the full prefill token by token: 2.713 seconds for ordinary forward versus 309.158 seconds for recirculation. It validates the method, not production latency.</p>
+        </article>
+        <article class="panel gauge">
+          <div class="chart-title">Observed MPS driver allocation</div>
+          <div class="gauge-track"><div class="gauge-fill"></div></div>
+          <p>+2.340 GB sampled after synchronized windows<br>6.137 GB → 8.478 GB</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="caveat-title">
+      <div class="section-head">
+        <div class="section-index">06</div>
+        <div><h2 id="caveat-title">Dust in the bearings</h2><p class="section-sub">What this result does and does not establish</p></div>
+      </div>
+
+      <details open>
+        <summary>Small sample // strong local effect</summary>
+        <div class="detail-body"><p>This run evaluates 10,230 predicted tokens—about 0.095% of the paper's 10.8M-token PG-19 evaluation. Its 13.676% reduction is close to the paper's 14.41%, but the two-book sample is not a substitute for the full corpus.</p></div>
+      </details>
+      <details>
+        <summary>Pilot and stopping rule</summary>
+        <div class="detail-body"><p>The initial two-window pilot slightly worsened perplexity by 0.396%. The sample was extended exactly once by a content-blind rule to five windows from each same book, then stopped regardless of direction. The eight added windows alone improve by 16.874%.</p></div>
+      </details>
+      <details>
+        <summary>Mask failure caught and rejected</summary>
+        <div class="detail-body"><p>An early diagnostic incorrectly gave sliding layers the full-attention mask, inflating pilot baseline PPL to 75.636. An official-forward equivalence check exposed it. Native 512-token sliding masks restore pilot baseline PPL to 19.201; only corrected numbers appear in final results.</p></div>
+      </details>
+      <details>
+        <summary>Paper ambiguities</summary>
+        <div class="detail-body"><p>The paper does not pin software, model, tokenizer, or data revisions, dtype, or device. It introduces the 1B ten-token ramp but does not explicitly state whether Table 1 includes it. This reproduction pins everything and includes the ramp as the closest reading of the final method.</p></div>
+      </details>
+      <details>
+        <summary>Uncertainty and performance claims</summary>
+        <div class="detail-body"><p>A descriptive paired-window bootstrap gives 7.69%–19.55%, but windows within a book are dependent, so this is sensitivity evidence rather than a population confidence interval. The paper's near-zero generation-latency claim is not tested: this artifact measures serial prefill only.</p></div>
+      </details>
+    </section>
+
+    <section class="section" aria-labelledby="next-title">
+      <article class="panel next">
+        <div class="next-label">Next work order // deliberately not run</div>
+        <h3 id="next-title">Hold every mechanism setting fixed. Move to eight unseen PG-19 books.</h3>
+        <p>Take the first five complete windows from the next eight test records. That single test would show whether the effect survives broader document variation without changing source, destination, α, β, normalization, ramp, or recurrence count.</p>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap footer-grid">
+      <div><div class="footer-mark">RC//M3 field unit 2099</div><p class="footer-small">Built from committed result JSON. Primary sources: Mozer et al., arXiv:2608.17981v1 and Shoaib Ahmed Siddiqui's author reference implementation.</p></div>
+      <div><a href="../README.md">README</a> // <a href="../results/comparison.json">RESULT JSON</a> // <a href="../sources/SOURCES.md">SOURCES</a></div>
+    </div>
+  </footer>
+</body>
+</html>

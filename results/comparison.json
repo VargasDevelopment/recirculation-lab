@@ -1,0 +1,42 @@
+{
+  "baseline_perplexity": 33.452248246879435,
+  "recirculation_perplexity": 28.877287604161598,
+  "absolute_perplexity_reduction": 4.574960642717837,
+  "percent_perplexity_reduction": 13.676093184991261,
+  "paper_pg19_percent_reduction_reference": 14.41,
+  "difference_from_paper_percentage_points": -0.7339068150087389,
+  "evaluated_predicted_tokens": 10230,
+  "windows": 10,
+  "windows_with_lower_nll": 8,
+  "paired_window_bootstrap_percent_reduction_95pct_interval_descriptive": [
+    7.692556755385634,
+    19.550097596493487
+  ],
+  "baseline_evaluation_seconds": 2.7134713330306113,
+  "recirculation_evaluation_seconds": 309.1576197920367,
+  "runtime_ratio": 113.93436003126887,
+  "baseline_tokens_per_second": 3770.078524682388,
+  "recirculation_tokens_per_second": 33.08991706845682,
+  "baseline_max_observed_mps_driver_allocated_bytes_after_sync": 6137036800,
+  "recirculation_max_observed_mps_driver_allocated_bytes_after_sync": 8477523968,
+  "observed_mps_driver_allocated_delta_bytes": 2340487168,
+  "identical_condition_fields_verified": [
+    "model_id",
+    "model_revision",
+    "weights_sha256",
+    "parameter_count",
+    "dtype",
+    "device",
+    "attention_implementation",
+    "torch_version",
+    "transformers_version",
+    "python_version",
+    "dataset_id",
+    "dataset_revision",
+    "evaluated_predicted_tokens"
+  ],
+  "identical_ordered_window_hashes_verified": true,
+  "pass_rule": "positive aggregate reduction and positive descriptive paired-window bootstrap lower bound",
+  "conclusion": "fixed recirculation measurably reduced perplexity on the locked local subset",
+  "reproduction_status": "PASS"
+}
