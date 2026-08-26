@@ -50,6 +50,16 @@ class FixedRecirculationConfig:
     ramp_steps: int
 
 
+@dataclass
+class RecirculationGenerationState:
+    """Minimal rolling state needed for exact autoregressive recirculation."""
+
+    past_key_values: Cache
+    feedback: torch.Tensor
+    previous_input_embeds: torch.Tensor
+    sequence_length: int
+
+
 def fixed_recirculation_mix(
     destination: torch.Tensor,
     source: torch.Tensor,
@@ -221,7 +231,7 @@ def _recirculating_text_forward(
     inputs_embeds: torch.FloatTensor | None,
     cache_position: torch.LongTensor | None,
     **kwargs,
-) -> BaseModelOutputWithPast:
+) -> tuple[BaseModelOutputWithPast, RecirculationGenerationState]:
     if (input_ids is None) == (inputs_embeds is None):
         raise ValueError("specify exactly one of input_ids or inputs_embeds")
     if past_key_values is not None:
@@ -345,10 +355,107 @@ def _recirculating_text_forward(
                 layer_input = layer_output
         outputs.append(layer_output[:, -1:, :])
 
-    return BaseModelOutputWithPast(
+    output = BaseModelOutputWithPast(
         last_hidden_state=text_model.norm(torch.cat(outputs, dim=1)),
         past_key_values=cache,
     )
+    state = RecirculationGenerationState(
+        past_key_values=cache,
+        feedback=feedback[:, -1:, :],
+        previous_input_embeds=inputs_embeds[:, -1:, :].clone(),
+        sequence_length=sequence_length,
+    )
+    return output, state
+
+
+def _recirculating_decode_step(
+    text_model: nn.Module,
+    recirculation: FixedRecirculationConfig,
+    new_input_ids: torch.LongTensor,
+    state: RecirculationGenerationState,
+    **kwargs,
+) -> tuple[BaseModelOutputWithPast, RecirculationGenerationState]:
+    """Advance one token using the same two-stack unrolling as full prefill."""
+    if new_input_ids.ndim == 1:
+        new_input_ids = new_input_ids.unsqueeze(1)
+    if new_input_ids.ndim != 2 or new_input_ids.shape[1] != 1:
+        raise ValueError("decode step requires exactly one new token per sequence")
+    if new_input_ids.shape[0] != state.previous_input_embeds.shape[0]:
+        raise ValueError("decode batch size does not match the generation state")
+
+    new_input_embeds = text_model.embed_tokens(new_input_ids)
+    pair_embeds = torch.cat((state.previous_input_embeds, new_input_embeds), dim=1)
+    cache_position = torch.arange(
+        state.sequence_length - 1,
+        state.sequence_length + 1,
+        device=pair_embeds.device,
+    )
+    position_ids = cache_position.unsqueeze(0)
+    attention_mask = torch.ones(
+        (new_input_ids.shape[0], state.sequence_length + 1),
+        dtype=torch.long,
+        device=new_input_ids.device,
+    )
+    masks, positions = _build_masks_and_positions(
+        text_model,
+        pair_embeds,
+        attention_mask,
+        position_ids,
+        cache_position,
+        state.past_key_values,
+    )
+
+    layer_input = pair_embeds
+    feedback = state.feedback
+    for layer_index, layer in enumerate(
+        text_model.layers[: text_model.config.num_hidden_layers]
+    ):
+        layer_output = _decoder_layer_with_cache_policy(
+            layer,
+            layer_input,
+            position_embeddings=positions[layer.attention_type],
+            attention_mask=masks[layer.attention_type],
+            past_key_values=state.past_key_values,
+            cache_position=cache_position,
+            cache_policy="first",
+            **kwargs,
+        )
+        if layer_index == recirculation.destination_layer:
+            feedback = torch.cat((feedback, layer_output[:, -1:, :]), dim=1)
+            layer_input = feedback
+        elif layer_index == recirculation.source_layer:
+            alpha = ramped_alpha(
+                recirculation.source_weight,
+                state.sequence_length,
+                recirculation.ramp_steps,
+            )
+            beta = (
+                1.0 - alpha
+                if recirculation.ramp_steps
+                else recirculation.destination_weight
+            )
+            feedback = fixed_recirculation_mix(
+                feedback,
+                layer_output,
+                destination_weight=beta,
+                source_weight=alpha,
+                normalization=recirculation.normalization,
+            )
+            layer_input = layer_output
+        else:
+            layer_input = layer_output
+
+    output = BaseModelOutputWithPast(
+        last_hidden_state=text_model.norm(layer_output[:, -1:, :]),
+        past_key_values=state.past_key_values,
+    )
+    next_state = RecirculationGenerationState(
+        past_key_values=state.past_key_values,
+        feedback=feedback[:, -1:, :],
+        previous_input_embeds=new_input_embeds.clone(),
+        sequence_length=state.sequence_length + 1,
+    )
+    return output, next_state
 
 
 class Gemma3ForCausalLM(TransformersGemma3ForCausalLM):
@@ -420,7 +527,7 @@ class Gemma3ForCausalLM(TransformersGemma3ForCausalLM):
                 **kwargs,
             )
 
-        outputs = _recirculating_text_forward(
+        outputs, _ = _recirculating_text_forward(
             self.model,
             self._fixed_recirculation,
             input_ids=input_ids,
@@ -450,3 +557,57 @@ class Gemma3ForCausalLM(TransformersGemma3ForCausalLM):
             logits=logits,
             past_key_values=outputs.past_key_values,
         )
+
+    def recirculating_prefill(
+        self,
+        input_ids: torch.LongTensor,
+        attention_mask: torch.Tensor | None = None,
+    ) -> tuple[CausalLMOutputWithPast, RecirculationGenerationState]:
+        """Prefill a sequence and retain the uncommitted newest-token state."""
+        if self._fixed_recirculation is None:
+            raise RuntimeError("fixed recirculation is not configured")
+        outputs, state = _recirculating_text_forward(
+            self.model,
+            self._fixed_recirculation,
+            input_ids=input_ids,
+            attention_mask=attention_mask,
+            position_ids=None,
+            past_key_values=None,
+            inputs_embeds=None,
+            cache_position=None,
+        )
+        # Generation only needs the newest-token distribution. Avoid materializing
+        # a sequence-by-vocabulary tensor for long benchmark prompts.
+        logits = self._project_logits(outputs.last_hidden_state[:, -1:, :])
+        return (
+            CausalLMOutputWithPast(
+                logits=logits, past_key_values=outputs.past_key_values
+            ),
+            state,
+        )
+
+    def recirculating_decode_step(
+        self,
+        new_input_ids: torch.LongTensor,
+        state: RecirculationGenerationState,
+    ) -> tuple[CausalLMOutputWithPast, RecirculationGenerationState]:
+        """Decode one token while carrying exact recirculation/cache state."""
+        if self._fixed_recirculation is None:
+            raise RuntimeError("fixed recirculation is not configured")
+        outputs, next_state = _recirculating_decode_step(
+            self.model, self._fixed_recirculation, new_input_ids, state
+        )
+        logits = self._project_logits(outputs.last_hidden_state)
+        return (
+            CausalLMOutputWithPast(
+                logits=logits, past_key_values=outputs.past_key_values
+            ),
+            next_state,
+        )
+
+    def _project_logits(self, hidden_states: torch.Tensor) -> torch.Tensor:
+        logits = self.lm_head(hidden_states)
+        if self.config.final_logit_softcapping is not None:
+            logits = torch.tanh(logits / self.config.final_logit_softcapping)
+            logits = logits * self.config.final_logit_softcapping
+        return logits

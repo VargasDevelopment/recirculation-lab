@@ -1,11 +1,13 @@
 {
   "schema_version": 1,
-  "purpose": "Document exact output equivalence before removing unlicensed reference-derived source from the public tree",
+  "purpose": "Document exact scoring-output equivalence before removing unlicensed reference-derived source, and preserve it after adding the capability-generation extension",
   "author_reference_gist_commit": "d88d797f9ae0e88073ce219a41887c48408e5bf4",
   "author_reference_raw_sha256": "c21ea064c29c04c8c4cf93c91f134b7719dbbdb9960759c191790c41850990b1",
   "local_reference_adapter_sha256": "459679db6480074c3446e5186d3ecc7a2e7cb3eae01d11784e5b5f88c98dfba1",
   "public_implementation_path": "src/recirculation/gemma3_recirculation.py",
-  "public_implementation_sha256": "2327d8d531359f1183d9e5f082e991a77558b32bd7c282680d9698715b4ea336",
+  "v0_1_public_implementation_sha256": "2327d8d531359f1183d9e5f082e991a77558b32bd7c282680d9698715b4ea336",
+  "public_implementation_sha256": "0460737e9551e87779aa6485eaab7a73425d8045bdc65b9594b5d096bfc0648b",
+  "capability_extension_check_date": "2026-08-26",
   "model_id": "google/gemma-3-1b-pt",
   "model_revision": "fcf18a2a879aab110ca39f8bffbccd5d49d8eb29",
   "dtype": "bfloat16",
@@ -24,5 +26,5 @@
     "full_1024_token_nll_sum": 3410.6591796875,
     "predicted_tokens": 1023
   },
-  "interpretation": "On the pinned Apple Silicon environment, the compact public implementation exactly reproduced the scoring outputs of the reference-derived implementation used for both recorded experiments."
+  "interpretation": "On the pinned Apple Silicon environment, the compact public implementation exactly reproduced the scoring outputs of the reference-derived implementation used for both recorded experiments. After incremental autoregressive state support was added for the capability milestone, the first-64-token logit hash, full 1,024-token per-target NLL hash, NLL sum, and target count remained exactly unchanged."
 }

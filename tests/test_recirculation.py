@@ -169,3 +169,39 @@ def test_future_tokens_cannot_change_earlier_recirculated_logits() -> None:
     assert torch.allclose(
         first_logits[:, :3], second_logits[:, :3], atol=1e-6, rtol=1e-6
     )
+
+
+def test_incremental_decode_matches_fresh_full_sequence_recirculation() -> None:
+    _, model = paired_models()
+    model.set_recirculation_args(
+        target_layer=0,
+        source_layer=2,
+        target_layer_weight=0.85,
+        source_layer_weight=0.15,
+        num_recurrence_steps=1,
+        normalization="norm_rep",
+        ramp_steps=10,
+    )
+    sequence = torch.tensor([[2, 10, 11, 12, 13]])
+    with torch.inference_mode():
+        prefill, state = model.recirculating_prefill(
+            sequence, attention_mask=torch.ones_like(sequence)
+        )
+        full_prefill = model(
+            sequence, attention_mask=torch.ones_like(sequence), use_cache=False
+        )
+    assert torch.equal(prefill.logits[:, -1], full_prefill.logits[:, -1])
+
+    for new_token in (14, 15, 16):
+        new_input = torch.tensor([[new_token]])
+        sequence = torch.cat((sequence, new_input), dim=1)
+        with torch.inference_mode():
+            step, state = model.recirculating_decode_step(new_input, state)
+            fresh = model(
+                sequence, attention_mask=torch.ones_like(sequence), use_cache=False
+            )
+        assert torch.allclose(
+            step.logits[:, -1], fresh.logits[:, -1], atol=1e-6, rtol=1e-6
+        )
+        assert state.sequence_length == sequence.shape[1]
+        assert state.past_key_values.get_seq_length() == sequence.shape[1] - 1

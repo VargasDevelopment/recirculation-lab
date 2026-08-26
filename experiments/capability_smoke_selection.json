@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "phase": "plumbing_smoke_non_evidentiary",
+  "selection_rule": "First five harness evaluation documents; for MMLU-Pro, document zero from the first five alphabetic categories.",
+  "benchmarks": {
+    "mmlu_pro": {
+      "harness_tasks": [
+        "mmlu_pro_biology",
+        "mmlu_pro_business",
+        "mmlu_pro_chemistry",
+        "mmlu_pro_computer_science",
+        "mmlu_pro_economics"
+      ],
+      "samples": {
+        "mmlu_pro_biology": [0],
+        "mmlu_pro_business": [0],
+        "mmlu_pro_chemistry": [0],
+        "mmlu_pro_computer_science": [0],
+        "mmlu_pro_economics": [0]
+      }
+    },
+    "gsm8k": {
+      "harness_tasks": ["gsm8k"],
+      "samples": {"gsm8k": [0, 1, 2, 3, 4]}
+    },
+    "ifeval": {
+      "harness_tasks": ["ifeval"],
+      "samples": {"ifeval": [0, 1, 2, 3, 4]}
+    },
+    "hellaswag": {
+      "harness_tasks": ["hellaswag"],
+      "samples": {"hellaswag": [0, 1, 2, 3, 4]}
+    }
+  }
+}

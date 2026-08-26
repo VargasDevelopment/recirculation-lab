@@ -1,0 +1,250 @@
+{
+  "schema_version": 1,
+  "phase": "plumbing_smoke_non_evidentiary",
+  "locked_before_substantive_scoring": false,
+  "model": {
+    "id": "google/gemma-3-1b-it",
+    "revision": "dcc83ea841ab6100d6b47a070329e1ba4cf78752",
+    "tokenizer_revision": "dcc83ea841ab6100d6b47a070329e1ba4cf78752",
+    "weights_sha256": "3d4ef8d71c14db7e448a09ebe891cfb6bf32c57a9b44499ae0d1c098e48516b6",
+    "chat_template_sha256": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+    "frozen": true,
+    "dtype": "bfloat16",
+    "device": "mps",
+    "attention_implementation": "eager",
+    "max_length": 32768
+  },
+  "recirculation": {
+    "destination_layer_zero_based": 4,
+    "source_layer_zero_based": 11,
+    "alpha": 0.15,
+    "beta": 0.85,
+    "alpha_ramp_tokens": 10,
+    "normalization": "norm_rep",
+    "additional_recurrence_iterations": 1
+  },
+  "harness": {
+    "repository": "https://github.com/EleutherAI/lm-evaluation-harness",
+    "revision": "dd417662e5bda6a247489ec28d2ff46a45d1c42c",
+    "batch_size": 1,
+    "apply_chat_template": true,
+    "fewshot_as_multiturn": true,
+    "task_default_fewshot_and_generation_settings": true,
+    "random_seed": 20260826,
+    "numpy_random_seed": 20260826,
+    "torch_random_seed": 20260826,
+    "fewshot_random_seed": 20260826
+  },
+  "selection_rule": "First five harness evaluation documents; for MMLU-Pro, document zero from the first five alphabetic categories.",
+  "benchmarks": {
+    "mmlu_pro": {
+      "dataset_id": "TIGER-Lab/MMLU-Pro",
+      "dataset_revision": "b189ec765aa7ed75c8acfea42df31fdae71f97be",
+      "task_version": "3.1",
+      "harness_tasks": [
+        "mmlu_pro_biology",
+        "mmlu_pro_business",
+        "mmlu_pro_chemistry",
+        "mmlu_pro_computer_science",
+        "mmlu_pro_economics"
+      ],
+      "selection_rule": "First five harness evaluation documents; for MMLU-Pro, document zero from the first five alphabetic categories.",
+      "sample_count": 5,
+      "tasks": {
+        "mmlu_pro_biology": {
+          "task_version": "3.1",
+          "output_type": "generate_until",
+          "available_eval_docs": 717,
+          "selected_samples": [
+            {
+              "eval_doc_index": 0,
+              "stable_id": "mmlu_pro_biology:eval_doc_index=0",
+              "doc_sha256_canonical_json": "7ffd67cfa3c9ac065ed19304e3174276d12087eb78b2f95721adeecc2fff0ab2"
+            }
+          ]
+        },
+        "mmlu_pro_business": {
+          "task_version": "3.1",
+          "output_type": "generate_until",
+          "available_eval_docs": 789,
+          "selected_samples": [
+            {
+              "eval_doc_index": 0,
+              "stable_id": "mmlu_pro_business:eval_doc_index=0",
+              "doc_sha256_canonical_json": "64f56b6182b816b69223ad91ad5dda7759477b28e142c66005034f0ddfef2c59"
+            }
+          ]
+        },
+        "mmlu_pro_chemistry": {
+          "task_version": "3.1",
+          "output_type": "generate_until",
+          "available_eval_docs": 1132,
+          "selected_samples": [
+            {
+              "eval_doc_index": 0,
+              "stable_id": "mmlu_pro_chemistry:eval_doc_index=0",
+              "doc_sha256_canonical_json": "a33b299eee9d3739fab999b4feadff2ceca305b711a511d8470ef57b3256f024"
+            }
+          ]
+        },
+        "mmlu_pro_computer_science": {
+          "task_version": "3.1",
+          "output_type": "generate_until",
+          "available_eval_docs": 410,
+          "selected_samples": [
+            {
+              "eval_doc_index": 0,
+              "stable_id": "mmlu_pro_computer_science:eval_doc_index=0",
+              "doc_sha256_canonical_json": "7f587e93abed23a1c1cb047cca4aa1bf803a00335a998485b1d7f714dc1cdf01"
+            }
+          ]
+        },
+        "mmlu_pro_economics": {
+          "task_version": "3.1",
+          "output_type": "generate_until",
+          "available_eval_docs": 844,
+          "selected_samples": [
+            {
+              "eval_doc_index": 0,
+              "stable_id": "mmlu_pro_economics:eval_doc_index=0",
+              "doc_sha256_canonical_json": "f2a9831a05a3e021a0cd06eb91be1a2137edc66262a63adef4420654482e11ef"
+            }
+          ]
+        }
+      }
+    },
+    "gsm8k": {
+      "dataset_id": "openai/gsm8k",
+      "dataset_revision": "740312add88f781978c0658806c59bc2815b9866",
+      "task_version": "3.0",
+      "harness_tasks": [
+        "gsm8k"
+      ],
+      "selection_rule": "First five harness evaluation documents; for MMLU-Pro, document zero from the first five alphabetic categories.",
+      "sample_count": 5,
+      "tasks": {
+        "gsm8k": {
+          "task_version": "3.0",
+          "output_type": "generate_until",
+          "available_eval_docs": 1319,
+          "selected_samples": [
+            {
+              "eval_doc_index": 0,
+              "stable_id": "gsm8k:eval_doc_index=0",
+              "doc_sha256_canonical_json": "d975fa1ff1b1742a786bd2d002ab394f2a743f185353bc51eebf03bad875cbe6"
+            },
+            {
+              "eval_doc_index": 1,
+              "stable_id": "gsm8k:eval_doc_index=1",
+              "doc_sha256_canonical_json": "a1433f0a901dce9036a87b6dc3a421fe335764bd136b82155fdbe7fd54febfa7"
+            },
+            {
+              "eval_doc_index": 2,
+              "stable_id": "gsm8k:eval_doc_index=2",
+              "doc_sha256_canonical_json": "2d5ad16672166414eb2da5a396a9832d77e6ec7d8adfffb8004887174c759f2e"
+            },
+            {
+              "eval_doc_index": 3,
+              "stable_id": "gsm8k:eval_doc_index=3",
+              "doc_sha256_canonical_json": "9a239b08df60c5a66733c2c7d3633a8005bed9602afb70cd5b024f988a86a64b"
+            },
+            {
+              "eval_doc_index": 4,
+              "stable_id": "gsm8k:eval_doc_index=4",
+              "doc_sha256_canonical_json": "e0aa4f2259a6d83b1a5cd6f3b1b92c676849cb94ad3d01498816f96b31313c16"
+            }
+          ]
+        }
+      }
+    },
+    "ifeval": {
+      "dataset_id": "google/IFEval",
+      "dataset_revision": "966cd89545d6b6acfd7638bc708b98261ca58e84",
+      "task_version": "4.0",
+      "harness_tasks": [
+        "ifeval"
+      ],
+      "selection_rule": "First five harness evaluation documents; for MMLU-Pro, document zero from the first five alphabetic categories.",
+      "sample_count": 5,
+      "tasks": {
+        "ifeval": {
+          "task_version": "4.0",
+          "output_type": "generate_until",
+          "available_eval_docs": 541,
+          "selected_samples": [
+            {
+              "eval_doc_index": 0,
+              "stable_id": "ifeval:key=1000",
+              "doc_sha256_canonical_json": "e0360ddf21692c056f9983a468e08d273abd06f6dc8a0469b3a995d3fb57ac22"
+            },
+            {
+              "eval_doc_index": 1,
+              "stable_id": "ifeval:key=1001",
+              "doc_sha256_canonical_json": "8d743ba6092877ba663ecf706b487edc25d879bde0d8feacd0f492c3364c4710"
+            },
+            {
+              "eval_doc_index": 2,
+              "stable_id": "ifeval:key=1005",
+              "doc_sha256_canonical_json": "084b9478a2e73bbf85f97b5a2593cc1f7a956b864122602bb3f3ba2384b7ae13"
+            },
+            {
+              "eval_doc_index": 3,
+              "stable_id": "ifeval:key=1012",
+              "doc_sha256_canonical_json": "8ec1a3f1af0899ec284aa0e99a82e0c69e0f75c7d03a75fe71c79f73b3f24e20"
+            },
+            {
+              "eval_doc_index": 4,
+              "stable_id": "ifeval:key=1019",
+              "doc_sha256_canonical_json": "45ce2d6b6427f4ebbce0e003820d3318a95361014c94a4c38e572a9578d5c1a1"
+            }
+          ]
+        }
+      }
+    },
+    "hellaswag": {
+      "dataset_id": "Rowan/hellaswag",
+      "dataset_revision": "218ec52e09a7e7462a5400043bb9a69a41d06b76",
+      "task_version": "1.0",
+      "harness_tasks": [
+        "hellaswag"
+      ],
+      "selection_rule": "First five harness evaluation documents; for MMLU-Pro, document zero from the first five alphabetic categories.",
+      "sample_count": 5,
+      "tasks": {
+        "hellaswag": {
+          "task_version": "1.0",
+          "output_type": "multiple_choice",
+          "available_eval_docs": 10042,
+          "selected_samples": [
+            {
+              "eval_doc_index": 0,
+              "stable_id": "hellaswag:ind=24",
+              "doc_sha256_canonical_json": "f01ae3a9bf5397bdff4245f9931d86c13b1c309775ffea1f4a1c89e495b5a8c7"
+            },
+            {
+              "eval_doc_index": 1,
+              "stable_id": "hellaswag:ind=92",
+              "doc_sha256_canonical_json": "bf55adcd7f301d84fe5f80f3f92e9fc8fdd8ca9362e92e22dfb0737680ab72a5"
+            },
+            {
+              "eval_doc_index": 2,
+              "stable_id": "hellaswag:ind=106",
+              "doc_sha256_canonical_json": "4cd463b29ef8f3f1c9218ff575e3aede5402a450f56e0b9f9d5f1ca8e431f164"
+            },
+            {
+              "eval_doc_index": 3,
+              "stable_id": "hellaswag:ind=114",
+              "doc_sha256_canonical_json": "43930f890c89a61d3b03a25dbd192f11cec7c7598d0010b90ffa75810e3f4ed9"
+            },
+            {
+              "eval_doc_index": 4,
+              "stable_id": "hellaswag:ind=116",
+              "doc_sha256_canonical_json": "04441f0fa18fb931970236169ecad80ff69ea72514055c78696fa138d04ca435"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "manifest_sha256_without_self_hash": "2607c9d24f4e60801eec5d5582b58fb643dbb9d70def2263a13b1f67e15c1ecc"
+}

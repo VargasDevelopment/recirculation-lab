@@ -1,0 +1,652 @@
+{
+  "schema_version": 1,
+  "phase": "plumbing_smoke_non_evidentiary",
+  "condition": "recirculation",
+  "benchmark": "ifeval",
+  "manifest_path": "experiments/capability_smoke_manifest.json",
+  "manifest_sha256": "8c55362f4878ccdf0c242bade21e2085fef04484518caf55214b05a43c3d05af",
+  "harness_revision": "dd417662e5bda6a247489ec28d2ff46a45d1c42c",
+  "model_info": {
+    "model_id": "google/gemma-3-1b-it",
+    "model_revision": "dcc83ea841ab6100d6b47a070329e1ba4cf78752",
+    "tokenizer_revision": "dcc83ea841ab6100d6b47a070329e1ba4cf78752",
+    "dtype": "bfloat16",
+    "device": "mps",
+    "parameter_count": 999885952,
+    "transformers_version": "5.0.0"
+  },
+  "model_load_seconds": 0.40850737504661083,
+  "evaluation_seconds": 120.07997233327478,
+  "python_version": "3.12.6",
+  "platform": "macOS-26.5.2-arm64-arm-64bit",
+  "torch_version": "2.10.0",
+  "transformers_version": "5.0.0",
+  "harness_results": {
+    "ifeval": {
+      "name": "ifeval",
+      "alias": "ifeval",
+      "sample_len": 5,
+      "prompt_level_strict_acc,none": 0.4,
+      "prompt_level_strict_acc_stderr,none": "N/A",
+      "inst_level_strict_acc,none": 0.625,
+      "inst_level_strict_acc_stderr,none": "N/A",
+      "prompt_level_loose_acc,none": 0.4,
+      "prompt_level_loose_acc_stderr,none": "N/A",
+      "inst_level_loose_acc,none": 0.625,
+      "inst_level_loose_acc_stderr,none": "N/A"
+    }
+  },
+  "harness_groups": {},
+  "harness_configs": {
+    "ifeval": {
+      "task": "ifeval",
+      "dataset_path": "google/IFEval",
+      "test_split": "train",
+      "doc_to_text": "prompt",
+      "doc_to_target": 0,
+      "unsafe_code": false,
+      "process_results": "def process_results(doc, results):\n    inp = InputExample(\n        key=doc[\"key\"],\n        instruction_id_list=doc[\"instruction_id_list\"],\n        prompt=doc[\"prompt\"],\n        kwargs=doc[\"kwargs\"],\n    )\n    response = results[0]\n\n    out_strict = test_instruction_following_strict(inp, response)\n    out_loose = test_instruction_following_loose(inp, response)\n\n    return {\n        \"prompt_level_strict_acc\": out_strict.follow_all_instructions,\n        \"inst_level_strict_acc\": out_strict.follow_instruction_list,\n        \"prompt_level_loose_acc\": out_loose.follow_all_instructions,\n        \"inst_level_loose_acc\": out_loose.follow_instruction_list,\n    }\n",
+      "description": "",
+      "target_delimiter": " ",
+      "fewshot_delimiter": "\n\n",
+      "fewshot_config": {
+        "sampler": "default",
+        "split": null,
+        "process_docs": null,
+        "fewshot_indices": null,
+        "samples": null,
+        "doc_to_text": "prompt",
+        "doc_to_choice": null,
+        "doc_to_target": 0,
+        "gen_prefix": null,
+        "fewshot_delimiter": "\n\n",
+        "target_delimiter": " "
+      },
+      "num_fewshot": 0,
+      "metric_list": [
+        {
+          "metric": "prompt_level_strict_acc",
+          "aggregation": "mean",
+          "higher_is_better": true
+        },
+        {
+          "metric": "inst_level_strict_acc",
+          "aggregation": "def agg_inst_level_acc(items):\n    flat_items = [item for sublist in items for item in sublist]\n    inst_level_acc = sum(flat_items) / len(flat_items)\n    return inst_level_acc\n",
+          "higher_is_better": true
+        },
+        {
+          "metric": "prompt_level_loose_acc",
+          "aggregation": "mean",
+          "higher_is_better": true
+        },
+        {
+          "metric": "inst_level_loose_acc",
+          "aggregation": "def agg_inst_level_acc(items):\n    flat_items = [item for sublist in items for item in sublist]\n    inst_level_acc = sum(flat_items) / len(flat_items)\n    return inst_level_acc\n",
+          "higher_is_better": true
+        }
+      ],
+      "output_type": "generate_until",
+      "generation_kwargs": {
+        "until": [],
+        "do_sample": false,
+        "temperature": 0.0,
+        "max_gen_toks": 1280
+      },
+      "repeats": 1,
+      "should_decontaminate": false,
+      "metadata": {
+        "version": 4.0,
+        "config_source": "/Users/josephvargas/Documents/Projects/recirculation/.venv/lib/python3.12/site-packages/lm_eval/tasks/ifeval/ifeval.yaml"
+      }
+    }
+  },
+  "harness_versions": {
+    "ifeval": 4.0
+  },
+  "harness_n_shot": {
+    "ifeval": 0
+  },
+  "samples": {
+    "ifeval": [
+      {
+        "doc_id": 0,
+        "doc": {
+          "key": 1000,
+          "prompt": "Write a 300+ word summary of the wikipedia page \"https://en.wikipedia.org/wiki/Raymond_III,_Count_of_Tripoli\". Do not use any commas and highlight at least 3 sections that has titles in markdown format, for example *highlighted section part 1*, *highlighted section part 2*, *highlighted section part 3*.",
+          "instruction_id_list": [
+            "punctuation:no_comma",
+            "detectable_format:number_highlighted_sections",
+            "length_constraints:number_words"
+          ],
+          "kwargs": [
+            {
+              "num_highlights": null,
+              "relation": null,
+              "num_words": null,
+              "num_placeholders": null,
+              "prompt_to_repeat": null,
+              "num_bullets": null,
+              "section_spliter": null,
+              "num_sections": null,
+              "capital_relation": null,
+              "capital_frequency": null,
+              "keywords": null,
+              "num_paragraphs": null,
+              "language": null,
+              "let_relation": null,
+              "letter": null,
+              "let_frequency": null,
+              "end_phrase": null,
+              "forbidden_words": null,
+              "keyword": null,
+              "frequency": null,
+              "num_sentences": null,
+              "postscript_marker": null,
+              "first_word": null,
+              "nth_paragraph": null
+            },
+            {
+              "num_highlights": 3,
+              "relation": null,
+              "num_words": null,
+              "num_placeholders": null,
+              "prompt_to_repeat": null,
+              "num_bullets": null,
+              "section_spliter": null,
+              "num_sections": null,
+              "capital_relation": null,
+              "capital_frequency": null,
+              "keywords": null,
+              "num_paragraphs": null,
+              "language": null,
+              "let_relation": null,
+              "letter": null,
+              "let_frequency": null,
+              "end_phrase": null,
+              "forbidden_words": null,
+              "keyword": null,
+              "frequency": null,
+              "num_sentences": null,
+              "postscript_marker": null,
+              "first_word": null,
+              "nth_paragraph": null
+            },
+            {
+              "num_highlights": null,
+              "relation": "at least",
+              "num_words": 300,
+              "num_placeholders": null,
+              "prompt_to_repeat": null,
+              "num_bullets": null,
+              "section_spliter": null,
+              "num_sections": null,
+              "capital_relation": null,
+              "capital_frequency": null,
+              "keywords": null,
+              "num_paragraphs": null,
+              "language": null,
+              "let_relation": null,
+              "letter": null,
+              "let_frequency": null,
+              "end_phrase": null,
+              "forbidden_words": null,
+              "keyword": null,
+              "frequency": null,
+              "num_sentences": null,
+              "postscript_marker": null,
+              "first_word": null,
+              "nth_paragraph": null
+            }
+          ]
+        },
+        "target": 0,
+        "arguments": [
+          [
+            "<bos><start_of_turn>user\nWrite a 300+ word summary of the wikipedia page \"https://en.wikipedia.org/wiki/Raymond_III,_Count_of_Tripoli\". Do not use any commas and highlight at least 3 sections that has titles in markdown format, for example *highlighted section part 1*, *highlighted section part 2*, *highlighted section part 3*.<end_of_turn>\n<start_of_turn>model\n",
+            {
+              "until": [],
+              "do_sample": false,
+              "temperature": 0.0,
+              "max_gen_toks": 1280
+            }
+          ]
+        ],
+        "resps": [
+          [
+            "Here’s a 300+ word summary of the Wikipedia page on Raymond III of Tripoli focusing on key aspects and avoiding direct quotes:\n\nRaymond III of Tripoli was a pivotal figure in the history of the Arab world particularly during the tumultuous period of the 12th and 13th centuries. He rose to prominence as a powerful and ambitious ruler challenging the authority of the Abbasid Caliphate and the increasingly powerful Byzantine Empire. His reign was marked by a complex interplay of political maneuvering religious fervor and military campaigns. *Raymond’s initial rise to power was largely fueled by a combination of strategic alliances and a shrewd understanding of the political landscape*. He skillfully leveraged existing rivalries between the various Arab tribes and Byzantine territories to consolidate his control over the region.\n\nThe Caliphate of Tripoli was a significant challenge to the established authority of Damascus and Cairo. Raymond III recognized this threat and began a protracted campaign to establish a strong defensive perimeter around his territory. He focused on strengthening Tripoli’s fortifications and developing a formidable military force. He actively sought support from various factions within the Arab world including Berber tribes and even some Byzantine officials. This involved a delicate balancing act of diplomacy and military force.\n\nRaymond III’s reign was characterized by a significant shift in religious policy. He adopted a more orthodox Sunni interpretation of Islam, a departure from the more tolerant policies of his predecessors. This move was partly motivated by a desire to assert Tripoli’s independence from the Byzantine influence and partly a strategic calculation to appeal to a wider range of religious converts. *This religious reform was a defining characteristic of his rule*. He commissioned the construction of numerous mosques and religious institutions throughout the region demonstrating his commitment to establishing a powerful and religiously centered state.\n\n*The most significant military undertaking of Raymond III was his campaign against the Byzantine Empire*. He successfully besieged and captured several key Byzantine cities including Tyre and Alexandria demonstrating his ambition and military prowess. However, this expansion came at a considerable cost. *The prolonged conflict with the Byzantines resulted in significant territorial losses and a deep-seated resentment within the Arab population*. Raymond III’s reign ultimately ended with his death in 1178 leaving behind a legacy of both military success and political instability. His actions profoundly shaped the political map of the Levant and the dynamics of the Islamic world for decades to come.\n\nFurther research reveals that Raymond III’s legacy is often debated. Some historians view him as a brilliant military strategist and a visionary ruler while others criticize his aggressive expansionist policies and the resulting instability."
+          ]
+        ],
+        "filtered_resps": [
+          "Here’s a 300+ word summary of the Wikipedia page on Raymond III of Tripoli focusing on key aspects and avoiding direct quotes:\n\nRaymond III of Tripoli was a pivotal figure in the history of the Arab world particularly during the tumultuous period of the 12th and 13th centuries. He rose to prominence as a powerful and ambitious ruler challenging the authority of the Abbasid Caliphate and the increasingly powerful Byzantine Empire. His reign was marked by a complex interplay of political maneuvering religious fervor and military campaigns. *Raymond’s initial rise to power was largely fueled by a combination of strategic alliances and a shrewd understanding of the political landscape*. He skillfully leveraged existing rivalries between the various Arab tribes and Byzantine territories to consolidate his control over the region.\n\nThe Caliphate of Tripoli was a significant challenge to the established authority of Damascus and Cairo. Raymond III recognized this threat and began a protracted campaign to establish a strong defensive perimeter around his territory. He focused on strengthening Tripoli’s fortifications and developing a formidable military force. He actively sought support from various factions within the Arab world including Berber tribes and even some Byzantine officials. This involved a delicate balancing act of diplomacy and military force.\n\nRaymond III’s reign was characterized by a significant shift in religious policy. He adopted a more orthodox Sunni interpretation of Islam, a departure from the more tolerant policies of his predecessors. This move was partly motivated by a desire to assert Tripoli’s independence from the Byzantine influence and partly a strategic calculation to appeal to a wider range of religious converts. *This religious reform was a defining characteristic of his rule*. He commissioned the construction of numerous mosques and religious institutions throughout the region demonstrating his commitment to establishing a powerful and religiously centered state.\n\n*The most significant military undertaking of Raymond III was his campaign against the Byzantine Empire*. He successfully besieged and captured several key Byzantine cities including Tyre and Alexandria demonstrating his ambition and military prowess. However, this expansion came at a considerable cost. *The prolonged conflict with the Byzantines resulted in significant territorial losses and a deep-seated resentment within the Arab population*. Raymond III’s reign ultimately ended with his death in 1178 leaving behind a legacy of both military success and political instability. His actions profoundly shaped the political map of the Levant and the dynamics of the Islamic world for decades to come.\n\nFurther research reveals that Raymond III’s legacy is often debated. Some historians view him as a brilliant military strategist and a visionary ruler while others criticize his aggressive expansionist policies and the resulting instability."
+        ],
+        "filter": "none",
+        "metrics": [
+          "prompt_level_strict_acc",
+          "inst_level_strict_acc",
+          "prompt_level_loose_acc",
+          "inst_level_loose_acc"
+        ],
+        "doc_hash": "db22137ddf6291c2a4a753a9cbdf6d85b219ecfd83eaa52eb0fb6409256b0489",
+        "prompt_hash": "21ecb6099f3069b798caeaaff02c0bd2b704517272bc663dd08c96c25e964539",
+        "target_hash": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+        "prompt_level_strict_acc": false,
+        "inst_level_strict_acc": [
+          false,
+          true,
+          true
+        ],
+        "prompt_level_loose_acc": false,
+        "inst_level_loose_acc": [
+          false,
+          true,
+          true
+        ]
+      },
+      {
+        "doc_id": 1,
+        "doc": {
+          "key": 1001,
+          "prompt": "I am planning a trip to Japan, and I would like thee to write an itinerary for my journey in a Shakespearean style. You are not allowed to use any commas in your response.",
+          "instruction_id_list": [
+            "punctuation:no_comma"
+          ],
+          "kwargs": [
+            {
+              "num_highlights": null,
+              "relation": null,
+              "num_words": null,
+              "num_placeholders": null,
+              "prompt_to_repeat": null,
+              "num_bullets": null,
+              "section_spliter": null,
+              "num_sections": null,
+              "capital_relation": null,
+              "capital_frequency": null,
+              "keywords": null,
+              "num_paragraphs": null,
+              "language": null,
+              "let_relation": null,
+              "letter": null,
+              "let_frequency": null,
+              "end_phrase": null,
+              "forbidden_words": null,
+              "keyword": null,
+              "frequency": null,
+              "num_sentences": null,
+              "postscript_marker": null,
+              "first_word": null,
+              "nth_paragraph": null
+            }
+          ]
+        },
+        "target": 0,
+        "arguments": [
+          [
+            "<bos><start_of_turn>user\nI am planning a trip to Japan, and I would like thee to write an itinerary for my journey in a Shakespearean style. You are not allowed to use any commas in your response.<end_of_turn>\n<start_of_turn>model\n",
+            {
+              "until": [],
+              "do_sample": false,
+              "temperature": 0.0,
+              "max_gen_toks": 1280
+            }
+          ]
+        ],
+        "resps": [
+          [
+            "Hark gentle traveler a journey planned with care\nA tapestry of wonders to be shared.\n\n**The First Day’s Dawn – Kyoto’s Grace**\n\nThe sun ascends a pale and misty hue\nWe journey forth to Kyoto old and true.\nA temple’s shadow falls a solemn sight\nKiyomizu-dera’s waters shining bright.\nA thousand vermillion gates a wondrous scene\nWhere ancient spirits whisper ever keen.\nWe’ll feast on tofu sweet a humble grace\nAnd seek a geisha’s fleeting smile’s embrace.\n\n**The Second Day – Nara’s Gentle Plea**\n\nA train we ride a silver serpent’s flight\nTo Nara’s realm a peaceful gentle light.\nDeer roam free a curious, playful throng\nTheir antlers gleaming where they belong.\nA Buddha’s face a stony majesty\nReflecting wisdom for all to see.\nWe’ll sample mochi soft a sugary delight\nAnd wander through the gardens bathed in light.\n\n**The Third Day – Tokyo’s Shimmering Show**\n\nNow onward swiftly to Tokyo’s grand design\nA city pulsing with a restless shine.\nThe Shibuya crossing a chaotic flow\nA thousand faces rushing to and fro.\nWe’ll climb the Tokyo Skytree a soaring height\nAnd gaze upon the city’s dazzling light.\nA Kabuki theatre’s dramatic plea\nA vibrant scene for all to see.\nWe’ll sample ramen hot a savory treat\nAnd find a haven cool and bittersweet.\n\n**The Fourth Day – Hakone’s Mountain’s Calm**\n\nTo Hakone we travel a verdant slope\nWhere mountains rise in silent solemn hope.\nA wooden boat a gentle drifting pace\nAcross a lake reflecting time and space.\nSteam rises fragrant from the mountain’s core\nA tranquil beauty to explore and adore.\nA Ryokan’s warmth a welcome sight\nA place to rest and bathe in peaceful light.\n\n**The Fifth Day – Osaka’s Vibrant Heart**\n\nOsaka beckons with a bustling sound\nA city’s pulse a joyful spinning round.\nStreet food stalls a tempting, fragrant plea\nTakoyaki octopus a tasty spree.\nA castle’s keep a regal sight to view\nAnd Dotonbori’s lights a dazzling hue.\nWe’ll savor okonomiyaki savory and bold\nA culinary story to be told.\n\n**The Sixth Day – Ancient Shinjuku’s Reign**\n\nShinjuku’s heights a modern, bustling scene\nA neon glow a vibrant, restless sheen.\nThe Tokyo Metropolitan Government Building high\nA panoramic view beneath the endless sky.\nWe’ll wander through the gardens serene and deep\nAnd find a moment’s quiet peace to keep.\nFarewell to Japan a wondrous land so grand\nA memory etched within this promised land.\n\n**The Final Note – A Humble Farewell**\n\nThis journey’s end a bittersweet decree\nA glimpse of beauty for all eyes to see.\nRemember well the lessons learned with grace\nThe spirit of Japan in this sacred space.\nFarewell my friends until we meet again\nUpon this land of ancient, vibrant men."
+          ]
+        ],
+        "filtered_resps": [
+          "Hark gentle traveler a journey planned with care\nA tapestry of wonders to be shared.\n\n**The First Day’s Dawn – Kyoto’s Grace**\n\nThe sun ascends a pale and misty hue\nWe journey forth to Kyoto old and true.\nA temple’s shadow falls a solemn sight\nKiyomizu-dera’s waters shining bright.\nA thousand vermillion gates a wondrous scene\nWhere ancient spirits whisper ever keen.\nWe’ll feast on tofu sweet a humble grace\nAnd seek a geisha’s fleeting smile’s embrace.\n\n**The Second Day – Nara’s Gentle Plea**\n\nA train we ride a silver serpent’s flight\nTo Nara’s realm a peaceful gentle light.\nDeer roam free a curious, playful throng\nTheir antlers gleaming where they belong.\nA Buddha’s face a stony majesty\nReflecting wisdom for all to see.\nWe’ll sample mochi soft a sugary delight\nAnd wander through the gardens bathed in light.\n\n**The Third Day – Tokyo’s Shimmering Show**\n\nNow onward swiftly to Tokyo’s grand design\nA city pulsing with a restless shine.\nThe Shibuya crossing a chaotic flow\nA thousand faces rushing to and fro.\nWe’ll climb the Tokyo Skytree a soaring height\nAnd gaze upon the city’s dazzling light.\nA Kabuki theatre’s dramatic plea\nA vibrant scene for all to see.\nWe’ll sample ramen hot a savory treat\nAnd find a haven cool and bittersweet.\n\n**The Fourth Day – Hakone’s Mountain’s Calm**\n\nTo Hakone we travel a verdant slope\nWhere mountains rise in silent solemn hope.\nA wooden boat a gentle drifting pace\nAcross a lake reflecting time and space.\nSteam rises fragrant from the mountain’s core\nA tranquil beauty to explore and adore.\nA Ryokan’s warmth a welcome sight\nA place to rest and bathe in peaceful light.\n\n**The Fifth Day – Osaka’s Vibrant Heart**\n\nOsaka beckons with a bustling sound\nA city’s pulse a joyful spinning round.\nStreet food stalls a tempting, fragrant plea\nTakoyaki octopus a tasty spree.\nA castle’s keep a regal sight to view\nAnd Dotonbori’s lights a dazzling hue.\nWe’ll savor okonomiyaki savory and bold\nA culinary story to be told.\n\n**The Sixth Day – Ancient Shinjuku’s Reign**\n\nShinjuku’s heights a modern, bustling scene\nA neon glow a vibrant, restless sheen.\nThe Tokyo Metropolitan Government Building high\nA panoramic view beneath the endless sky.\nWe’ll wander through the gardens serene and deep\nAnd find a moment’s quiet peace to keep.\nFarewell to Japan a wondrous land so grand\nA memory etched within this promised land.\n\n**The Final Note – A Humble Farewell**\n\nThis journey’s end a bittersweet decree\nA glimpse of beauty for all eyes to see.\nRemember well the lessons learned with grace\nThe spirit of Japan in this sacred space.\nFarewell my friends until we meet again\nUpon this land of ancient, vibrant men."
+        ],
+        "filter": "none",
+        "metrics": [
+          "prompt_level_strict_acc",
+          "inst_level_strict_acc",
+          "prompt_level_loose_acc",
+          "inst_level_loose_acc"
+        ],
+        "doc_hash": "ae243f232b1ed1765de72cd65671b35b430fe6096464898596214dca2a3b5f73",
+        "prompt_hash": "ffe93a758171236aea060555bbcdfbc42842c7acdcdbc5cb8d3844e82187826e",
+        "target_hash": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+        "prompt_level_strict_acc": false,
+        "inst_level_strict_acc": [
+          false
+        ],
+        "prompt_level_loose_acc": false,
+        "inst_level_loose_acc": [
+          false
+        ]
+      },
+      {
+        "doc_id": 2,
+        "doc": {
+          "key": 1005,
+          "prompt": "Write a resume for a fresh high school graduate who is seeking their first job. Make sure to include at least 12 placeholder represented by square brackets, such as [address], [name].",
+          "instruction_id_list": [
+            "detectable_content:number_placeholders"
+          ],
+          "kwargs": [
+            {
+              "num_highlights": null,
+              "relation": null,
+              "num_words": null,
+              "num_placeholders": 12,
+              "prompt_to_repeat": null,
+              "num_bullets": null,
+              "section_spliter": null,
+              "num_sections": null,
+              "capital_relation": null,
+              "capital_frequency": null,
+              "keywords": null,
+              "num_paragraphs": null,
+              "language": null,
+              "let_relation": null,
+              "letter": null,
+              "let_frequency": null,
+              "end_phrase": null,
+              "forbidden_words": null,
+              "keyword": null,
+              "frequency": null,
+              "num_sentences": null,
+              "postscript_marker": null,
+              "first_word": null,
+              "nth_paragraph": null
+            }
+          ]
+        },
+        "target": 0,
+        "arguments": [
+          [
+            "<bos><start_of_turn>user\nWrite a resume for a fresh high school graduate who is seeking their first job. Make sure to include at least 12 placeholder represented by square brackets, such as [address], [name].<end_of_turn>\n<start_of_turn>model\n",
+            {
+              "until": [],
+              "do_sample": false,
+              "temperature": 0.0,
+              "max_gen_toks": 1280
+            }
+          ]
+        ],
+        "resps": [
+          [
+            "Okay, here's a resume for a fresh high school graduate, aiming for a first job, incorporating placeholders and aiming for a professional, yet approachable tone.  It’s designed to be adaptable – you’ll need to tailor it further to specific job descriptions.\n\n---\n\n**[Name]**\n[Address] | [Phone Number] | [Email Address] | [LinkedIn Profile URL (if applicable)]\n\n**Objective**\n\nHighly motivated and enthusiastic [Year] at [High School Name] seeking a [Type of Role - e.g., entry-level administrative assistant, customer service position, retail associate] role where I can utilize my strong [Skill 1 - e.g., communication] and [Skill 2 - e.g., organizational] skills, combined with a willingness to learn and contribute to a positive team environment. I am eager to begin my professional experience and gain valuable skills.\n\n**Education**\n\n* **[High School Name]**, [City, State] – [Graduation Date]\n    * High School Diploma – [GPA] (If above 3.5, include it)\n    * Relevant Coursework: [List 2-3 relevant courses - e.g., Business Fundamentals, Computer Applications, Communications]\n    * [Mention any honors or awards – e.g., Honor Roll, Student of the Month]\n    * [Optional: Include a brief statement about academic achievements or a commitment to learning.]\n\n**Skills**\n\n* **Communication:** Excellent written and verbal communication, active listening, clear and concise speaking.\n* **Customer Service:**  Friendly, helpful, and patient – dedicated to providing excellent service.\n* **Organization & Time Management:**  Highly organized, detail-oriented, proficient in prioritizing tasks, and able to manage multiple responsibilities. [Specific example: Successfully managed a school schedule with [Number] students.]\n* **Computer Skills:** Microsoft Office Suite (Word, Excel, PowerPoint – [Specify level of proficiency – e.g., Basic proficiency]), [Specific software - e.g., Google Workspace, [Specific industry software if applicable]].\n* **Teamwork & Collaboration:**  Proven ability to work effectively as part of a team, contributing to a positive and productive atmosphere.\n* **[Skill 3 - e.g., Problem-Solving]:**  Analytical and resourceful in identifying and resolving issues.\n* **[Skill 4 - e.g., Adaptability]:**  Quick learner and adaptable to new situations and environments.\n\n**Experience**\n\n* **[Volunteer Experience/Part-Time Job Title]**, [Organization Name], [City, State] – [Dates of Employment]\n    * [Describe your responsibilities and accomplishments using action verbs. Focus on transferable skills.  Example: Assisted customers with inquiries, providing excellent service and resolving issues effectively.]\n* **[Other Relevant Experience - e.g., School Club, Family Responsibilities]** – [Brief Description]\n    * [Highlight skills relevant to the desired role - e.g., Managed schedules, coordinated events, demonstrated responsibility.]\n\n**[Placeholder - Interests/Hobbies]:**  [List 1-2 brief interests – e.g., Photography, Reading, Volunteering at [Organization]] –  Demonstrates [Skill - e.g., initiative and a willingness to engage.]\n\n**References**\n\nAvailable upon request. [Placeholder -  You can add a line like \"Available for contact via email.\"]\n\n---\n\n**Important Notes & Customization:**\n\n*   **Replace the bracketed placeholders** with your own information.\n*   **Tailor the skills section** to match the specific job description.  Don’t just list skills; briefly explain how you’ve used them.\n*   **Quantify your accomplishments** whenever possible (e.g., \"Managed a team of 5 volunteers\").\n*   **Proofread carefully** for any errors in grammar or spelling.\n*   **Format:** Use a clean, professional font (e.g., Arial, Calibri, Times New Roman) and keep it to one page.\n\nTo help me refine this further and make it even more targeted, could you tell me:\n\n*   What kind of job are you applying for? (Be as specific as possible - e.g., retail, food service, office assistant, etc.)\n*   What are some of your strongest skills? (Besides the ones listed above)"
+          ]
+        ],
+        "filtered_resps": [
+          "Okay, here's a resume for a fresh high school graduate, aiming for a first job, incorporating placeholders and aiming for a professional, yet approachable tone.  It’s designed to be adaptable – you’ll need to tailor it further to specific job descriptions.\n\n---\n\n**[Name]**\n[Address] | [Phone Number] | [Email Address] | [LinkedIn Profile URL (if applicable)]\n\n**Objective**\n\nHighly motivated and enthusiastic [Year] at [High School Name] seeking a [Type of Role - e.g., entry-level administrative assistant, customer service position, retail associate] role where I can utilize my strong [Skill 1 - e.g., communication] and [Skill 2 - e.g., organizational] skills, combined with a willingness to learn and contribute to a positive team environment. I am eager to begin my professional experience and gain valuable skills.\n\n**Education**\n\n* **[High School Name]**, [City, State] – [Graduation Date]\n    * High School Diploma – [GPA] (If above 3.5, include it)\n    * Relevant Coursework: [List 2-3 relevant courses - e.g., Business Fundamentals, Computer Applications, Communications]\n    * [Mention any honors or awards – e.g., Honor Roll, Student of the Month]\n    * [Optional: Include a brief statement about academic achievements or a commitment to learning.]\n\n**Skills**\n\n* **Communication:** Excellent written and verbal communication, active listening, clear and concise speaking.\n* **Customer Service:**  Friendly, helpful, and patient – dedicated to providing excellent service.\n* **Organization & Time Management:**  Highly organized, detail-oriented, proficient in prioritizing tasks, and able to manage multiple responsibilities. [Specific example: Successfully managed a school schedule with [Number] students.]\n* **Computer Skills:** Microsoft Office Suite (Word, Excel, PowerPoint – [Specify level of proficiency – e.g., Basic proficiency]), [Specific software - e.g., Google Workspace, [Specific industry software if applicable]].\n* **Teamwork & Collaboration:**  Proven ability to work effectively as part of a team, contributing to a positive and productive atmosphere.\n* **[Skill 3 - e.g., Problem-Solving]:**  Analytical and resourceful in identifying and resolving issues.\n* **[Skill 4 - e.g., Adaptability]:**  Quick learner and adaptable to new situations and environments.\n\n**Experience**\n\n* **[Volunteer Experience/Part-Time Job Title]**, [Organization Name], [City, State] – [Dates of Employment]\n    * [Describe your responsibilities and accomplishments using action verbs. Focus on transferable skills.  Example: Assisted customers with inquiries, providing excellent service and resolving issues effectively.]\n* **[Other Relevant Experience - e.g., School Club, Family Responsibilities]** – [Brief Description]\n    * [Highlight skills relevant to the desired role - e.g., Managed schedules, coordinated events, demonstrated responsibility.]\n\n**[Placeholder - Interests/Hobbies]:**  [List 1-2 brief interests – e.g., Photography, Reading, Volunteering at [Organization]] –  Demonstrates [Skill - e.g., initiative and a willingness to engage.]\n\n**References**\n\nAvailable upon request. [Placeholder -  You can add a line like \"Available for contact via email.\"]\n\n---\n\n**Important Notes & Customization:**\n\n*   **Replace the bracketed placeholders** with your own information.\n*   **Tailor the skills section** to match the specific job description.  Don’t just list skills; briefly explain how you’ve used them.\n*   **Quantify your accomplishments** whenever possible (e.g., \"Managed a team of 5 volunteers\").\n*   **Proofread carefully** for any errors in grammar or spelling.\n*   **Format:** Use a clean, professional font (e.g., Arial, Calibri, Times New Roman) and keep it to one page.\n\nTo help me refine this further and make it even more targeted, could you tell me:\n\n*   What kind of job are you applying for? (Be as specific as possible - e.g., retail, food service, office assistant, etc.)\n*   What are some of your strongest skills? (Besides the ones listed above)"
+        ],
+        "filter": "none",
+        "metrics": [
+          "prompt_level_strict_acc",
+          "inst_level_strict_acc",
+          "prompt_level_loose_acc",
+          "inst_level_loose_acc"
+        ],
+        "doc_hash": "47cdabff82ac427a1cbbc0e5870171db9c620a6240e658c0ddaab33d10edb87d",
+        "prompt_hash": "6a250ad7d529df140baa7dd44c03c0e9082a01fa3ebd1507b9a10acadb7abfd5",
+        "target_hash": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+        "prompt_level_strict_acc": true,
+        "inst_level_strict_acc": [
+          true
+        ],
+        "prompt_level_loose_acc": true,
+        "inst_level_loose_acc": [
+          true
+        ]
+      },
+      {
+        "doc_id": 3,
+        "doc": {
+          "key": 1012,
+          "prompt": "Write an email to my boss telling him that I am quitting. The email must contain a title wrapped in double angular brackets, i.e. <<title>>.\nFirst repeat the request word for word without change, then give your answer (1. do not say any words or characters before repeating the request; 2. the request you need to repeat does not include this sentence)",
+          "instruction_id_list": [
+            "combination:repeat_prompt",
+            "detectable_format:title"
+          ],
+          "kwargs": [
+            {
+              "num_highlights": null,
+              "relation": null,
+              "num_words": null,
+              "num_placeholders": null,
+              "prompt_to_repeat": "Write an email to my boss telling him that I am quitting. The email must contain a title wrapped in double angular brackets, i.e. <<title>>.",
+              "num_bullets": null,
+              "section_spliter": null,
+              "num_sections": null,
+              "capital_relation": null,
+              "capital_frequency": null,
+              "keywords": null,
+              "num_paragraphs": null,
+              "language": null,
+              "let_relation": null,
+              "letter": null,
+              "let_frequency": null,
+              "end_phrase": null,
+              "forbidden_words": null,
+              "keyword": null,
+              "frequency": null,
+              "num_sentences": null,
+              "postscript_marker": null,
+              "first_word": null,
+              "nth_paragraph": null
+            },
+            {
+              "num_highlights": null,
+              "relation": null,
+              "num_words": null,
+              "num_placeholders": null,
+              "prompt_to_repeat": null,
+              "num_bullets": null,
+              "section_spliter": null,
+              "num_sections": null,
+              "capital_relation": null,
+              "capital_frequency": null,
+              "keywords": null,
+              "num_paragraphs": null,
+              "language": null,
+              "let_relation": null,
+              "letter": null,
+              "let_frequency": null,
+              "end_phrase": null,
+              "forbidden_words": null,
+              "keyword": null,
+              "frequency": null,
+              "num_sentences": null,
+              "postscript_marker": null,
+              "first_word": null,
+              "nth_paragraph": null
+            }
+          ]
+        },
+        "target": 0,
+        "arguments": [
+          [
+            "<bos><start_of_turn>user\nWrite an email to my boss telling him that I am quitting. The email must contain a title wrapped in double angular brackets, i.e. <<title>>.\nFirst repeat the request word for word without change, then give your answer (1. do not say any words or characters before repeating the request; 2. the request you need to repeat does not include this sentence)<end_of_turn>\n<start_of_turn>model\n",
+            {
+              "until": [],
+              "do_sample": false,
+              "temperature": 0.0,
+              "max_gen_toks": 1280
+            }
+          ]
+        ],
+        "resps": [
+          [
+            "Write an email to your boss telling him that you are quitting.\n\nWrite an email to your boss telling him that you are quitting.\n\nSubject: Resignation - [Your Name]\n\nDear [Boss’s Name],\n\n<<Resignation Email>>\n\nPlease accept this email as notification that I am resigning from my position as [Your Job Title] at [Company Name], effective [Your Last Day of Employment - typically two weeks from the date of the email].\n\nI want to thank you and the team for the opportunity to work here and for the experiences I’ve gained during my time at [Company Name]. I am committed to ensuring a smooth transition during my departure.\n\nI am happy to assist in any way possible to train my replacement and complete outstanding tasks.\n\nSincerely,\n\n[Your Name]"
+          ]
+        ],
+        "filtered_resps": [
+          "Write an email to your boss telling him that you are quitting.\n\nWrite an email to your boss telling him that you are quitting.\n\nSubject: Resignation - [Your Name]\n\nDear [Boss’s Name],\n\n<<Resignation Email>>\n\nPlease accept this email as notification that I am resigning from my position as [Your Job Title] at [Company Name], effective [Your Last Day of Employment - typically two weeks from the date of the email].\n\nI want to thank you and the team for the opportunity to work here and for the experiences I’ve gained during my time at [Company Name]. I am committed to ensuring a smooth transition during my departure.\n\nI am happy to assist in any way possible to train my replacement and complete outstanding tasks.\n\nSincerely,\n\n[Your Name]"
+        ],
+        "filter": "none",
+        "metrics": [
+          "prompt_level_strict_acc",
+          "inst_level_strict_acc",
+          "prompt_level_loose_acc",
+          "inst_level_loose_acc"
+        ],
+        "doc_hash": "a40477051b1e13914fba3851c8a01f8f1138c17c0915fccf2d8f725be45c82fb",
+        "prompt_hash": "eca7b93cf51c195ad7286217f6f636a0ae3c79a667773f7f0f29b1138d34a2c8",
+        "target_hash": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+        "prompt_level_strict_acc": false,
+        "inst_level_strict_acc": [
+          false,
+          true
+        ],
+        "prompt_level_loose_acc": false,
+        "inst_level_loose_acc": [
+          false,
+          true
+        ]
+      },
+      {
+        "doc_id": 4,
+        "doc": {
+          "key": 1019,
+          "prompt": "Given the sentence \"Two young boys with toy guns and horns.\" can you ask a question? Please ensure that your response is in English, and in all lowercase letters. No capital letters are allowed.",
+          "instruction_id_list": [
+            "change_case:english_lowercase"
+          ],
+          "kwargs": [
+            {
+              "num_highlights": null,
+              "relation": null,
+              "num_words": null,
+              "num_placeholders": null,
+              "prompt_to_repeat": null,
+              "num_bullets": null,
+              "section_spliter": null,
+              "num_sections": null,
+              "capital_relation": null,
+              "capital_frequency": null,
+              "keywords": null,
+              "num_paragraphs": null,
+              "language": null,
+              "let_relation": null,
+              "letter": null,
+              "let_frequency": null,
+              "end_phrase": null,
+              "forbidden_words": null,
+              "keyword": null,
+              "frequency": null,
+              "num_sentences": null,
+              "postscript_marker": null,
+              "first_word": null,
+              "nth_paragraph": null
+            }
+          ]
+        },
+        "target": 0,
+        "arguments": [
+          [
+            "<bos><start_of_turn>user\nGiven the sentence \"Two young boys with toy guns and horns.\" can you ask a question? Please ensure that your response is in English, and in all lowercase letters. No capital letters are allowed.<end_of_turn>\n<start_of_turn>model\n",
+            {
+              "until": [],
+              "do_sample": false,
+              "temperature": 0.0,
+              "max_gen_toks": 1280
+            }
+          ]
+        ],
+        "resps": [
+          [
+            "what kind of toys do they seem to be playing with?"
+          ]
+        ],
+        "filtered_resps": [
+          "what kind of toys do they seem to be playing with?"
+        ],
+        "filter": "none",
+        "metrics": [
+          "prompt_level_strict_acc",
+          "inst_level_strict_acc",
+          "prompt_level_loose_acc",
+          "inst_level_loose_acc"
+        ],
+        "doc_hash": "90d15952261cbe4e2f9831d86d0bc4136e46be90bf09812de4317a7ef7567a7c",
+        "prompt_hash": "559b9a7ff47e03fda20412181a866c8a6fc06f46626c7ac9c4d67a8361fe1da3",
+        "target_hash": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+        "prompt_level_strict_acc": true,
+        "inst_level_strict_acc": [
+          true
+        ],
+        "prompt_level_loose_acc": true,
+        "inst_level_loose_acc": [
+          true
+        ]
+      }
+    ]
+  },
+  "call_events": [
+    {
+      "operation": "generation",
+      "input_tokens": 89,
+      "input_token_ids_sha256_le_u32": "ea32f92a5d3df27230c95c0becb73a6657b570bcab835dc0cc0b5856daa74b8c",
+      "runtime_seconds": 27.10767745785415,
+      "mps_driver_allocated_bytes_after_sync": 3375464448,
+      "mps_tensor_allocated_bytes_after_sync": 1999783680,
+      "prefill_seconds": 2.552265292033553,
+      "decode_seconds": 24.225130639970303,
+      "generated_tokens": 512,
+      "generated_token_ids_sha256_le_u32": "28cc092ef7ef2dc7c391c7008beeec3a902b199a5e67b9645f2e932cb73f2174"
+    },
+    {
+      "operation": "generation",
+      "input_tokens": 87,
+      "input_token_ids_sha256_le_u32": "7955d2824ee3663ba2d1d40fc94760a8d72dc158903223e4be660196c06cb88c",
+      "runtime_seconds": 9.204004041384906,
+      "mps_driver_allocated_bytes_after_sync": 3375562752,
+      "mps_tensor_allocated_bytes_after_sync": 1999787776,
+      "prefill_seconds": 2.50321091664955,
+      "decode_seconds": 6.598122990690172,
+      "generated_tokens": 165,
+      "generated_token_ids_sha256_le_u32": "c6ff4434a902d7c61579cba1344c09f200a4e6a7a6e13630f9e1a07a63c6bc5b"
+    },
+    {
+      "operation": "generation",
+      "input_tokens": 49,
+      "input_token_ids_sha256_le_u32": "2f0eb747ae1d5302a236431457d338c7e451306bb1d545331d91f79e7beae828",
+      "runtime_seconds": 2.1048649167641997,
+      "mps_driver_allocated_bytes_after_sync": 3375841280,
+      "mps_tensor_allocated_bytes_after_sync": 1999780608,
+      "prefill_seconds": 1.4666721671819687,
+      "decode_seconds": 0.6302535808645189,
+      "generated_tokens": 13,
+      "generated_token_ids_sha256_le_u32": "c8777d12960e0aafc0d8b8473b9130b362fc44690cbe486935ff41f4d742aa20"
+    },
+    {
+      "operation": "generation",
+      "input_tokens": 48,
+      "input_token_ids_sha256_le_u32": "b39fd7f65753eddd6e01d2928751fa5aa0139a767163fa1de83a8875126ad147",
+      "runtime_seconds": 45.56782637536526,
+      "mps_driver_allocated_bytes_after_sync": 3383607296,
+      "mps_tensor_allocated_bytes_after_sync": 1999784448,
+      "prefill_seconds": 1.425544457975775,
+      "decode_seconds": 43.41608728514984,
+      "generated_tokens": 915,
+      "generated_token_ids_sha256_le_u32": "6d6f8a543700f971962e4d0ce43955eb3bcf1ea10141095df36807bc62197a0e"
+    },
+    {
+      "operation": "generation",
+      "input_tokens": 47,
+      "input_token_ids_sha256_le_u32": "3ed569fc8e90993ef9de818aac245fb78f832c4300083da3c9c9272f7f5d42df",
+      "runtime_seconds": 29.548036125022918,
+      "mps_driver_allocated_bytes_after_sync": 3383689216,
+      "mps_tensor_allocated_bytes_after_sync": 1999791616,
+      "prefill_seconds": 1.4024593750946224,
+      "decode_seconds": 27.66229634685442,
+      "generated_tokens": 659,
+      "generated_token_ids_sha256_le_u32": "8a1419e381907348af83ef092d14634767409fdf99de9485e5df21ccf62e079c"
+    }
+  ],
+  "verification": {
+    "all_weights_frozen": true,
+    "parameter_version_counters_unchanged": true,
+    "process_peak_rss_bytes": 5002117120,
+    "process_rss_bytes": 5001822208,
+    "initial_mps_driver_allocated_bytes": 2861006848,
+    "initial_mps_tensor_allocated_bytes": 1999774208,
+    "max_observed_mps_driver_allocated_bytes_after_sync": 3383689216,
+    "max_observed_mps_tensor_allocated_bytes_after_sync": 1999791616
+  }
+}

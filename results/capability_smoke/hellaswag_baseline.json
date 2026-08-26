@@ -1,0 +1,772 @@
+{
+  "schema_version": 1,
+  "phase": "plumbing_smoke_non_evidentiary",
+  "condition": "baseline",
+  "benchmark": "hellaswag",
+  "manifest_path": "experiments/capability_smoke_manifest.json",
+  "manifest_sha256": "8c55362f4878ccdf0c242bade21e2085fef04484518caf55214b05a43c3d05af",
+  "harness_revision": "dd417662e5bda6a247489ec28d2ff46a45d1c42c",
+  "model_info": {
+    "model_id": "google/gemma-3-1b-it",
+    "model_revision": "dcc83ea841ab6100d6b47a070329e1ba4cf78752",
+    "tokenizer_revision": "dcc83ea841ab6100d6b47a070329e1ba4cf78752",
+    "dtype": "bfloat16",
+    "device": "mps",
+    "parameter_count": 999885952,
+    "transformers_version": "5.0.0"
+  },
+  "model_load_seconds": 0.39581150002777576,
+  "evaluation_seconds": 8.287860000040382,
+  "python_version": "3.12.6",
+  "platform": "macOS-26.5.2-arm64-arm-64bit",
+  "torch_version": "2.10.0",
+  "transformers_version": "5.0.0",
+  "harness_results": {
+    "hellaswag": {
+      "name": "hellaswag",
+      "alias": "hellaswag",
+      "sample_len": 5,
+      "acc,none": 0.6,
+      "acc_stderr,none": "N/A",
+      "acc_norm,none": 0.4,
+      "acc_norm_stderr,none": "N/A"
+    }
+  },
+  "harness_groups": {},
+  "harness_configs": {
+    "hellaswag": {
+      "task": "hellaswag",
+      "dataset_path": "Rowan/hellaswag",
+      "training_split": "train",
+      "validation_split": "validation",
+      "process_docs": "def process_docs(dataset: datasets.Dataset) -> datasets.Dataset:\n    def _process_doc(doc):\n        ctx = doc[\"ctx_a\"] + \" \" + doc[\"ctx_b\"].capitalize()\n        out_doc = {\n            \"query\": preprocess(doc[\"activity_label\"] + \": \" + ctx),\n            \"choices\": [preprocess(ending) for ending in doc[\"endings\"]],\n            \"gold\": int(doc[\"label\"]),\n        }\n        return out_doc\n\n    return dataset.map(_process_doc)\n",
+      "doc_to_text": "{{query}}",
+      "doc_to_target": "{{label}}",
+      "unsafe_code": false,
+      "doc_to_choice": "choices",
+      "description": "",
+      "target_delimiter": " ",
+      "fewshot_delimiter": "\n\n",
+      "fewshot_config": {
+        "sampler": "default",
+        "split": null,
+        "process_docs": "lm_eval.tasks.hellaswag.utils.process_docs",
+        "fewshot_indices": null,
+        "samples": null,
+        "doc_to_text": "{{query}}",
+        "doc_to_choice": "choices",
+        "doc_to_target": "{{label}}",
+        "gen_prefix": null,
+        "fewshot_delimiter": "\n\n",
+        "target_delimiter": " "
+      },
+      "num_fewshot": 0,
+      "metric_list": [
+        {
+          "metric": "acc",
+          "aggregation": "mean",
+          "higher_is_better": true
+        },
+        {
+          "metric": "acc_norm",
+          "aggregation": "mean",
+          "higher_is_better": true
+        }
+      ],
+      "output_type": "multiple_choice",
+      "repeats": 1,
+      "should_decontaminate": false,
+      "metadata": {
+        "version": 1.0,
+        "config_source": "/Users/josephvargas/Documents/Projects/recirculation/.venv/lib/python3.12/site-packages/lm_eval/tasks/hellaswag/hellaswag.yaml"
+      }
+    }
+  },
+  "harness_versions": {
+    "hellaswag": 1.0
+  },
+  "harness_n_shot": {
+    "hellaswag": 0
+  },
+  "samples": {
+    "hellaswag": [
+      {
+        "doc_id": 0,
+        "doc": {
+          "ind": 24,
+          "activity_label": "Roof shingle removal",
+          "ctx_a": "A man is sitting on a roof.",
+          "ctx_b": "he",
+          "ctx": "A man is sitting on a roof. he",
+          "endings": [
+            "is using wrap to wrap a pair of skis.",
+            "is ripping level tiles off.",
+            "is holding a rubik's cube.",
+            "starts pulling up roofing on a roof."
+          ],
+          "source_id": "activitynet~v_-JhWjGDPHMY",
+          "split": "val",
+          "split_type": "indomain",
+          "label": "3",
+          "query": "Roof shingle removal: A man is sitting on a roof. He",
+          "choices": [
+            "is using wrap to wrap a pair of skis.",
+            "is ripping level tiles off.",
+            "is holding a rubik's cube.",
+            "starts pulling up roofing on a roof."
+          ],
+          "gold": 3
+        },
+        "target": 3,
+        "arguments": [
+          [
+            "<bos><start_of_turn>user\nRoof shingle removal: A man is sitting on a roof. He<end_of_turn>\n<start_of_turn>model\n",
+            "is using wrap to wrap a pair of skis."
+          ],
+          [
+            "<bos><start_of_turn>user\nRoof shingle removal: A man is sitting on a roof. He<end_of_turn>\n<start_of_turn>model\n",
+            "is ripping level tiles off."
+          ],
+          [
+            "<bos><start_of_turn>user\nRoof shingle removal: A man is sitting on a roof. He<end_of_turn>\n<start_of_turn>model\n",
+            "is holding a rubik's cube."
+          ],
+          [
+            "<bos><start_of_turn>user\nRoof shingle removal: A man is sitting on a roof. He<end_of_turn>\n<start_of_turn>model\n",
+            "starts pulling up roofing on a roof."
+          ]
+        ],
+        "resps": [
+          [
+            [
+              -109.0,
+              false
+            ]
+          ],
+          [
+            [
+              -100.5,
+              false
+            ]
+          ],
+          [
+            [
+              -82.5,
+              false
+            ]
+          ],
+          [
+            [
+              -100.0,
+              false
+            ]
+          ]
+        ],
+        "filtered_resps": [
+          [
+            -109.0,
+            false
+          ],
+          [
+            -100.5,
+            false
+          ],
+          [
+            -82.5,
+            false
+          ],
+          [
+            -100.0,
+            false
+          ]
+        ],
+        "filter": "none",
+        "metrics": [
+          "acc",
+          "acc_norm"
+        ],
+        "doc_hash": "5fa398b50d156bdf77b474f3b43a03352e9a46bddfc7bb62e1038f7b4f12bbd1",
+        "prompt_hash": "c876c1dd3b53b70449711033a7e1e70b5c358e42863bce0a9ae85ae5825be0cb",
+        "target_hash": "4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce",
+        "acc": 0.0,
+        "acc_norm": 1.0
+      },
+      {
+        "doc_id": 1,
+        "doc": {
+          "ind": 92,
+          "activity_label": "Clean and jerk",
+          "ctx_a": "A lady walks to a barbell. She bends down and grabs the pole.",
+          "ctx_b": "the lady",
+          "ctx": "A lady walks to a barbell. She bends down and grabs the pole. the lady",
+          "endings": [
+            "swings and lands in her arms.",
+            "pulls the barbell forward.",
+            "pulls a rope attached to the barbell.",
+            "stands and lifts the weight over her head."
+          ],
+          "source_id": "activitynet~v_-lJS58hyo1c",
+          "split": "val",
+          "split_type": "zeroshot",
+          "label": "3",
+          "query": "Clean and jerk: A lady walks to a barbell. She bends down and grabs the pole. The lady",
+          "choices": [
+            "swings and lands in her arms.",
+            "pulls the barbell forward.",
+            "pulls a rope attached to the barbell.",
+            "stands and lifts the weight over her head."
+          ],
+          "gold": 3
+        },
+        "target": 3,
+        "arguments": [
+          [
+            "<bos><start_of_turn>user\nClean and jerk: A lady walks to a barbell. She bends down and grabs the pole. The lady<end_of_turn>\n<start_of_turn>model\n",
+            "swings and lands in her arms."
+          ],
+          [
+            "<bos><start_of_turn>user\nClean and jerk: A lady walks to a barbell. She bends down and grabs the pole. The lady<end_of_turn>\n<start_of_turn>model\n",
+            "pulls the barbell forward."
+          ],
+          [
+            "<bos><start_of_turn>user\nClean and jerk: A lady walks to a barbell. She bends down and grabs the pole. The lady<end_of_turn>\n<start_of_turn>model\n",
+            "pulls a rope attached to the barbell."
+          ],
+          [
+            "<bos><start_of_turn>user\nClean and jerk: A lady walks to a barbell. She bends down and grabs the pole. The lady<end_of_turn>\n<start_of_turn>model\n",
+            "stands and lifts the weight over her head."
+          ]
+        ],
+        "resps": [
+          [
+            [
+              -92.5,
+              false
+            ]
+          ],
+          [
+            [
+              -55.0,
+              false
+            ]
+          ],
+          [
+            [
+              -53.75,
+              false
+            ]
+          ],
+          [
+            [
+              -80.5,
+              false
+            ]
+          ]
+        ],
+        "filtered_resps": [
+          [
+            -92.5,
+            false
+          ],
+          [
+            -55.0,
+            false
+          ],
+          [
+            -53.75,
+            false
+          ],
+          [
+            -80.5,
+            false
+          ]
+        ],
+        "filter": "none",
+        "metrics": [
+          "acc",
+          "acc_norm"
+        ],
+        "doc_hash": "08296d87a2d1cb270a714773cb78d37f02f82661a082462fa53b437dfa0e3a5e",
+        "prompt_hash": "0862618ce2a14dcacbff78dc9030c2bed9c1defb42d11eedfac77b162584ea0e",
+        "target_hash": "4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce",
+        "acc": 0.0,
+        "acc_norm": 0.0
+      },
+      {
+        "doc_id": 2,
+        "doc": {
+          "ind": 106,
+          "activity_label": "Canoeing",
+          "ctx_a": "Two women in a child are shown in a canoe while a man pulls the canoe while standing in the water, with other individuals visible in the background.",
+          "ctx_b": "the child and a different man",
+          "ctx": "Two women in a child are shown in a canoe while a man pulls the canoe while standing in the water, with other individuals visible in the background. the child and a different man",
+          "endings": [
+            "are then shown paddling down a river in a boat while a woman talks.",
+            "are driving the canoe, they go down the river flowing side to side.",
+            "sit in a canoe while the man paddles.",
+            "walking go down the rapids, while the man in his helicopter almost falls and goes out of canoehood."
+          ],
+          "source_id": "activitynet~v_-xQvJmC2jhk",
+          "split": "val",
+          "split_type": "indomain",
+          "label": "2",
+          "query": "Canoeing: Two women in a child are shown in a canoe while a man pulls the canoe while standing in the water, with other individuals visible in the background. The child and a different man",
+          "choices": [
+            "are then shown paddling down a river in a boat while a woman talks.",
+            "are driving the canoe, they go down the river flowing side to side.",
+            "sit in a canoe while the man paddles.",
+            "walking go down the rapids, while the man in his helicopter almost falls and goes out of canoehood."
+          ],
+          "gold": 2
+        },
+        "target": 2,
+        "arguments": [
+          [
+            "<bos><start_of_turn>user\nCanoeing: Two women in a child are shown in a canoe while a man pulls the canoe while standing in the water, with other individuals visible in the background. The child and a different man<end_of_turn>\n<start_of_turn>model\n",
+            "are then shown paddling down a river in a boat while a woman talks."
+          ],
+          [
+            "<bos><start_of_turn>user\nCanoeing: Two women in a child are shown in a canoe while a man pulls the canoe while standing in the water, with other individuals visible in the background. The child and a different man<end_of_turn>\n<start_of_turn>model\n",
+            "are driving the canoe, they go down the river flowing side to side."
+          ],
+          [
+            "<bos><start_of_turn>user\nCanoeing: Two women in a child are shown in a canoe while a man pulls the canoe while standing in the water, with other individuals visible in the background. The child and a different man<end_of_turn>\n<start_of_turn>model\n",
+            "sit in a canoe while the man paddles."
+          ],
+          [
+            "<bos><start_of_turn>user\nCanoeing: Two women in a child are shown in a canoe while a man pulls the canoe while standing in the water, with other individuals visible in the background. The child and a different man<end_of_turn>\n<start_of_turn>model\n",
+            "walking go down the rapids, while the man in his helicopter almost falls and goes out of canoehood."
+          ]
+        ],
+        "resps": [
+          [
+            [
+              -136.0,
+              false
+            ]
+          ],
+          [
+            [
+              -152.0,
+              false
+            ]
+          ],
+          [
+            [
+              -80.0,
+              false
+            ]
+          ],
+          [
+            [
+              -203.0,
+              false
+            ]
+          ]
+        ],
+        "filtered_resps": [
+          [
+            -136.0,
+            false
+          ],
+          [
+            -152.0,
+            false
+          ],
+          [
+            -80.0,
+            false
+          ],
+          [
+            -203.0,
+            false
+          ]
+        ],
+        "filter": "none",
+        "metrics": [
+          "acc",
+          "acc_norm"
+        ],
+        "doc_hash": "14dc9b1c3f03ef369e0e9976562d362f58e37cadb9bebf25ee5dabdc3ff6ad7d",
+        "prompt_hash": "56977cacaf05de00365058eaae089933b96a40c472274462ebde4f9e1b7d8274",
+        "target_hash": "d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35",
+        "acc": 1.0,
+        "acc_norm": 0.0
+      },
+      {
+        "doc_id": 3,
+        "doc": {
+          "ind": 114,
+          "activity_label": "High jump",
+          "ctx_a": "A boy is running down a track.",
+          "ctx_b": "the boy",
+          "ctx": "A boy is running down a track. the boy",
+          "endings": [
+            "runs into a car.",
+            "gets in a mat.",
+            "lifts his body above the height of a pole.",
+            "stands on his hands and springs."
+          ],
+          "source_id": "activitynet~v_-zHX3Gdx6I4",
+          "split": "val",
+          "split_type": "zeroshot",
+          "label": "2",
+          "query": "High jump: A boy is running down a track. The boy",
+          "choices": [
+            "runs into a car.",
+            "gets in a mat.",
+            "lifts his body above the height of a pole.",
+            "stands on his hands and springs."
+          ],
+          "gold": 2
+        },
+        "target": 2,
+        "arguments": [
+          [
+            "<bos><start_of_turn>user\nHigh jump: A boy is running down a track. The boy<end_of_turn>\n<start_of_turn>model\n",
+            "runs into a car."
+          ],
+          [
+            "<bos><start_of_turn>user\nHigh jump: A boy is running down a track. The boy<end_of_turn>\n<start_of_turn>model\n",
+            "gets in a mat."
+          ],
+          [
+            "<bos><start_of_turn>user\nHigh jump: A boy is running down a track. The boy<end_of_turn>\n<start_of_turn>model\n",
+            "lifts his body above the height of a pole."
+          ],
+          [
+            "<bos><start_of_turn>user\nHigh jump: A boy is running down a track. The boy<end_of_turn>\n<start_of_turn>model\n",
+            "stands on his hands and springs."
+          ]
+        ],
+        "resps": [
+          [
+            [
+              -77.0,
+              false
+            ]
+          ],
+          [
+            [
+              -77.5,
+              false
+            ]
+          ],
+          [
+            [
+              -68.5,
+              false
+            ]
+          ],
+          [
+            [
+              -91.0,
+              false
+            ]
+          ]
+        ],
+        "filtered_resps": [
+          [
+            -77.0,
+            false
+          ],
+          [
+            -77.5,
+            false
+          ],
+          [
+            -68.5,
+            false
+          ],
+          [
+            -91.0,
+            false
+          ]
+        ],
+        "filter": "none",
+        "metrics": [
+          "acc",
+          "acc_norm"
+        ],
+        "doc_hash": "7a5346b1d9309aa52799e598a5ccbff33ccd8c18c1d1056da412389ea5bd9e8b",
+        "prompt_hash": "5bf97265a6255a51fcea8fca869151bc0731d51233f75e0fdc0c3b4a32b00dff",
+        "target_hash": "d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35",
+        "acc": 1.0,
+        "acc_norm": 1.0
+      },
+      {
+        "doc_id": 4,
+        "doc": {
+          "ind": 116,
+          "activity_label": "High jump",
+          "ctx_a": "The boy lifts his body above the height of a pole. The boy lands on his back on to a red mat.",
+          "ctx_b": "the boy",
+          "ctx": "The boy lifts his body above the height of a pole. The boy lands on his back on to a red mat. the boy",
+          "endings": [
+            "turns his body around on the mat.",
+            "gets up from the mat.",
+            "continues to lift his body over the pole.",
+            "wiggles out of the mat."
+          ],
+          "source_id": "activitynet~v_-zHX3Gdx6I4",
+          "split": "val",
+          "split_type": "zeroshot",
+          "label": "1",
+          "query": "High jump: The boy lifts his body above the height of a pole. The boy lands on his back on to a red mat. The boy",
+          "choices": [
+            "turns his body around on the mat.",
+            "gets up from the mat.",
+            "continues to lift his body over the pole.",
+            "wiggles out of the mat."
+          ],
+          "gold": 1
+        },
+        "target": 1,
+        "arguments": [
+          [
+            "<bos><start_of_turn>user\nHigh jump: The boy lifts his body above the height of a pole. The boy lands on his back on to a red mat. The boy<end_of_turn>\n<start_of_turn>model\n",
+            "turns his body around on the mat."
+          ],
+          [
+            "<bos><start_of_turn>user\nHigh jump: The boy lifts his body above the height of a pole. The boy lands on his back on to a red mat. The boy<end_of_turn>\n<start_of_turn>model\n",
+            "gets up from the mat."
+          ],
+          [
+            "<bos><start_of_turn>user\nHigh jump: The boy lifts his body above the height of a pole. The boy lands on his back on to a red mat. The boy<end_of_turn>\n<start_of_turn>model\n",
+            "continues to lift his body over the pole."
+          ],
+          [
+            "<bos><start_of_turn>user\nHigh jump: The boy lifts his body above the height of a pole. The boy lands on his back on to a red mat. The boy<end_of_turn>\n<start_of_turn>model\n",
+            "wiggles out of the mat."
+          ]
+        ],
+        "resps": [
+          [
+            [
+              -61.0,
+              false
+            ]
+          ],
+          [
+            [
+              -55.75,
+              false
+            ]
+          ],
+          [
+            [
+              -68.5,
+              false
+            ]
+          ],
+          [
+            [
+              -67.0,
+              false
+            ]
+          ]
+        ],
+        "filtered_resps": [
+          [
+            -61.0,
+            false
+          ],
+          [
+            -55.75,
+            false
+          ],
+          [
+            -68.5,
+            false
+          ],
+          [
+            -67.0,
+            false
+          ]
+        ],
+        "filter": "none",
+        "metrics": [
+          "acc",
+          "acc_norm"
+        ],
+        "doc_hash": "0ea20e56c00cb5efbd1db09b523ddfb3dca721b1e17d740270d39d0296ee621c",
+        "prompt_hash": "b8032ccda49ece995b0b834b973ad2bc015fae35e55cd6757810a4ac8f234b23",
+        "target_hash": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
+        "acc": 1.0,
+        "acc_norm": 0.0
+      }
+    ]
+  },
+  "call_events": [
+    {
+      "operation": "loglikelihood",
+      "input_tokens": 69,
+      "input_token_ids_sha256_le_u32": "8c93452f54d96b6ad68668225039ec57dfa6293615f9e8ba3419cb500b3fd286",
+      "runtime_seconds": 0.12690775003284216,
+      "mps_driver_allocated_bytes_after_sync": 2899017728,
+      "mps_tensor_allocated_bytes_after_sync": 2035952384
+    },
+    {
+      "operation": "loglikelihood",
+      "input_tokens": 63,
+      "input_token_ids_sha256_le_u32": "aa2e9b5333cbce20dd116e549aee11210c168687445cb681cc99fd10798ecb49",
+      "runtime_seconds": 0.0633507501333952,
+      "mps_driver_allocated_bytes_after_sync": 2922119168,
+      "mps_tensor_allocated_bytes_after_sync": 2072130304
+    },
+    {
+      "operation": "loglikelihood",
+      "input_tokens": 63,
+      "input_token_ids_sha256_le_u32": "82c997e834f999384b52fd8b5e8bc0f086bafcc9eabcf521419033d133c1a894",
+      "runtime_seconds": 0.03465491672977805,
+      "mps_driver_allocated_bytes_after_sync": 2922135552,
+      "mps_tensor_allocated_bytes_after_sync": 2068984576
+    },
+    {
+      "operation": "loglikelihood",
+      "input_tokens": 57,
+      "input_token_ids_sha256_le_u32": "4dc6bb49da0d6ea104cbcbc92a19db9b44809300161e08a944c156b7794ceb6c",
+      "runtime_seconds": 0.06182008422911167,
+      "mps_driver_allocated_bytes_after_sync": 2922151936,
+      "mps_tensor_allocated_bytes_after_sync": 2068984576
+    },
+    {
+      "operation": "loglikelihood",
+      "input_tokens": 46,
+      "input_token_ids_sha256_le_u32": "1cde720f9423ae87f8f6f9efafc85bd1fa8cb9013c898d4f68f649d538887f58",
+      "runtime_seconds": 0.061102166306227446,
+      "mps_driver_allocated_bytes_after_sync": 2922184704,
+      "mps_tensor_allocated_bytes_after_sync": 2068984576
+    },
+    {
+      "operation": "loglikelihood",
+      "input_tokens": 45,
+      "input_token_ids_sha256_le_u32": "6d8033e0363cecf0337d7cd889bbdbbfc000eb1a9caad79396e254d4bd9f68df",
+      "runtime_seconds": 0.06277666706591845,
+      "mps_driver_allocated_bytes_after_sync": 2922201088,
+      "mps_tensor_allocated_bytes_after_sync": 2068984576
+    },
+    {
+      "operation": "loglikelihood",
+      "input_tokens": 44,
+      "input_token_ids_sha256_le_u32": "7776574eb1c0050dfae29d22cfff35a3b7b2e9cf16430a61af5b88b9634e9c51",
+      "runtime_seconds": 0.060906417202204466,
+      "mps_driver_allocated_bytes_after_sync": 2922233856,
+      "mps_tensor_allocated_bytes_after_sync": 2068984576
+    },
+    {
+      "operation": "loglikelihood",
+      "input_tokens": 43,
+      "input_token_ids_sha256_le_u32": "5d0af454cd309b737f3ade8120f0f69a916351e734ea8152c4f6b499f59a4ee5",
+      "runtime_seconds": 0.06218487489968538,
+      "mps_driver_allocated_bytes_after_sync": 2922266624,
+      "mps_tensor_allocated_bytes_after_sync": 2068984576
+    },
+    {
+      "operation": "loglikelihood",
+      "input_tokens": 38,
+      "input_token_ids_sha256_le_u32": "7c86c4a79f5980c116783e2bf628b86011a05694223605c463be7f6dfc38ae6d",
+      "runtime_seconds": 0.13480820879340172,
+      "mps_driver_allocated_bytes_after_sync": 2922299392,
+      "mps_tensor_allocated_bytes_after_sync": 2068984576
+    },
+    {
+      "operation": "loglikelihood",
+      "input_tokens": 38,
+      "input_token_ids_sha256_le_u32": "27dee0643ff3fda86aeaaf45b15e6fb57726c1de13dcfb2a01c03167bcd34584",
+      "runtime_seconds": 0.03441420802846551,
+      "mps_driver_allocated_bytes_after_sync": 2922299392,
+      "mps_tensor_allocated_bytes_after_sync": 2068984576
+    },
+    {
+      "operation": "loglikelihood",
+      "input_tokens": 37,
+      "input_token_ids_sha256_le_u32": "9735603b1fdf00cb421b8bc3725a3cedc1bab78210f5a8fd52d19abba66f4902",
+      "runtime_seconds": 0.06325187487527728,
+      "mps_driver_allocated_bytes_after_sync": 2922315776,
+      "mps_tensor_allocated_bytes_after_sync": 2068984576
+    },
+    {
+      "operation": "loglikelihood",
+      "input_tokens": 35,
+      "input_token_ids_sha256_le_u32": "e428cd2ea42b0bcab45f8a248c8fdf17dc5b56bfdea3493308210c09a224f9b1",
+      "runtime_seconds": 0.06379433302208781,
+      "mps_driver_allocated_bytes_after_sync": 2922332160,
+      "mps_tensor_allocated_bytes_after_sync": 2068984576
+    },
+    {
+      "operation": "loglikelihood",
+      "input_tokens": 32,
+      "input_token_ids_sha256_le_u32": "46300ac60aa7ef6f5925def1220b6324f3beea019888da541bb429adf2ac80e0",
+      "runtime_seconds": 0.06257791724056005,
+      "mps_driver_allocated_bytes_after_sync": 2922348544,
+      "mps_tensor_allocated_bytes_after_sync": 2068984576
+    },
+    {
+      "operation": "loglikelihood",
+      "input_tokens": 31,
+      "input_token_ids_sha256_le_u32": "e812d4be78a035f0a62064a57e0016c56d3a81c011138f12d38a952bc7546ce6",
+      "runtime_seconds": 0.06175275007262826,
+      "mps_driver_allocated_bytes_after_sync": 2922381312,
+      "mps_tensor_allocated_bytes_after_sync": 2068984576
+    },
+    {
+      "operation": "loglikelihood",
+      "input_tokens": 31,
+      "input_token_ids_sha256_le_u32": "16affeae29962c349de58de7b3a3cd209159570512de0f8dc400eb9cf645b462",
+      "runtime_seconds": 0.03340395772829652,
+      "mps_driver_allocated_bytes_after_sync": 2922381312,
+      "mps_tensor_allocated_bytes_after_sync": 2068984576
+    },
+    {
+      "operation": "loglikelihood",
+      "input_tokens": 30,
+      "input_token_ids_sha256_le_u32": "e900be622638ef79c769a5d3228973e6f85e3c1c3775f24e7db948ffa39d2f17",
+      "runtime_seconds": 0.06188033428043127,
+      "mps_driver_allocated_bytes_after_sync": 2922397696,
+      "mps_tensor_allocated_bytes_after_sync": 2068984576
+    },
+    {
+      "operation": "loglikelihood",
+      "input_tokens": 28,
+      "input_token_ids_sha256_le_u32": "1459d9dded8d6ac098fea45da06d4ff7189a2199b556cd649087dac278cf4878",
+      "runtime_seconds": 0.06200875015929341,
+      "mps_driver_allocated_bytes_after_sync": 2922414080,
+      "mps_tensor_allocated_bytes_after_sync": 2068984576
+    },
+    {
+      "operation": "loglikelihood",
+      "input_tokens": 28,
+      "input_token_ids_sha256_le_u32": "b72e0495cb932cbc07cb06cb644658a83addd26a374a4e24826d84bebbf00a66",
+      "runtime_seconds": 0.0327652501873672,
+      "mps_driver_allocated_bytes_after_sync": 2922414080,
+      "mps_tensor_allocated_bytes_after_sync": 2068984576
+    },
+    {
+      "operation": "loglikelihood",
+      "input_tokens": 26,
+      "input_token_ids_sha256_le_u32": "7e6bac5854a8d8f1ae7859f7caa92bf45412bca1d40dbd26df624a5e3c143b00",
+      "runtime_seconds": 0.06284154066815972,
+      "mps_driver_allocated_bytes_after_sync": 2922430464,
+      "mps_tensor_allocated_bytes_after_sync": 2068984576
+    },
+    {
+      "operation": "loglikelihood",
+      "input_tokens": 26,
+      "input_token_ids_sha256_le_u32": "0adf528ae9866186675d847b83cb1f8603148e98ba19e4acece81acdddad31de",
+      "runtime_seconds": 0.033479166217148304,
+      "mps_driver_allocated_bytes_after_sync": 2928738304,
+      "mps_tensor_allocated_bytes_after_sync": 2068984576
+    }
+  ],
+  "verification": {
+    "all_weights_frozen": true,
+    "parameter_version_counters_unchanged": true,
+    "process_peak_rss_bytes": 1876754432,
+    "process_rss_bytes": 1651032064,
+    "initial_mps_driver_allocated_bytes": 2861006848,
+    "initial_mps_tensor_allocated_bytes": 1999774208,
+    "max_observed_mps_driver_allocated_bytes_after_sync": 2928738304,
+    "max_observed_mps_tensor_allocated_bytes_after_sync": 2072130304
+  }
+}
