@@ -16,7 +16,6 @@ from recirculation.constants import (
 from recirculation.data import load_manifest
 from recirculation.summarize_validation import classify, summarize_validation
 
-
 MANIFEST = Path("experiments/pg19_validation_books_2_9.json")
 EXPLORATORY_MANIFEST = Path("experiments/pg19_windows.json")
 EXPLORATORY_COMPARISON = Path("results/comparison.json")
@@ -89,14 +88,18 @@ def summarize(tmp_path: Path, baseline: dict, recurrent: dict) -> dict:
 
 
 def test_uniform_positive_result_is_confirmed(tmp_path: Path) -> None:
-    result = summarize(tmp_path, condition("baseline", 3.0), condition("recirculation", 2.9))
+    result = summarize(
+        tmp_path, condition("baseline", 3.0), condition("recirculation", 2.9)
+    )
     assert result["classification"] == "CONFIRMED"
     assert result["consistency"]["books_improved"] == 8
     assert result["consistency"]["windows_improved"] == 40
 
 
 def test_uniform_negative_result_is_not_confirmed(tmp_path: Path) -> None:
-    result = summarize(tmp_path, condition("baseline", 3.0), condition("recirculation", 3.1))
+    result = summarize(
+        tmp_path, condition("baseline", 3.0), condition("recirculation", 3.1)
+    )
     assert result["classification"] == "NOT CONFIRMED"
     assert result["aggregate"]["percent_perplexity_reduction"] < 0
 

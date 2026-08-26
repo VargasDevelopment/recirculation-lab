@@ -46,8 +46,13 @@ def paired_direction(
     return "improved" if mean_delta > 0 else "worsened"
 
 
-def validate_conditions(baseline: dict, recirculation: dict, manifest: dict) -> list[str]:
-    if baseline.get("condition") != "baseline" or baseline.get("recirculation") is not None:
+def validate_conditions(
+    baseline: dict, recirculation: dict, manifest: dict
+) -> list[str]:
+    if (
+        baseline.get("condition") != "baseline"
+        or baseline.get("recirculation") is not None
+    ):
         raise ValueError("baseline input is not the ordinary condition")
     expected_recirculation = {
         "destination_layer_zero_based": DESTINATION_LAYER,
@@ -61,7 +66,9 @@ def validate_conditions(baseline: dict, recirculation: dict, manifest: dict) -> 
     if recirculation.get("condition") != "recirculation":
         raise ValueError("recirculation input is mislabeled")
     if recirculation.get("recirculation") != expected_recirculation:
-        raise ValueError("recirculation mechanism differs from the locked configuration")
+        raise ValueError(
+            "recirculation mechanism differs from the locked configuration"
+        )
 
     exact_fields = [
         "model_id",
@@ -83,7 +90,10 @@ def validate_conditions(baseline: dict, recirculation: dict, manifest: dict) -> 
     for field in exact_fields:
         if baseline.get(field) != recirculation.get(field):
             raise ValueError(f"conditions differ in {field}")
-    if baseline.get("weights_frozen") is not True or recirculation.get("weights_frozen") is not True:
+    if (
+        baseline.get("weights_frozen") is not True
+        or recirculation.get("weights_frozen") is not True
+    ):
         raise ValueError("a condition did not report frozen weights")
     if baseline.get("parameter_version_counters_unchanged") is not True:
         raise ValueError("baseline parameter versions changed")
@@ -116,7 +126,9 @@ def validate_conditions(baseline: dict, recirculation: dict, manifest: dict) -> 
     return exact_fields
 
 
-def classify(aggregate_reduction: float, books_improved: int, windows_improved: int) -> str:
+def classify(
+    aggregate_reduction: float, books_improved: int, windows_improved: int
+) -> str:
     if aggregate_reduction > 0 and books_improved >= 5 and windows_improved >= 21:
         return "CONFIRMED"
     if aggregate_reduction <= 0 and books_improved <= 4 and windows_improved <= 20:
@@ -277,9 +289,7 @@ def summarize_validation(
             "requires no aggregate improvement and no majority at either level; "
             "all other outcomes are MIXED"
         ),
-        "tie_rule": (
-            "absolute paired mean-NLL difference <= 1e-6 per predicted token"
-        ),
+        "tie_rule": ("absolute paired mean-NLL difference <= 1e-6 per predicted token"),
         "aggregate": {
             "baseline_perplexity": baseline_ppl,
             "recirculation_perplexity": recurrent_ppl,

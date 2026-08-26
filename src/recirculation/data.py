@@ -14,10 +14,10 @@ from datasets import load_dataset
 from transformers import AutoTokenizer
 
 from .constants import (
-    CONTEXT_LENGTH,
     CONFIRMATORY_NUM_DOCUMENTS,
     CONFIRMATORY_SELECTION_ID,
     CONFIRMATORY_START_DOCUMENT,
+    CONTEXT_LENGTH,
     DATASET_ID,
     DATASET_REVISION,
     DATASET_SPLIT,
@@ -65,7 +65,9 @@ def token_sha256(token_ids: list[int]) -> str:
     return hashlib.sha256(payload).hexdigest()
 
 
-def prepare_manifest(output: Path, selection_id: str = EXPLORATORY_SELECTION_ID) -> dict:
+def prepare_manifest(
+    output: Path, selection_id: str = EXPLORATORY_SELECTION_ID
+) -> dict:
     selection = SELECTIONS[selection_id]
     dataset = load_dataset(
         DATASET_ID,
@@ -86,7 +88,9 @@ def prepare_manifest(output: Path, selection_id: str = EXPLORATORY_SELECTION_ID)
         token_ids = tokenizer.encode(record["text"], add_special_tokens=True)
         required = CONTEXT_LENGTH * WINDOWS_PER_DOCUMENT
         if len(token_ids) < required:
-            raise RuntimeError(f"document {document_index} has fewer than {required} tokens")
+            raise RuntimeError(
+                f"document {document_index} has fewer than {required} tokens"
+            )
         for window_index in range(WINDOWS_PER_DOCUMENT):
             start = window_index * CONTEXT_LENGTH
             window = token_ids[start : start + CONTEXT_LENGTH]
@@ -168,7 +172,9 @@ def load_manifest(path: Path) -> dict:
         for window in windows
     ]
     if actual_order != expected_order:
-        raise ValueError("manifest document/window order differs from the locked selection")
+        raise ValueError(
+            "manifest document/window order differs from the locked selection"
+        )
 
     predicted_total = 0
     for window in windows:
@@ -201,7 +207,9 @@ def assert_manifests_disjoint(first_path: Path, second_path: Path) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--output", type=Path, default=Path("experiments/pg19_windows.json"))
+    parser.add_argument(
+        "--output", type=Path, default=Path("experiments/pg19_windows.json")
+    )
     parser.add_argument(
         "--selection",
         choices=sorted(SELECTIONS),

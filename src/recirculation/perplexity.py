@@ -8,7 +8,9 @@ import torch
 import torch.nn.functional as F
 
 
-def shifted_nll(logits: torch.Tensor, input_ids: torch.Tensor) -> tuple[torch.Tensor, int]:
+def shifted_nll(
+    logits: torch.Tensor, input_ids: torch.Tensor
+) -> tuple[torch.Tensor, int]:
     """Return summed float32 NLL and number of next-token targets."""
     if logits.ndim != 3 or input_ids.ndim != 2:
         raise ValueError("expected logits [B,L,V] and input_ids [B,L]")

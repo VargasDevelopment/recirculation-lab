@@ -20,14 +20,24 @@ Relevant locations: Equations 1–2 (PDF p. 4), Sections 4.1–4.3 and Table 1
   `d88d797f9ae0e88073ce219a41887c48408e5bf4` (24 January 2026)
 - Unmodified upstream raw-file SHA-256:
   `c21ea064c29c04c8c4cf93c91f134b7719dbbdb9960759c191790c41850990b1`
-- Vendored and adapted at
-  `src/recirculation/author_recurrent_gemma3.py`; adaptations are marked
-  `REPRODUCTION`.
+- The paper does not formally link the gist. It is treated as author-provided
+  reference code, not an arXiv ancillary artifact.
+- The gist does not state a license. It was consulted for behavioral semantics,
+  but no gist source is included in the public distribution.
 
-The paper does not formally link the gist. It is treated as author-provided
-reference code, not an arXiv ancillary artifact. The gist does not state a
-license; this repository is a local research reproduction and makes no broader
-redistribution claim.
+## Public implementation provenance
+
+- `src/recirculation/gemma3_recirculation.py` is a compact implementation of
+  the published method over the official Transformers Gemma 3 classes.
+- It subclasses and follows layer/attention structure from Hugging Face
+  Transformers 5.0.0, licensed Apache-2.0, and retains the relevant Google and
+  Hugging Face copyright notice.
+- The public implementation was compared before publication with the local
+  reference-derived implementation used for the experiments. On the pinned
+  environment, 64-token logits and a 1,024-token per-target NLL vector were
+  bitwise identical. See `results/implementation_equivalence.json`.
+- Repository-authored code and documentation are released under Apache-2.0.
+  Model and data assets retain their separate terms.
 
 ## Model and data
 
@@ -38,3 +48,8 @@ redistribution claim.
 - Dataset mirror: <https://huggingface.co/datasets/emozilla/pg19-test>, revision
   `c5e39bf32e33f9111323aa68d7d9000d22722035`
 - Original PG-19 project: <https://github.com/deepmind/pg19>
+
+No model weights, Hugging Face caches, or full PG-19 dataset files are committed.
+The Gemma checkpoint is governed by Google's Gemma terms. The original PG-19
+benchmark repository declares Apache-2.0; the pinned mirror declares no separate
+license metadata. See `THIRD_PARTY_NOTICES.md` for the release boundary.

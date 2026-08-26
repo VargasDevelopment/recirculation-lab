@@ -10,7 +10,6 @@ from pathlib import Path
 
 from .constants import (
     ALPHA,
-    ATTENTION_IMPLEMENTATION,
     BETA,
     DESTINATION_LAYER,
     NORMALIZATION,
@@ -26,7 +25,9 @@ def summarize(baseline_path: Path, recirculation_path: Path) -> dict:
     if baseline.get("condition") != "baseline":
         raise ValueError("baseline input is not labeled as the baseline condition")
     if recirculation.get("condition") != "recirculation":
-        raise ValueError("recirculation input is not labeled as the recirculation condition")
+        raise ValueError(
+            "recirculation input is not labeled as the recirculation condition"
+        )
     if baseline.get("recirculation") is not None:
         raise ValueError("baseline unexpectedly contains recirculation parameters")
     expected_recirculation = {
@@ -58,7 +59,9 @@ def summarize(baseline_path: Path, recirculation_path: Path) -> dict:
     for field in exact_match_fields:
         if baseline[field] != recirculation[field]:
             raise ValueError(f"conditions differ in {field}")
-    baseline_hashes = [window["token_ids_sha256_le_u32"] for window in baseline["windows"]]
+    baseline_hashes = [
+        window["token_ids_sha256_le_u32"] for window in baseline["windows"]
+    ]
     recirculation_hashes = [
         window["token_ids_sha256_le_u32"] for window in recirculation["windows"]
     ]
@@ -109,14 +112,17 @@ def summarize(baseline_path: Path, recirculation_path: Path) -> dict:
         "windows": count,
         "windows_with_lower_nll": sum(
             recirculated["nll_sum"] < ordinary["nll_sum"]
-            for ordinary, recirculated in zip(baseline["windows"], recirculation["windows"])
+            for ordinary, recirculated in zip(
+                baseline["windows"], recirculation["windows"]
+            )
         ),
         "paired_window_bootstrap_percent_reduction_95pct_interval_descriptive": [
             *bootstrap_interval,
         ],
         "baseline_evaluation_seconds": baseline["evaluation_seconds"],
         "recirculation_evaluation_seconds": recirculation["evaluation_seconds"],
-        "runtime_ratio": recirculation["evaluation_seconds"] / baseline["evaluation_seconds"],
+        "runtime_ratio": recirculation["evaluation_seconds"]
+        / baseline["evaluation_seconds"],
         "baseline_tokens_per_second": baseline["tokens_per_second"],
         "recirculation_tokens_per_second": recirculation["tokens_per_second"],
         "baseline_max_observed_mps_driver_allocated_bytes_after_sync": baseline[

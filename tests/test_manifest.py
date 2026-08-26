@@ -1,11 +1,9 @@
-import copy
 import json
 from pathlib import Path
 
 import pytest
 
 from recirculation.data import assert_manifests_disjoint, load_manifest
-
 
 SOURCE = Path("experiments/pg19_windows.json")
 CONFIRMATORY = Path("experiments/pg19_validation_books_2_9.json")

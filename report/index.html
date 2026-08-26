@@ -5,13 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark">
   <meta name="theme-color" content="#171816">
-  <meta name="description" content="A local Apple Silicon reproduction of fixed recirculation on frozen Gemma 3 1B PT.">
-  <meta property="og:title" content="Recirculation // M3 Field Report">
-  <meta property="og:description" content="Frozen Gemma 3 1B PT. Same tokens. 13.676% lower perplexity with fixed recirculation.">
-  <meta property="og:image" content="./og.png">
-  <meta property="og:image:alt" content="Pixel-art desert field report: 13.676% lower perplexity, PASS.">
+  <meta name="description" content="A locked eight-book validation of fixed recirculation on frozen Gemma 3 1B PT: 13.503% lower perplexity.">
+  <meta property="og:title" content="Recirculation // Confirmatory M3 Field Report">
+  <meta property="og:description" content="Eight unseen books. Same frozen Gemma 3 1B PT. 13.503% lower perplexity with fixed recirculation.">
+  <meta property="og:image" content="https://vargasdevelopment.github.io/recirculation-lab/og.png">
+  <meta property="og:image:alt" content="Pixel-art desert field report showing 13.503% lower perplexity on the confirmatory experiment.">
   <meta property="og:type" content="article">
-  <title>Recirculation // M3 Field Report</title>
+  <title>Recirculation // Confirmatory M3 Field Report</title>
   <style>
     :root {
       --ink: #171816;
@@ -223,6 +223,7 @@
       letter-spacing: -.08em;
       text-shadow: 3px 3px 0 #f3d695;
     }
+    .pass-word.confirmed { font-size: clamp(2rem, 4.6vw, 3.5rem); letter-spacing: -.055em; }
 
     .pass-note { font-size: .76rem; font-weight: 800; }
 
@@ -378,6 +379,15 @@
     .delta-label { margin-top: 14px; color: var(--muted); font-size: .75rem; text-transform: uppercase; letter-spacing: .1em; }
     .paper-tag { margin-top: 18px; color: var(--sand); font-size: .76rem; }
 
+    .table-wrap { overflow-x: auto; padding: 10px; }
+    .book-table { width: 100%; min-width: 830px; border-collapse: collapse; font-size: .73rem; }
+    .book-table th, .book-table td { padding: 13px 12px; border-bottom: 2px solid var(--line); text-align: right; }
+    .book-table th { color: var(--sand); font-size: .66rem; letter-spacing: .08em; text-transform: uppercase; }
+    .book-table th:nth-child(2), .book-table td:nth-child(2) { text-align: left; }
+    .book-table tbody tr:last-child td { border-bottom: 0; }
+    .book-table .gain { color: var(--lime); font-weight: 900; }
+    .pattern-note { margin: 20px 0 0; padding: 20px 24px; border-left: 6px solid var(--rust); background: #121411; color: #c8bea5; font-family: ui-sans-serif, system-ui, sans-serif; }
+
     .mechanism {
       padding: clamp(24px, 4vw, 40px);
       overflow: hidden;
@@ -512,17 +522,6 @@
     .detail-body { padding: 20px 24px; color: #bdb49d; font-family: ui-sans-serif, system-ui, sans-serif; font-size: .91rem; }
     .detail-body p:last-child { margin-bottom: 0; }
 
-    .next {
-      padding: clamp(28px, 6vw, 54px);
-      border-color: var(--rust-dark);
-      background:
-        linear-gradient(135deg, rgba(195, 79, 45, .16), transparent 46%),
-        var(--ink-2);
-    }
-    .next-label { color: var(--rust); font-size: .72rem; font-weight: 1000; letter-spacing: .14em; text-transform: uppercase; }
-    .next h3 { max-width: 900px; margin: 12px 0 14px; color: var(--bone); font-size: clamp(1.5rem, 4vw, 2.7rem); line-height: 1.15; }
-    .next p { max-width: 760px; margin-bottom: 0; color: var(--muted); }
-
     footer {
       padding: 36px 0 48px;
       border-top: 4px solid #090a09;
@@ -571,21 +570,21 @@
   <header class="rail">
     <div class="wrap">
       <span>FIELD REPORT // RC-1B-PT // 2608.17981</span>
-      <span class="rail-status">M3 MAX // LOCAL RUN VERIFIED</span>
+      <span class="rail-status"><a href="https://github.com/VargasDevelopment/recirculation-lab">VIEW SOURCE / REPRODUCE ON GITHUB</a></span>
     </div>
   </header>
 
   <section class="hero">
     <div class="wrap hero-grid">
       <div>
-        <div class="eyebrow">Frozen weights / live feedback</div>
-        <h1>Does the loop <span>pay?</span></h1>
-        <p class="lede">On identical Gemma 3 1B PT weights and identical PG-19 tokens, the paper's fixed recirculation mechanism cut perplexity by 13.676% on this Apple Silicon field run.</p>
+        <div class="eyebrow">Frozen mechanism / unseen books</div>
+        <h1>The loop <span>holds.</span></h1>
+        <p class="lede">On eight previously unseen PG-19 books, identical frozen Gemma 3 1B PT weights, and a protocol committed before evaluation, fixed recirculation cut aggregate perplexity by 13.503%.</p>
       </div>
-      <aside class="pass-plate" aria-label="Reproduction status: pass">
-        <span class="pass-kicker">Reproduction status</span>
-        <strong class="pass-word">PASS</strong>
-        <span class="pass-note">Direction reproduced. Magnitude within 0.734 percentage points of paper PG-19.</span>
+      <aside class="pass-plate" aria-label="Follow-up status: confirmed">
+        <span class="pass-kicker">Confirmatory status</span>
+        <strong class="pass-word confirmed">CONFIRMED</strong>
+        <span class="pass-note">8/8 books improved. Magnitude within 0.907 percentage points of paper PG-19.</span>
       </aside>
     </div>
   </section>
@@ -594,39 +593,62 @@
     <section class="section" aria-labelledby="result-title">
       <div class="section-head">
         <div class="section-index">01</div>
-        <div><h2 id="result-title">The result</h2><p class="section-sub">10 windows // 10,230 next-token targets // one locked comparison</p></div>
+        <div><h2 id="result-title">The validation result</h2><p class="section-sub">8 unseen books // 40 windows // 40,920 next-token targets</p></div>
       </div>
 
       <div class="metrics">
-        <article class="panel metric"><span class="metric-label">Ordinary forward PPL</span><strong class="metric-value">33.452</strong><span class="metric-unit">BASELINE</span></article>
-        <article class="panel metric"><span class="metric-label">Recirculation PPL</span><strong class="metric-value good">28.877</strong><span class="metric-unit">FIXED RC</span></article>
-        <article class="panel metric"><span class="metric-label">Absolute reduction</span><strong class="metric-value good">4.575</strong><span class="metric-unit">PPL POINTS</span></article>
-        <article class="panel metric"><span class="metric-label">Windows improved</span><strong class="metric-value">8 / 10</strong><span class="metric-unit">PAIRED NLL</span></article>
+        <article class="panel metric"><span class="metric-label">Ordinary forward PPL</span><strong class="metric-value">27.232</strong><span class="metric-unit">BASELINE</span></article>
+        <article class="panel metric"><span class="metric-label">Recirculation PPL</span><strong class="metric-value good">23.555</strong><span class="metric-unit">FIXED RC</span></article>
+        <article class="panel metric"><span class="metric-label">Books improved</span><strong class="metric-value good">8 / 8</strong><span class="metric-unit">PAIRED NLL</span></article>
+        <article class="panel metric"><span class="metric-label">Windows improved</span><strong class="metric-value">32 / 40</strong><span class="metric-unit">0 TIES</span></article>
       </div>
 
       <article class="panel chart-panel" aria-label="Perplexity comparison">
         <div>
           <div class="chart-title">Lower is better // same weights + same token hashes</div>
           <div class="bar-row">
-            <div class="bar-meta"><span>Ordinary forward</span><strong>33.45225</strong></div>
+            <div class="bar-meta"><span>Ordinary forward</span><strong>27.23190</strong></div>
             <div class="bar-track"><div class="bar-fill" style="width:100%"></div></div>
           </div>
           <div class="bar-row">
-            <div class="bar-meta"><span>Fixed recirculation</span><strong>28.87729</strong></div>
+            <div class="bar-meta"><span>Fixed recirculation</span><strong>23.55482</strong></div>
             <div class="bar-track"><div class="bar-fill recirc"></div></div>
           </div>
         </div>
         <div class="delta-block">
-          <strong class="delta-number">−13.676%</strong>
+          <strong class="delta-number">−13.503%</strong>
           <span class="delta-label">perplexity</span>
-          <span class="paper-tag">Paper PG-19 reference: −14.41%</span>
+          <span class="paper-tag">Exploratory: −13.676% // Paper: −14.41%</span>
         </div>
       </article>
     </section>
 
-    <section class="section" aria-labelledby="mechanism-title">
+    <section class="section" aria-labelledby="books-title">
       <div class="section-head">
         <div class="section-index">02</div>
+        <div><h2 id="books-title">Eight books // eight gains</h2><p class="section-sub">The aggregate is not being dragged by one lucky record</p></div>
+      </div>
+      <div class="panel table-wrap">
+        <table class="book-table">
+          <thead><tr><th>Record</th><th>Book</th><th>Baseline PPL</th><th>RC PPL</th><th>Reduction</th><th>Improved</th></tr></thead>
+          <tbody>
+            <tr><td>2</td><td>Travels in Morocco, Vol. 2</td><td>39.6202</td><td>33.0576</td><td class="gain">16.564%</td><td>4 / 5</td></tr>
+            <tr><td>3</td><td>Impressions of Theophrastus Such</td><td>51.0193</td><td>42.4333</td><td class="gain">16.829%</td><td>4 / 5</td></tr>
+            <tr><td>4</td><td>Odd Craft, Part 4</td><td>19.8284</td><td>18.3424</td><td class="gain">7.494%</td><td>4 / 5</td></tr>
+            <tr><td>5</td><td>The S. W. F. Club</td><td>19.3801</td><td>17.7407</td><td class="gain">8.459%</td><td>4 / 5</td></tr>
+            <tr><td>6</td><td>Frank Merriwell Down South</td><td>24.8161</td><td>21.4131</td><td class="gain">13.713%</td><td>4 / 5</td></tr>
+            <tr><td>7</td><td>Critical Miscellanies, Vol. 2</td><td>31.0531</td><td>25.0763</td><td class="gain">19.247%</td><td>4 / 5</td></tr>
+            <tr><td>8</td><td>From Sand Hill to Pine</td><td>36.0620</td><td>32.2304</td><td class="gain">10.625%</td><td>4 / 5</td></tr>
+            <tr><td>9</td><td>Child's Health Primer</td><td>14.0101</td><td>11.9957</td><td class="gain">14.378%</td><td>4 / 5</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="pattern-note"><strong>Clean pattern, sharp exception:</strong> the first window of every book worsened by 1.46%–3.97%; all 32 later windows improved. The locked protocol kept every unfavorable window. The two largest book gains account for only 34.3% of positive NLL gain.</p>
+    </section>
+
+    <section class="section" aria-labelledby="mechanism-title">
+      <div class="section-head">
+        <div class="section-index">03</div>
         <div><h2 id="mechanism-title">The mechanism</h2><p class="section-sub">A measured leak from deep state to shallow state, one token later</p></div>
       </div>
 
@@ -667,7 +689,7 @@
 
     <section class="section" aria-labelledby="protocol-title">
       <div class="section-head">
-        <div class="section-index">03</div>
+        <div class="section-index">04</div>
         <div><h2 id="protocol-title">Matched protocol</h2><p class="section-sub">Nothing changes between lanes except recirculation state flow</p></div>
       </div>
       <div class="two-col">
@@ -685,7 +707,7 @@
           <h3>Data lane</h3>
           <dl>
             <div class="ledger-row"><dt>Corpus</dt><dd>PG-19 test, pinned parquet mirror</dd></div>
-            <div class="ledger-row"><dt>Selection</dt><dd>First 5 complete windows × first 2 books</dd></div>
+            <div class="ledger-row"><dt>Selection</dt><dd>First 5 complete windows × unseen records 2–9</dd></div>
             <div class="ledger-row"><dt>Window</dt><dd>1,024 tokens // no padding</dd></div>
             <div class="ledger-row"><dt>Scored</dt><dd>1,023 targets per window</dd></div>
             <div class="ledger-row"><dt>Identity</dt><dd>Ordered per-window SHA-256 verified in both lanes</dd></div>
@@ -696,7 +718,7 @@
 
     <section class="section" aria-labelledby="verify-title">
       <div class="section-head">
-        <div class="section-index">04</div>
+        <div class="section-index">05</div>
         <div><h2 id="verify-title">Safety interlocks</h2><p class="section-sub">The positive number only counts if the machine is doing the intended computation</p></div>
       </div>
       <div class="checks">
@@ -706,18 +728,20 @@
         <article class="panel check"><strong>Norm coupling</strong><p>Source is rescaled per token on the hidden axis before α/β mixing.</p></article>
         <article class="panel check"><strong>Causal seal</strong><p>Changing tokens 514–529 produces zero change through position 513, crossing the 512-token sliding-attention boundary.</p></article>
         <article class="panel check"><strong>Cache timing</strong><p>Native cache lengths match: 511 positions in sliding layers and 529 in full-attention layers.</p></article>
+        <article class="panel check"><strong>Sample seal</strong><p>Records 2–9 and all 40 ordered hashes are locked; no record or token hash overlaps the exploratory sample.</p></article>
+        <article class="panel check"><strong>Public adapter</strong><p>First-64-token logits and a full 1,024-token target-loss vector exactly match the reference-derived evaluator.</p></article>
       </div>
     </section>
 
     <section class="section" aria-labelledby="cost-title">
       <div class="section-head">
-        <div class="section-index">05</div>
+        <div class="section-index">06</div>
         <div><h2 id="cost-title">Shop cost</h2><p class="section-sub">Quality went up; serial prefill throughput went through the floor</p></div>
       </div>
       <div class="cost-grid">
         <article class="panel cost-main">
-          <div class="cost-big">113.9×</div>
-          <p class="cost-copy">This author-reference path walks the full prefill token by token: 2.713 seconds for ordinary forward versus 309.158 seconds for recirculation. It validates the method, not production latency.</p>
+          <div class="cost-big">117.2×</div>
+          <p class="cost-copy">The confirmatory reference-style path walks the full prefill token by token: 10.585 seconds for ordinary forward versus 1,240.263 seconds for recirculation. It validates the method, not production latency.</p>
         </article>
         <article class="panel gauge">
           <div class="chart-title">Observed MPS driver allocation</div>
@@ -729,45 +753,42 @@
 
     <section class="section" aria-labelledby="caveat-title">
       <div class="section-head">
-        <div class="section-index">06</div>
+        <div class="section-index">07</div>
         <div><h2 id="caveat-title">Dust in the bearings</h2><p class="section-sub">What this result does and does not establish</p></div>
       </div>
 
       <details open>
-        <summary>Small sample // strong local effect</summary>
-        <div class="detail-body"><p>This run evaluates 10,230 predicted tokens—about 0.095% of the paper's 10.8M-token PG-19 evaluation. Its 13.676% reduction is close to the paper's 14.41%, but the two-book sample is not a substitute for the full corpus.</p></div>
+        <summary>Locked confirmation // broader, still bounded</summary>
+        <div class="detail-body"><p>The current confirmatory run evaluates 40,920 predicted tokens across 40 windows from eight previously unseen books—about 0.379% of the paper's 10.8M-token PG-19 evaluation. Its 13.503% reduction is close to the paper's 14.41%, but eight sequential records are not a substitute for the full corpus.</p></div>
       </details>
       <details>
-        <summary>Pilot and stopping rule</summary>
-        <div class="detail-body"><p>The initial two-window pilot slightly worsened perplexity by 0.396%. The sample was extended exactly once by a content-blind rule to five windows from each same book, then stopped regardless of direction. The eight added windows alone improve by 16.874%.</p></div>
+        <summary>Earlier exploratory run // preserved</summary>
+        <div class="detail-body"><p>The earlier exploratory run used 10 windows and 10,230 targets from records 0–1, reducing perplexity by 13.676% with 8 of 10 windows improved. Its initial two-window pilot worsened by 0.396%; it was extended once by a content-blind rule and then stopped. Those artifacts and caveats remain intact and are not presented as the current confirmatory sample.</p></div>
       </details>
       <details>
-        <summary>Mask failure caught and rejected</summary>
-        <div class="detail-body"><p>An early diagnostic incorrectly gave sliding layers the full-attention mask, inflating pilot baseline PPL to 75.636. An official-forward equivalence check exposed it. Native 512-token sliding masks restore pilot baseline PPL to 19.201; only corrected numbers appear in final results.</p></div>
+        <summary>Systematic window boundary exception</summary>
+        <div class="detail-body"><p>In the locked confirmatory run, window 0 of all eight books worsened by 1.46%–3.97%, while every one of the 32 later windows improved. The protocol retained all eight unfavorable windows. This pattern is real in the sample and unexplained; it is a reason to avoid overgeneralizing the aggregate.</p></div>
       </details>
       <details>
-        <summary>Paper ambiguities</summary>
-        <div class="detail-body"><p>The paper does not pin software, model, tokenizer, or data revisions, dtype, or device. It introduces the 1B ten-token ramp but does not explicitly state whether Table 1 includes it. This reproduction pins everything and includes the ramp as the closest reading of the final method.</p></div>
+        <summary>Earlier exploratory mask failure // caught and rejected</summary>
+        <div class="detail-body"><p>During the earlier exploratory work, one diagnostic incorrectly gave sliding layers the full-attention mask, inflating pilot baseline PPL to 75.636. An official-forward equivalence check exposed it. Native 512-token sliding masks restored pilot baseline PPL to 19.201; only corrected numbers appear in either experiment's final result files.</p></div>
       </details>
       <details>
-        <summary>Uncertainty and performance claims</summary>
-        <div class="detail-body"><p>A descriptive paired-window bootstrap gives 7.69%–19.55%, but windows within a book are dependent, so this is sensitivity evidence rather than a population confidence interval. The paper's near-zero generation-latency claim is not tested: this artifact measures serial prefill only.</p></div>
+        <summary>Paper ambiguities and uncertainty</summary>
+        <div class="detail-body"><p>The paper does not pin software, model, tokenizer, data revisions, dtype, or device. It introduces the 1B ten-token ramp but does not explicitly state whether Table 1 includes it. The confirmatory whole-book bootstrap is 10.70%–16.12%, but these are sequential rather than randomly sampled books, so it is descriptive stability evidence—not population-level confidence.</p></div>
+      </details>
+      <details>
+        <summary>Perplexity is not downstream capability</summary>
+        <div class="detail-body"><p>This artifact establishes lower perplexity on the specified evaluations. It does not establish equivalent gains in reasoning, coding, instruction following, agentic task completion, or general model intelligence. The paper's near-zero generation-latency claim is also not tested here: this implementation measures serial prefill.</p></div>
       </details>
     </section>
 
-    <section class="section" aria-labelledby="next-title">
-      <article class="panel next">
-        <div class="next-label">Next work order // deliberately not run</div>
-        <h3 id="next-title">Hold every mechanism setting fixed. Move to eight unseen PG-19 books.</h3>
-        <p>Take the first five complete windows from the next eight test records. That single test would show whether the effect survives broader document variation without changing source, destination, α, β, normalization, ramp, or recurrence count.</p>
-      </article>
-    </section>
   </main>
 
   <footer>
     <div class="wrap footer-grid">
-      <div><div class="footer-mark">RC//M3 field unit 2099</div><p class="footer-small">Built from committed result JSON. Primary sources: Mozer et al., arXiv:2608.17981v1 and Shoaib Ahmed Siddiqui's author reference implementation.</p></div>
-      <div><a href="../README.md">README</a> // <a href="../results/comparison.json">RESULT JSON</a> // <a href="../sources/SOURCES.md">SOURCES</a></div>
+      <div><div class="footer-mark">RC//M3 field unit 2099</div><p class="footer-small">Built from committed result JSON. Primary sources: <a href="https://arxiv.org/abs/2608.17981">Mozer et al., arXiv:2608.17981v1</a> and <a href="https://gist.github.com/shoaibahmed/10702acc01cc5a169fdbc1719932438f">Shoaib Ahmed Siddiqui's author reference implementation</a>.</p></div>
+      <div><a href="https://github.com/VargasDevelopment/recirculation-lab">SOURCE / README</a> // <a href="https://github.com/VargasDevelopment/recirculation-lab/blob/main/results/validation_comparison.json">CONFIRMATORY JSON</a> // <a href="https://github.com/VargasDevelopment/recirculation-lab/blob/main/results/comparison.json">EXPLORATORY JSON</a></div>
     </div>
   </footer>
 </body>

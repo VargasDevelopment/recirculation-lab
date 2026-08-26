@@ -63,7 +63,9 @@ def write(tmp_path: Path, name: str, value: dict) -> Path:
 
 def test_swapped_inputs_are_rejected(tmp_path: Path) -> None:
     baseline = write(tmp_path, "baseline.json", condition("baseline", 2.0))
-    recirculation = write(tmp_path, "recirculation.json", condition("recirculation", 1.0))
+    recirculation = write(
+        tmp_path, "recirculation.json", condition("recirculation", 1.0)
+    )
     with pytest.raises(ValueError, match="baseline input"):
         summarize(recirculation, baseline)
 

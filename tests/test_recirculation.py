@@ -5,8 +5,8 @@ import torch
 from transformers import Gemma3ForCausalLM as HFGemma3ForCausalLM
 from transformers import Gemma3TextConfig
 
-import recirculation.author_recurrent_gemma3 as author_module
-from recirculation.author_recurrent_gemma3 import (
+import recirculation.gemma3_recirculation as recirculation_module
+from recirculation.gemma3_recirculation import (
     Gemma3ForCausalLM,
     fixed_recirculation_mix,
     ramped_alpha,
@@ -43,8 +43,12 @@ def test_author_baseline_is_exactly_hugging_face_forward() -> None:
     input_ids = torch.tensor([[2, 10, 11, 12, 13, 14]])
     attention_mask = torch.ones_like(input_ids)
     with torch.inference_mode():
-        expected = baseline(input_ids, attention_mask=attention_mask, use_cache=False).logits
-        actual = author(input_ids, attention_mask=attention_mask, use_cache=False).logits
+        expected = baseline(
+            input_ids, attention_mask=attention_mask, use_cache=False
+        ).logits
+        actual = author(
+            input_ids, attention_mask=attention_mask, use_cache=False
+        ).logits
     assert torch.equal(actual, expected)
 
 
@@ -58,8 +62,10 @@ def test_norm_matched_convex_mix() -> None:
         source_weight=0.15,
         normalization="norm_rep",
     )
-    scaled_source = source / source.norm(dim=-1, keepdim=True) * destination.norm(
-        dim=-1, keepdim=True
+    scaled_source = (
+        source
+        / source.norm(dim=-1, keepdim=True)
+        * destination.norm(dim=-1, keepdim=True)
     )
     assert torch.allclose(mixed, 0.85 * destination + 0.15 * scaled_source)
     assert torch.allclose(
@@ -68,7 +74,8 @@ def test_norm_matched_convex_mix() -> None:
 
 
 @pytest.mark.parametrize(
-    ("token_index", "expected"), [(0, 0.0), (1, 0.015), (5, 0.075), (10, 0.15), (99, 0.15)]
+    ("token_index", "expected"),
+    [(0, 0.0), (1, 0.015), (5, 0.075), (10, 0.15), (99, 0.15)],
 )
 def test_paper_ramp(token_index: int, expected: float) -> None:
     assert ramped_alpha(0.15, token_index, 10) == pytest.approx(expected)
@@ -88,17 +95,23 @@ def test_recirculation_hits_source_once_per_step_and_preserves_weights() -> None
     )
     input_ids = torch.tensor([[2, 10, 11, 12, 13, 14]])
     attention_mask = torch.ones_like(input_ids)
-    before = {name: tensor.detach().clone() for name, tensor in model.state_dict().items()}
+    before = {
+        name: tensor.detach().clone() for name, tensor in model.state_dict().items()
+    }
     observed_shapes = []
-    real_mix = author_module.fixed_recirculation_mix
+    real_mix = recirculation_module.fixed_recirculation_mix
 
     def observing_mix(destination, source, **kwargs):
         observed_shapes.append((destination.shape, source.shape))
         return real_mix(destination, source, **kwargs)
 
-    with patch.object(author_module, "fixed_recirculation_mix", side_effect=observing_mix):
-        with torch.inference_mode():
-            output = model(input_ids, attention_mask=attention_mask, use_cache=False)
+    with (
+        patch.object(
+            recirculation_module, "fixed_recirculation_mix", side_effect=observing_mix
+        ),
+        torch.inference_mode(),
+    ):
+        output = model(input_ids, attention_mask=attention_mask, use_cache=False)
 
     assert output.logits.shape == (1, input_ids.shape[1], tiny_config().vocab_size)
     assert output.past_key_values.get_seq_length() == input_ids.shape[1] - 1
@@ -113,7 +126,9 @@ def test_first_readout_is_ordinary_and_later_readouts_change() -> None:
     input_ids = torch.tensor([[2, 10, 11, 12, 13, 14]])
     attention_mask = torch.ones_like(input_ids)
     with torch.inference_mode():
-        baseline = model(input_ids, attention_mask=attention_mask, use_cache=False).logits
+        baseline = model(
+            input_ids, attention_mask=attention_mask, use_cache=False
+        ).logits
     model.set_recirculation_args(
         target_layer=0,
         source_layer=2,
@@ -124,7 +139,9 @@ def test_first_readout_is_ordinary_and_later_readouts_change() -> None:
         ramp_steps=0,
     )
     with torch.inference_mode():
-        recirculated = model(input_ids, attention_mask=attention_mask, use_cache=False).logits
+        recirculated = model(
+            input_ids, attention_mask=attention_mask, use_cache=False
+        ).logits
     assert torch.allclose(recirculated[:, 0], baseline[:, 0], atol=1e-6, rtol=1e-6)
     assert not torch.allclose(recirculated[:, 2:], baseline[:, 2:])
 
@@ -143,6 +160,12 @@ def test_future_tokens_cannot_change_earlier_recirculated_logits() -> None:
     first = torch.tensor([[2, 10, 11, 12, 13, 14]])
     second = torch.tensor([[2, 10, 11, 99, 98, 97]])
     with torch.inference_mode():
-        first_logits = model(first, attention_mask=torch.ones_like(first), use_cache=False).logits
-        second_logits = model(second, attention_mask=torch.ones_like(second), use_cache=False).logits
-    assert torch.allclose(first_logits[:, :3], second_logits[:, :3], atol=1e-6, rtol=1e-6)
+        first_logits = model(
+            first, attention_mask=torch.ones_like(first), use_cache=False
+        ).logits
+        second_logits = model(
+            second, attention_mask=torch.ones_like(second), use_cache=False
+        ).logits
+    assert torch.allclose(
+        first_logits[:, :3], second_logits[:, :3], atol=1e-6, rtol=1e-6
+    )

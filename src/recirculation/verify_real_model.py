@@ -10,8 +10,8 @@ from unittest.mock import patch
 import torch
 from transformers import Gemma3ForCausalLM as HFGemma3ForCausalLM
 
-import recirculation.author_recurrent_gemma3 as author_module
-from .author_recurrent_gemma3 import Gemma3ForCausalLM
+import recirculation.gemma3_recirculation as recirculation_module
+
 from .constants import (
     ALPHA,
     ATTENTION_IMPLEMENTATION,
@@ -25,6 +25,7 @@ from .constants import (
     SOURCE_LAYER,
 )
 from .data import load_manifest
+from .gemma3_recirculation import Gemma3ForCausalLM
 
 
 def load(model_class):
@@ -50,17 +51,17 @@ def run(manifest_path: Path) -> dict:
     )
     mask = torch.ones_like(ids)
     official = load(HFGemma3ForCausalLM)
-    author = load(Gemma3ForCausalLM)
-    versions = tuple(parameter._version for parameter in author.parameters())
+    adapter = load(Gemma3ForCausalLM)
+    versions = tuple(parameter._version for parameter in adapter.parameters())
 
     with torch.inference_mode():
         official_logits = official(ids, attention_mask=mask, use_cache=False).logits
-        author_logits = author(ids, attention_mask=mask, use_cache=False).logits
-    baseline_max_abs = float((official_logits - author_logits).abs().max().item())
-    baseline_exact = bool(torch.equal(official_logits, author_logits))
-    del official_logits, author_logits, official
+        adapter_logits = adapter(ids, attention_mask=mask, use_cache=False).logits
+    baseline_max_abs = float((official_logits - adapter_logits).abs().max().item())
+    baseline_exact = bool(torch.equal(official_logits, adapter_logits))
+    del official_logits, adapter_logits, official
 
-    author.set_recirculation_args(
+    adapter.set_recirculation_args(
         target_layer=DESTINATION_LAYER,
         source_layer=SOURCE_LAYER,
         target_layer_weight=BETA,
@@ -72,17 +73,23 @@ def run(manifest_path: Path) -> dict:
 
     shapes = []
     captured = []
-    real_mix = author_module.fixed_recirculation_mix
+    real_mix = recirculation_module.fixed_recirculation_mix
 
     def observing_mix(destination, source, **kwargs):
         shapes.append([list(destination.shape), list(source.shape)])
         if len(shapes) == RAMP_STEPS + 1:
-            captured.append((destination.detach().clone(), source.detach().clone(), kwargs.copy()))
+            captured.append(
+                (destination.detach().clone(), source.detach().clone(), kwargs.copy())
+            )
         return real_mix(destination, source, **kwargs)
 
-    with patch.object(author_module, "fixed_recirculation_mix", side_effect=observing_mix):
-        with torch.inference_mode():
-            recirculated_output = author(ids, attention_mask=mask, use_cache=False)
+    with (
+        patch.object(
+            recirculation_module, "fixed_recirculation_mix", side_effect=observing_mix
+        ),
+        torch.inference_mode(),
+    ):
+        recirculated_output = adapter(ids, attention_mask=mask, use_cache=False)
 
     destination, source, mix_kwargs = captured[0]
     scaled_source = source / (source.norm(dim=-1, keepdim=True) + 1e-8)
@@ -100,7 +107,9 @@ def run(manifest_path: Path) -> dict:
         changed[:, future_change_position:], dims=(1,)
     )
     with torch.inference_mode():
-        changed_output = author(changed, attention_mask=torch.ones_like(changed), use_cache=False)
+        changed_output = adapter(
+            changed, attention_mask=torch.ones_like(changed), use_cache=False
+        )
     causal_prefix_max_abs = float(
         (
             recirculated_output.logits[:, :future_change_position]
@@ -115,18 +124,18 @@ def run(manifest_path: Path) -> dict:
         for layer in recirculated_output.past_key_values.layers
     ]
     expected_cache_lengths = [
-        min(ids.shape[1] - NUM_RECURRENCE_STEPS, author.config.sliding_window - 1)
+        min(ids.shape[1] - NUM_RECURRENCE_STEPS, adapter.config.sliding_window - 1)
         if layer_type == "sliding_attention"
         else ids.shape[1] - NUM_RECURRENCE_STEPS
-        for layer_type in author.config.layer_types
+        for layer_type in adapter.config.layer_types
     ]
 
     return {
         "model_id": MODEL_ID,
         "model_revision": MODEL_REVISION,
         "fixture_tokens": ids.shape[1],
-        "official_vs_author_baseline_bitwise_equal": baseline_exact,
-        "official_vs_author_baseline_max_abs_logit_difference": baseline_max_abs,
+        "official_vs_public_adapter_baseline_bitwise_equal": baseline_exact,
+        "official_vs_public_adapter_baseline_max_abs_logit_difference": baseline_max_abs,
         "recirculation_mix_call_count": len(shapes),
         "recirculation_unique_destination_source_shapes": sorted(
             {json.dumps(shape) for shape in shapes}
@@ -139,22 +148,28 @@ def run(manifest_path: Path) -> dict:
         "max_norm_match_relative_error": norm_match_relative_error,
         "captured_destination_norm_min": float(destination_norm.min().item()),
         "captured_destination_norm_max": float(destination_norm.max().item()),
-        "sliding_window": author.config.sliding_window,
+        "sliding_window": adapter.config.sliding_window,
         "returned_cache_layer_lengths": cache_lengths,
         "expected_cache_layer_lengths": expected_cache_lengths,
         "cache_layer_lengths_match": cache_lengths == expected_cache_lengths,
         "future_changed_from_position": future_change_position,
         "causal_unchanged_prefix_max_abs_logit_difference": causal_prefix_max_abs,
         "parameter_version_counters_unchanged": versions
-        == tuple(parameter._version for parameter in author.parameters()),
-        "all_weights_frozen": not any(parameter.requires_grad for parameter in author.parameters()),
+        == tuple(parameter._version for parameter in adapter.parameters()),
+        "all_weights_frozen": not any(
+            parameter.requires_grad for parameter in adapter.parameters()
+        ),
     }
 
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--manifest", type=Path, default=Path("experiments/pg19_windows.json"))
-    parser.add_argument("--output", type=Path, default=Path("results/verification.json"))
+    parser.add_argument(
+        "--manifest", type=Path, default=Path("experiments/pg19_windows.json")
+    )
+    parser.add_argument(
+        "--output", type=Path, default=Path("results/verification.json")
+    )
     args = parser.parse_args()
     result = run(args.manifest)
     args.output.write_text(json.dumps(result, indent=2) + "\n")

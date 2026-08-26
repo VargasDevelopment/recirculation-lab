@@ -1,0 +1,28 @@
+cff-version: 1.2.0
+message: "If you use this reproduction, cite this repository and the Recirculation paper."
+title: "Recirculation Lab: Gemma 3 1B Fixed-Recirculation Reproduction"
+type: software
+authors:
+  - family-names: Vargas
+    given-names: Joseph
+repository-code: "https://github.com/VargasDevelopment/recirculation-lab"
+url: "https://vargasdevelopment.github.io/recirculation-lab/"
+license: Apache-2.0
+version: 0.1.0
+date-released: 2026-08-25
+preferred-citation:
+  type: article
+  title: "Recirculation"
+  authors:
+    - family-names: Mozer
+      given-names: Michael C.
+    - family-names: Siddiqui
+      given-names: Shoaib Ahmed
+    - family-names: Sawyer
+      given-names: Danny
+    - family-names: Sanyal
+      given-names: Sunny
+    - family-names: Liu
+      given-names: Rosanne
+  year: 2026
+  url: "https://arxiv.org/abs/2608.17981"

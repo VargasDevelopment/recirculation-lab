@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "purpose": "Document exact output equivalence before removing unlicensed reference-derived source from the public tree",
+  "author_reference_gist_commit": "d88d797f9ae0e88073ce219a41887c48408e5bf4",
+  "author_reference_raw_sha256": "c21ea064c29c04c8c4cf93c91f134b7719dbbdb9960759c191790c41850990b1",
+  "local_reference_adapter_sha256": "459679db6480074c3446e5186d3ecc7a2e7cb3eae01d11784e5b5f88c98dfba1",
+  "public_implementation_path": "src/recirculation/gemma3_recirculation.py",
+  "public_implementation_sha256": "2327d8d531359f1183d9e5f082e991a77558b32bd7c282680d9698715b4ea336",
+  "model_id": "google/gemma-3-1b-pt",
+  "model_revision": "fcf18a2a879aab110ca39f8bffbccd5d49d8eb29",
+  "dtype": "bfloat16",
+  "device": "mps",
+  "fixture_manifest": "experiments/pg19_validation_books_2_9.json",
+  "fixture_document_index": 2,
+  "fixture_window_index": 0,
+  "fixture_token_sha256_le_u32": "e39d6bc6d729026c59ea00abece10c617ae09123abffad8dc0ad0a3bb811ae57",
+  "checks": {
+    "first_64_token_logits_bitwise_equal": true,
+    "first_64_token_logits_max_abs_difference": 0.0,
+    "first_64_token_bfloat16_logits_sha256": "cb0c4552760e7c8480c45c06b68d017a483f536724f1255e191509fc8f71a03f",
+    "full_1024_token_per_target_nll_bitwise_equal": true,
+    "full_1024_token_per_target_nll_max_abs_difference": 0.0,
+    "full_1024_token_per_target_nll_float32_sha256": "45baa42dc56f7f814e3e0c957881f2d066160994e56bb3a3e9afc6bc5b2425ca",
+    "full_1024_token_nll_sum": 3410.6591796875,
+    "predicted_tokens": 1023
+  },
+  "interpretation": "On the pinned Apple Silicon environment, the compact public implementation exactly reproduced the scoring outputs of the reference-derived implementation used for both recorded experiments."
+}

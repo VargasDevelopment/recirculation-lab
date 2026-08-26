@@ -1,0 +1,17 @@
+Recirculation Lab
+Copyright 2026 Joseph Vargas
+
+The Gemma 3 adapter calls and follows portions of the structure of Hugging Face
+Transformers' Gemma 3 implementation:
+
+  Copyright 2025 Google Inc. and Hugging Face Inc. team
+  Licensed under the Apache License, Version 2.0.
+
+The fixed-recirculation algorithm is described in:
+
+  Michael C. Mozer, Shoaib Ahmed Siddiqui, Danny Sawyer, Sunny Sanyal,
+  and Rosanne Liu. "Recirculation." arXiv:2608.17981 (2026).
+
+Shoaib Ahmed Siddiqui's public reference gist was consulted to resolve cache
+timing and recurrence semantics. Its source is not included in this public
+distribution because the gist states no license.

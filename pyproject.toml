@@ -1,8 +1,10 @@
 [project]
 name = "gemma-recirculation-reproduction"
 version = "0.1.0"
-description = "Minimal reproduction of fixed recirculation on Gemma 3 1B PT"
+description = "Reproducible fixed-recirculation experiments on frozen Gemma 3 1B PT"
 readme = "README.md"
+license = "Apache-2.0"
+authors = [{ name = "Joseph Vargas" }]
 requires-python = ">=3.12,<3.13"
 dependencies = [
   "click==8.3.1",
@@ -13,9 +15,15 @@ dependencies = [
   "transformers==5.0.0",
 ]
 
+[project.urls]
+Homepage = "https://vargasdevelopment.github.io/recirculation-lab/"
+Repository = "https://github.com/VargasDevelopment/recirculation-lab"
+Paper = "https://arxiv.org/abs/2608.17981"
+
 [dependency-groups]
 dev = [
   "pytest==9.0.2",
+  "ruff==0.16.4",
 ]
 
 [build-system]

@@ -16,7 +16,6 @@ import psutil
 import torch
 import transformers
 
-from .author_recurrent_gemma3 import Gemma3ForCausalLM
 from .constants import (
     ALPHA,
     ATTENTION_IMPLEMENTATION,
@@ -34,6 +33,7 @@ from .constants import (
     SOURCE_LAYER,
 )
 from .data import load_manifest
+from .gemma3_recirculation import Gemma3ForCausalLM
 from .perplexity import perplexity, shifted_nll
 
 
@@ -52,12 +52,11 @@ def rss_peak_bytes() -> int:
 
 
 def model_artifact() -> tuple[Path, str]:
-    cache_root = Path(os.environ.get("HF_HUB_CACHE", Path.home() / ".cache/huggingface/hub"))
+    cache_root = Path(
+        os.environ.get("HF_HUB_CACHE", Path.home() / ".cache/huggingface/hub")
+    )
     snapshot = (
-        cache_root
-        / "models--google--gemma-3-1b-pt"
-        / "snapshots"
-        / MODEL_REVISION
+        cache_root / "models--google--gemma-3-1b-pt" / "snapshots" / MODEL_REVISION
     )
     weights = snapshot / "model.safetensors"
     if not weights.exists():
@@ -129,14 +128,20 @@ def run(condition: str, manifest_path: Path) -> dict:
             nll = float(nll_tensor.item())
             torch.mps.synchronize()
             window_seconds = time.perf_counter() - window_start
-            observed_driver_bytes = max(observed_driver_bytes, torch.mps.driver_allocated_memory())
-            observed_tensor_bytes = max(observed_tensor_bytes, torch.mps.current_allocated_memory())
+            observed_driver_bytes = max(
+                observed_driver_bytes, torch.mps.driver_allocated_memory()
+            )
+            observed_tensor_bytes = max(
+                observed_tensor_bytes, torch.mps.current_allocated_memory()
+            )
             total_nll += nll
             total_tokens += predicted_tokens
             per_window.append(
                 {
                     "document_index": window["document_index"],
-                    "window_index_within_document": window["window_index_within_document"],
+                    "window_index_within_document": window[
+                        "window_index_within_document"
+                    ],
                     "token_ids_sha256_le_u32": window["token_ids_sha256_le_u32"],
                     "predicted_tokens": predicted_tokens,
                     "nll_sum": nll,
@@ -156,8 +161,12 @@ def run(condition: str, manifest_path: Path) -> dict:
             del output, nll_tensor, input_ids, attention_mask
 
     evaluation_seconds = time.perf_counter() - evaluation_start
-    if parameter_versions != tuple(parameter._version for parameter in model.parameters()):
-        raise AssertionError("a model parameter was modified in-place during evaluation")
+    if parameter_versions != tuple(
+        parameter._version for parameter in model.parameters()
+    ):
+        raise AssertionError(
+            "a model parameter was modified in-place during evaluation"
+        )
 
     return {
         "schema_version": 1,
@@ -208,8 +217,12 @@ def run(condition: str, manifest_path: Path) -> dict:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--condition", choices=["baseline", "recirculation"], required=True)
-    parser.add_argument("--manifest", type=Path, default=Path("experiments/pg19_windows.json"))
+    parser.add_argument(
+        "--condition", choices=["baseline", "recirculation"], required=True
+    )
+    parser.add_argument(
+        "--manifest", type=Path, default=Path("experiments/pg19_windows.json")
+    )
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     result = run(args.condition, args.manifest)
