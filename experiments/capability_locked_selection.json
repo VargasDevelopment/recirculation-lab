@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "phase": "locked_capability_transfer_v1",
+  "selection_rule": "Disjoint next examples after the non-evidentiary smoke set: MMLU-Pro filtered indices 1-3 in each of 14 categories; GSM8K and IFEval indices 5-54; HellaSwag indices 5-104. Sample sizes were chosen only from smoke runtime feasibility before substantive scoring.",
+  "benchmarks": {
+    "mmlu_pro": {
+      "harness_tasks": ["mmlu_pro"],
+      "samples": {
+        "mmlu_pro_biology": {"start": 1, "stop": 4},
+        "mmlu_pro_business": {"start": 1, "stop": 4},
+        "mmlu_pro_chemistry": {"start": 1, "stop": 4},
+        "mmlu_pro_computer_science": {"start": 1, "stop": 4},
+        "mmlu_pro_economics": {"start": 1, "stop": 4},
+        "mmlu_pro_engineering": {"start": 1, "stop": 4},
+        "mmlu_pro_health": {"start": 1, "stop": 4},
+        "mmlu_pro_history": {"start": 1, "stop": 4},
+        "mmlu_pro_law": {"start": 1, "stop": 4},
+        "mmlu_pro_math": {"start": 1, "stop": 4},
+        "mmlu_pro_other": {"start": 1, "stop": 4},
+        "mmlu_pro_philosophy": {"start": 1, "stop": 4},
+        "mmlu_pro_physics": {"start": 1, "stop": 4},
+        "mmlu_pro_psychology": {"start": 1, "stop": 4}
+      }
+    },
+    "gsm8k": {
+      "harness_tasks": ["gsm8k"],
+      "samples": {"gsm8k": {"start": 5, "stop": 55}}
+    },
+    "ifeval": {
+      "harness_tasks": ["ifeval"],
+      "samples": {"ifeval": {"start": 5, "stop": 55}}
+    },
+    "hellaswag": {
+      "harness_tasks": ["hellaswag"],
+      "samples": {"hellaswag": {"start": 5, "stop": 105}}
+    }
+  }
+}

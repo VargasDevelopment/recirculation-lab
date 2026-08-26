@@ -1,0 +1,1419 @@
+{
+  "schema_version": 1,
+  "phase": "locked_capability_transfer_v1",
+  "locked_before_substantive_scoring": true,
+  "model": {
+    "id": "google/gemma-3-1b-it",
+    "revision": "dcc83ea841ab6100d6b47a070329e1ba4cf78752",
+    "tokenizer_revision": "dcc83ea841ab6100d6b47a070329e1ba4cf78752",
+    "weights_sha256": "3d4ef8d71c14db7e448a09ebe891cfb6bf32c57a9b44499ae0d1c098e48516b6",
+    "chat_template_sha256": "7de1c58e208eda46e9c7f86397df37ec49883aeece39fb961e0a6b24088dd3c4",
+    "frozen": true,
+    "dtype": "bfloat16",
+    "device": "mps",
+    "attention_implementation": "eager",
+    "max_length": 32768
+  },
+  "recirculation": {
+    "destination_layer_zero_based": 4,
+    "source_layer_zero_based": 11,
+    "alpha": 0.15,
+    "beta": 0.85,
+    "alpha_ramp_tokens": 10,
+    "normalization": "norm_rep",
+    "additional_recurrence_iterations": 1
+  },
+  "harness": {
+    "repository": "https://github.com/EleutherAI/lm-evaluation-harness",
+    "revision": "dd417662e5bda6a247489ec28d2ff46a45d1c42c",
+    "batch_size": 1,
+    "apply_chat_template": true,
+    "fewshot_as_multiturn": true,
+    "task_default_fewshot_and_generation_settings": true,
+    "random_seed": 20260826,
+    "numpy_random_seed": 20260826,
+    "torch_random_seed": 20260826,
+    "fewshot_random_seed": 20260826
+  },
+  "selection_rule": "Disjoint next examples after the non-evidentiary smoke set: MMLU-Pro filtered indices 1-3 in each of 14 categories; GSM8K and IFEval indices 5-54; HellaSwag indices 5-104. Sample sizes were chosen only from smoke runtime feasibility before substantive scoring.",
+  "benchmarks": {
+    "mmlu_pro": {
+      "dataset_id": "TIGER-Lab/MMLU-Pro",
+      "dataset_revision": "b189ec765aa7ed75c8acfea42df31fdae71f97be",
+      "task_version": "3.1",
+      "harness_tasks": [
+        "mmlu_pro"
+      ],
+      "selection_rule": "Disjoint next examples after the non-evidentiary smoke set: MMLU-Pro filtered indices 1-3 in each of 14 categories; GSM8K and IFEval indices 5-54; HellaSwag indices 5-104. Sample sizes were chosen only from smoke runtime feasibility before substantive scoring.",
+      "sample_count": 42,
+      "tasks": {
+        "mmlu_pro_biology": {
+          "task_version": "3.1",
+          "output_type": "generate_until",
+          "available_eval_docs": 717,
+          "selected_samples": [
+            {
+              "eval_doc_index": 1,
+              "stable_id": "mmlu_pro_biology:eval_doc_index=1",
+              "doc_sha256_canonical_json": "79e88e855a00b4b88c1e546541e3363454fe274eacba092cdc693274fc9d6357"
+            },
+            {
+              "eval_doc_index": 2,
+              "stable_id": "mmlu_pro_biology:eval_doc_index=2",
+              "doc_sha256_canonical_json": "ce7ff378bb7a39a971399e8985f404f5f161f16dd78330895b4bb03ba719d71e"
+            },
+            {
+              "eval_doc_index": 3,
+              "stable_id": "mmlu_pro_biology:eval_doc_index=3",
+              "doc_sha256_canonical_json": "6a9790a02d1e825c99f87a501fd38c60d68604e2219f619b62077232cfcdfe74"
+            }
+          ]
+        },
+        "mmlu_pro_business": {
+          "task_version": "3.1",
+          "output_type": "generate_until",
+          "available_eval_docs": 789,
+          "selected_samples": [
+            {
+              "eval_doc_index": 1,
+              "stable_id": "mmlu_pro_business:eval_doc_index=1",
+              "doc_sha256_canonical_json": "2a42ff2bc9f5ded96cd9bb9f9fe0fd1f1413b2e36384c1825bb7a296af247bb4"
+            },
+            {
+              "eval_doc_index": 2,
+              "stable_id": "mmlu_pro_business:eval_doc_index=2",
+              "doc_sha256_canonical_json": "59b5de0de0ef3375727408d8f8993ee170f4b36f1b7392456aa12e33e3bc602a"
+            },
+            {
+              "eval_doc_index": 3,
+              "stable_id": "mmlu_pro_business:eval_doc_index=3",
+              "doc_sha256_canonical_json": "3205b629f1031887bcc6a1f81384879fa8ff25f692499c01ea0ddaf34e5444cf"
+            }
+          ]
+        },
+        "mmlu_pro_chemistry": {
+          "task_version": "3.1",
+          "output_type": "generate_until",
+          "available_eval_docs": 1132,
+          "selected_samples": [
+            {
+              "eval_doc_index": 1,
+              "stable_id": "mmlu_pro_chemistry:eval_doc_index=1",
+              "doc_sha256_canonical_json": "58028ce052fcc1e330987847573a2e2440a188513ca715cb925722d461a78207"
+            },
+            {
+              "eval_doc_index": 2,
+              "stable_id": "mmlu_pro_chemistry:eval_doc_index=2",
+              "doc_sha256_canonical_json": "51ab88b61bfe1ec68c1308afbf8945de0b39fc06e8b34d95018f8921861bc5cf"
+            },
+            {
+              "eval_doc_index": 3,
+              "stable_id": "mmlu_pro_chemistry:eval_doc_index=3",
+              "doc_sha256_canonical_json": "17ac5c882e18a4347ae12374358da814c03e4c2c97ad5b8d4db870ae3075ace1"
+            }
+          ]
+        },
+        "mmlu_pro_computer_science": {
+          "task_version": "3.1",
+          "output_type": "generate_until",
+          "available_eval_docs": 410,
+          "selected_samples": [
+            {
+              "eval_doc_index": 1,
+              "stable_id": "mmlu_pro_computer_science:eval_doc_index=1",
+              "doc_sha256_canonical_json": "d51d168f6c4c16d04a2a1f8e797c73e45b998e1841a59027098317e53debf413"
+            },
+            {
+              "eval_doc_index": 2,
+              "stable_id": "mmlu_pro_computer_science:eval_doc_index=2",
+              "doc_sha256_canonical_json": "33e8f0e90cc89934406a8825168f99efa4bc478dbadfd007b5627005e3c496de"
+            },
+            {
+              "eval_doc_index": 3,
+              "stable_id": "mmlu_pro_computer_science:eval_doc_index=3",
+              "doc_sha256_canonical_json": "05f86d57a814e2a835abe658729823efb6ac447b08e5e8b0f8ccb7bcd1ec2222"
+            }
+          ]
+        },
+        "mmlu_pro_economics": {
+          "task_version": "3.1",
+          "output_type": "generate_until",
+          "available_eval_docs": 844,
+          "selected_samples": [
+            {
+              "eval_doc_index": 1,
+              "stable_id": "mmlu_pro_economics:eval_doc_index=1",
+              "doc_sha256_canonical_json": "d7baa587333364e9cdbaa41531670fbcaabd8812823c4034e6e52e25d0357d9c"
+            },
+            {
+              "eval_doc_index": 2,
+              "stable_id": "mmlu_pro_economics:eval_doc_index=2",
+              "doc_sha256_canonical_json": "775a5f043c89dc09b6f24c155f0bcde13afbd4713b368e5559cc2e2242950aaa"
+            },
+            {
+              "eval_doc_index": 3,
+              "stable_id": "mmlu_pro_economics:eval_doc_index=3",
+              "doc_sha256_canonical_json": "abf52b8c96c3ebec7c2caf925a7792c97ee117de9757fa7b82f9c2e2dc5f0fc2"
+            }
+          ]
+        },
+        "mmlu_pro_engineering": {
+          "task_version": "3.1",
+          "output_type": "generate_until",
+          "available_eval_docs": 969,
+          "selected_samples": [
+            {
+              "eval_doc_index": 1,
+              "stable_id": "mmlu_pro_engineering:eval_doc_index=1",
+              "doc_sha256_canonical_json": "45615cffcad2b7f9f61d1a8f64e87d1f0726b44d86c855044d075dd438e928d1"
+            },
+            {
+              "eval_doc_index": 2,
+              "stable_id": "mmlu_pro_engineering:eval_doc_index=2",
+              "doc_sha256_canonical_json": "4aff53af994051981b4452ffe57b90bfda368cfcd865bdb96b7eed93c276b9b9"
+            },
+            {
+              "eval_doc_index": 3,
+              "stable_id": "mmlu_pro_engineering:eval_doc_index=3",
+              "doc_sha256_canonical_json": "8ea3721ac54cc90b9afc765a81ab8db6c823b203e964208f8cdafbf43def5fe6"
+            }
+          ]
+        },
+        "mmlu_pro_health": {
+          "task_version": "3.1",
+          "output_type": "generate_until",
+          "available_eval_docs": 818,
+          "selected_samples": [
+            {
+              "eval_doc_index": 1,
+              "stable_id": "mmlu_pro_health:eval_doc_index=1",
+              "doc_sha256_canonical_json": "436d2ac5f71ed6e40eedd4ec8695a44c7c06fa04b8ba7a0cc768a96bd8a05be2"
+            },
+            {
+              "eval_doc_index": 2,
+              "stable_id": "mmlu_pro_health:eval_doc_index=2",
+              "doc_sha256_canonical_json": "3269b4d07cddd7089a860d2cb118ef2258d32762409bdc7533f4b1bbead468a0"
+            },
+            {
+              "eval_doc_index": 3,
+              "stable_id": "mmlu_pro_health:eval_doc_index=3",
+              "doc_sha256_canonical_json": "85a51c1684119145778b7857eac864e38a664afad06bd8823dbeac8b57306b12"
+            }
+          ]
+        },
+        "mmlu_pro_history": {
+          "task_version": "3.1",
+          "output_type": "generate_until",
+          "available_eval_docs": 381,
+          "selected_samples": [
+            {
+              "eval_doc_index": 1,
+              "stable_id": "mmlu_pro_history:eval_doc_index=1",
+              "doc_sha256_canonical_json": "7d1b4b1986db697d3b0239cb23e1f10e45e34ea3c3558a359fb908a93370d37f"
+            },
+            {
+              "eval_doc_index": 2,
+              "stable_id": "mmlu_pro_history:eval_doc_index=2",
+              "doc_sha256_canonical_json": "5f13e9a7a5b18e79379a1bb0723a89179991d9bc6bbee7e89d7b3847a05c6d9e"
+            },
+            {
+              "eval_doc_index": 3,
+              "stable_id": "mmlu_pro_history:eval_doc_index=3",
+              "doc_sha256_canonical_json": "6089aeb45253435c1d7af21ed3bc2f94b940b23978d94dbb506f121a6292e2c6"
+            }
+          ]
+        },
+        "mmlu_pro_law": {
+          "task_version": "3.1",
+          "output_type": "generate_until",
+          "available_eval_docs": 1101,
+          "selected_samples": [
+            {
+              "eval_doc_index": 1,
+              "stable_id": "mmlu_pro_law:eval_doc_index=1",
+              "doc_sha256_canonical_json": "60851645a714d159d112db6e8df8d3829c629de6a67fab918a5ada2654d5bbca"
+            },
+            {
+              "eval_doc_index": 2,
+              "stable_id": "mmlu_pro_law:eval_doc_index=2",
+              "doc_sha256_canonical_json": "317f7af10e5a6f07a4c23be03573f4abd8c06837a4e1d54196629e6f5b0cfdc1"
+            },
+            {
+              "eval_doc_index": 3,
+              "stable_id": "mmlu_pro_law:eval_doc_index=3",
+              "doc_sha256_canonical_json": "0ce554b3502d2c8bf852739db496232ac6dbe803012143a08b296ca97267ddc0"
+            }
+          ]
+        },
+        "mmlu_pro_math": {
+          "task_version": "3.1",
+          "output_type": "generate_until",
+          "available_eval_docs": 1351,
+          "selected_samples": [
+            {
+              "eval_doc_index": 1,
+              "stable_id": "mmlu_pro_math:eval_doc_index=1",
+              "doc_sha256_canonical_json": "5c03a96413cf9b3c96882aba89f31eedcce4a63b2148e343760131191776d83f"
+            },
+            {
+              "eval_doc_index": 2,
+              "stable_id": "mmlu_pro_math:eval_doc_index=2",
+              "doc_sha256_canonical_json": "2acfda06c96d954d978c13b6f05d216b2e032af18027c2a18e6f995ab5f9bda2"
+            },
+            {
+              "eval_doc_index": 3,
+              "stable_id": "mmlu_pro_math:eval_doc_index=3",
+              "doc_sha256_canonical_json": "187e06687b5a65d13d04bd7515f56e45c299e95a1884a35e40fcf7a2c6390869"
+            }
+          ]
+        },
+        "mmlu_pro_other": {
+          "task_version": "3.1",
+          "output_type": "generate_until",
+          "available_eval_docs": 924,
+          "selected_samples": [
+            {
+              "eval_doc_index": 1,
+              "stable_id": "mmlu_pro_other:eval_doc_index=1",
+              "doc_sha256_canonical_json": "a16dc6f7a1e05e243656840bb57d91dcb00277754579ec4dc25bb5e537d15bf9"
+            },
+            {
+              "eval_doc_index": 2,
+              "stable_id": "mmlu_pro_other:eval_doc_index=2",
+              "doc_sha256_canonical_json": "7b073cf38f3916e584c8536c6a3d55f026c8ba851dd0b93d2942b1ca244c7a27"
+            },
+            {
+              "eval_doc_index": 3,
+              "stable_id": "mmlu_pro_other:eval_doc_index=3",
+              "doc_sha256_canonical_json": "92bdffa04f16e8730ae704e95e5da01acc0b51ecfa096a1f17aacbf01feca2d2"
+            }
+          ]
+        },
+        "mmlu_pro_philosophy": {
+          "task_version": "3.1",
+          "output_type": "generate_until",
+          "available_eval_docs": 499,
+          "selected_samples": [
+            {
+              "eval_doc_index": 1,
+              "stable_id": "mmlu_pro_philosophy:eval_doc_index=1",
+              "doc_sha256_canonical_json": "cc10bf0b157dd0c8355ad39821da9cc9db2aa39bb29f8612e2eb5bdd99708870"
+            },
+            {
+              "eval_doc_index": 2,
+              "stable_id": "mmlu_pro_philosophy:eval_doc_index=2",
+              "doc_sha256_canonical_json": "4b5c3bbf9703823f36f6861a58fa7b5e8c47a4e8ea9d912118184ad4d01585d9"
+            },
+            {
+              "eval_doc_index": 3,
+              "stable_id": "mmlu_pro_philosophy:eval_doc_index=3",
+              "doc_sha256_canonical_json": "07a52dbc9bba54110d271b82241703e9e1b8959c1671056f559f47886bcb8317"
+            }
+          ]
+        },
+        "mmlu_pro_physics": {
+          "task_version": "3.1",
+          "output_type": "generate_until",
+          "available_eval_docs": 1299,
+          "selected_samples": [
+            {
+              "eval_doc_index": 1,
+              "stable_id": "mmlu_pro_physics:eval_doc_index=1",
+              "doc_sha256_canonical_json": "bc601b9c310518913b175e7130b1e6caed50ba80156c53f222e00b61aa01a553"
+            },
+            {
+              "eval_doc_index": 2,
+              "stable_id": "mmlu_pro_physics:eval_doc_index=2",
+              "doc_sha256_canonical_json": "5ee806b6a604c81c8ee2177095cf1dcd7fe03511484f49d84df28d78eaed1880"
+            },
+            {
+              "eval_doc_index": 3,
+              "stable_id": "mmlu_pro_physics:eval_doc_index=3",
+              "doc_sha256_canonical_json": "054eee807f8d51be4c316f62d82defd91f5ce5747ae8b7dcf40c9217197c37b9"
+            }
+          ]
+        },
+        "mmlu_pro_psychology": {
+          "task_version": "3.1",
+          "output_type": "generate_until",
+          "available_eval_docs": 798,
+          "selected_samples": [
+            {
+              "eval_doc_index": 1,
+              "stable_id": "mmlu_pro_psychology:eval_doc_index=1",
+              "doc_sha256_canonical_json": "f21ca1a2b8bfe7fc3857bdc31b90ce96ba3986cf5c9cd320d63b2823211c51cf"
+            },
+            {
+              "eval_doc_index": 2,
+              "stable_id": "mmlu_pro_psychology:eval_doc_index=2",
+              "doc_sha256_canonical_json": "ef95a15903f85d3ccbdae840035ab80d6e1f1ba737b22c83102f127cca91d176"
+            },
+            {
+              "eval_doc_index": 3,
+              "stable_id": "mmlu_pro_psychology:eval_doc_index=3",
+              "doc_sha256_canonical_json": "49e623bdca5134db59fdfce0494b94e65d2bd01ac7947fb76eb98689438deefe"
+            }
+          ]
+        }
+      }
+    },
+    "gsm8k": {
+      "dataset_id": "openai/gsm8k",
+      "dataset_revision": "740312add88f781978c0658806c59bc2815b9866",
+      "task_version": "3.0",
+      "harness_tasks": [
+        "gsm8k"
+      ],
+      "selection_rule": "Disjoint next examples after the non-evidentiary smoke set: MMLU-Pro filtered indices 1-3 in each of 14 categories; GSM8K and IFEval indices 5-54; HellaSwag indices 5-104. Sample sizes were chosen only from smoke runtime feasibility before substantive scoring.",
+      "sample_count": 50,
+      "tasks": {
+        "gsm8k": {
+          "task_version": "3.0",
+          "output_type": "generate_until",
+          "available_eval_docs": 1319,
+          "selected_samples": [
+            {
+              "eval_doc_index": 5,
+              "stable_id": "gsm8k:eval_doc_index=5",
+              "doc_sha256_canonical_json": "465c73684cc6ae028c1c2b77a676e632612825542d6a5c7e0fb8e80d5e23f478"
+            },
+            {
+              "eval_doc_index": 6,
+              "stable_id": "gsm8k:eval_doc_index=6",
+              "doc_sha256_canonical_json": "cae6335f8c2d068bffc757827ccacff12abe9c15abb1088c57bd74ca3a82ee35"
+            },
+            {
+              "eval_doc_index": 7,
+              "stable_id": "gsm8k:eval_doc_index=7",
+              "doc_sha256_canonical_json": "be86534386cccbf99a6d968f3ca70c7b8a7228d4dccaea7dadfa7d3cc60ca59d"
+            },
+            {
+              "eval_doc_index": 8,
+              "stable_id": "gsm8k:eval_doc_index=8",
+              "doc_sha256_canonical_json": "f8dc1932551dd8266587e4a8f3f9cb84465c9b05eca2b76788c6582a9ecd21fa"
+            },
+            {
+              "eval_doc_index": 9,
+              "stable_id": "gsm8k:eval_doc_index=9",
+              "doc_sha256_canonical_json": "24f37b08c35c81aeacbe7ad56a0e6dd0e478b98872bf854975fdd45d57fd5d46"
+            },
+            {
+              "eval_doc_index": 10,
+              "stable_id": "gsm8k:eval_doc_index=10",
+              "doc_sha256_canonical_json": "6cb7266290df33247efe780a072a14736e523d27f72fb917c2d2b96cd986502e"
+            },
+            {
+              "eval_doc_index": 11,
+              "stable_id": "gsm8k:eval_doc_index=11",
+              "doc_sha256_canonical_json": "b57bf22e37f8c744e77183f7152ae2ffa5952719742c4e4e0c2ea8b7e926509a"
+            },
+            {
+              "eval_doc_index": 12,
+              "stable_id": "gsm8k:eval_doc_index=12",
+              "doc_sha256_canonical_json": "23e2df479692d9b5e73acc9fc74c5ebe61bfe1ea8f7183819dbe045c2ec552e3"
+            },
+            {
+              "eval_doc_index": 13,
+              "stable_id": "gsm8k:eval_doc_index=13",
+              "doc_sha256_canonical_json": "4b291213a8badf0204266c9b5e66f2028efac662a42bfa1bb66e341b30996d1a"
+            },
+            {
+              "eval_doc_index": 14,
+              "stable_id": "gsm8k:eval_doc_index=14",
+              "doc_sha256_canonical_json": "161ed4545c93791c2e582ec0fa1895983621c0471fea4ea5c82ee954293efa5c"
+            },
+            {
+              "eval_doc_index": 15,
+              "stable_id": "gsm8k:eval_doc_index=15",
+              "doc_sha256_canonical_json": "c3193995b02461e75a6681f63a29ba11e7fc78ae0ea9cfdbb495164cb037e934"
+            },
+            {
+              "eval_doc_index": 16,
+              "stable_id": "gsm8k:eval_doc_index=16",
+              "doc_sha256_canonical_json": "7dda2e14abc849c96d755e8fe2454b371821bb07dd01e9c9bb7fbe850a3f597e"
+            },
+            {
+              "eval_doc_index": 17,
+              "stable_id": "gsm8k:eval_doc_index=17",
+              "doc_sha256_canonical_json": "376f9958fdc66e46ab551d144633109a3a772db9bd266db12d7287787d1661d9"
+            },
+            {
+              "eval_doc_index": 18,
+              "stable_id": "gsm8k:eval_doc_index=18",
+              "doc_sha256_canonical_json": "7ecdf2d95e690a44ee2b21fc188993ebdaf366048e3325375ce066afa94a9bd3"
+            },
+            {
+              "eval_doc_index": 19,
+              "stable_id": "gsm8k:eval_doc_index=19",
+              "doc_sha256_canonical_json": "0bfdb1a680d398468f5d50b946075b365edffe5e7322250ec51f5a380e326406"
+            },
+            {
+              "eval_doc_index": 20,
+              "stable_id": "gsm8k:eval_doc_index=20",
+              "doc_sha256_canonical_json": "c9171d8b3df896bc4a0db06238f64f08b20730f576e842d9ce436e61f48af551"
+            },
+            {
+              "eval_doc_index": 21,
+              "stable_id": "gsm8k:eval_doc_index=21",
+              "doc_sha256_canonical_json": "02b950750a0d27490fa20a5d4583d3991a8db53d9315dbb1d51c9bd0e9437b5d"
+            },
+            {
+              "eval_doc_index": 22,
+              "stable_id": "gsm8k:eval_doc_index=22",
+              "doc_sha256_canonical_json": "26639db3981c76343fa9ab0693d6a491a48a38abce7695a12b0406e0ea831180"
+            },
+            {
+              "eval_doc_index": 23,
+              "stable_id": "gsm8k:eval_doc_index=23",
+              "doc_sha256_canonical_json": "5a2ff2cdf8a03bc539e1f55f8f3b30e17a565f72e35c2f7eb0becad79467874c"
+            },
+            {
+              "eval_doc_index": 24,
+              "stable_id": "gsm8k:eval_doc_index=24",
+              "doc_sha256_canonical_json": "9482b3efaf6b19edabcb3f9f8eb27c2cb749f0c878cec553bce39240b7944a20"
+            },
+            {
+              "eval_doc_index": 25,
+              "stable_id": "gsm8k:eval_doc_index=25",
+              "doc_sha256_canonical_json": "073b526a5ba02ef15f6d9ad8675af9df0a86deda73d31c1a56649753961d41b4"
+            },
+            {
+              "eval_doc_index": 26,
+              "stable_id": "gsm8k:eval_doc_index=26",
+              "doc_sha256_canonical_json": "4d692efb4be1032074d11d1aeea9bb27063cc1c58a04cd8566f1e143119ea829"
+            },
+            {
+              "eval_doc_index": 27,
+              "stable_id": "gsm8k:eval_doc_index=27",
+              "doc_sha256_canonical_json": "fb08f5b11555a2adedef7f37dbe5d0d02f51e5c36040f33ff6f006f24d35232c"
+            },
+            {
+              "eval_doc_index": 28,
+              "stable_id": "gsm8k:eval_doc_index=28",
+              "doc_sha256_canonical_json": "67a43144fe848f7158fad88db5112f5bae7bf8c988fc720d090dc714bb9d2cd5"
+            },
+            {
+              "eval_doc_index": 29,
+              "stable_id": "gsm8k:eval_doc_index=29",
+              "doc_sha256_canonical_json": "32f41ec46041b9baebf17e767880771012618ab3a0bbb0cb2335c0aae88670e4"
+            },
+            {
+              "eval_doc_index": 30,
+              "stable_id": "gsm8k:eval_doc_index=30",
+              "doc_sha256_canonical_json": "cbed674daf6ecc1e6ead8f9af8be7ebf9d16607f53f5df85da03cc67bfb578cc"
+            },
+            {
+              "eval_doc_index": 31,
+              "stable_id": "gsm8k:eval_doc_index=31",
+              "doc_sha256_canonical_json": "bf8a78f79adc58dab29b203d55baf45a6e14cf96e4fc5056e68aca41c3cd61d6"
+            },
+            {
+              "eval_doc_index": 32,
+              "stable_id": "gsm8k:eval_doc_index=32",
+              "doc_sha256_canonical_json": "639b9acb5a47494d3224afc680885032bbd05267ee1ad906f74db740f41c421b"
+            },
+            {
+              "eval_doc_index": 33,
+              "stable_id": "gsm8k:eval_doc_index=33",
+              "doc_sha256_canonical_json": "f817dbe0e033b8ca8e95ab0df5b8827d8c9a0aa1896879a7d0e66bfeb0864dc8"
+            },
+            {
+              "eval_doc_index": 34,
+              "stable_id": "gsm8k:eval_doc_index=34",
+              "doc_sha256_canonical_json": "0b21d535a5ee93a7ac96fca26dce13f7df05509b17818cb92d842aa4d16ed840"
+            },
+            {
+              "eval_doc_index": 35,
+              "stable_id": "gsm8k:eval_doc_index=35",
+              "doc_sha256_canonical_json": "6077efe9d8fcbbb345f53bc0cc0697df06d93cc020c5f7541786a77984ecfdc5"
+            },
+            {
+              "eval_doc_index": 36,
+              "stable_id": "gsm8k:eval_doc_index=36",
+              "doc_sha256_canonical_json": "98f14450593e5510de5cd80a44c97ce6e1488389fc559874326774ba154c1ba8"
+            },
+            {
+              "eval_doc_index": 37,
+              "stable_id": "gsm8k:eval_doc_index=37",
+              "doc_sha256_canonical_json": "9bca8875d332438ec93d9b12030d9867815f18ce3f1409595b0394f5de463a23"
+            },
+            {
+              "eval_doc_index": 38,
+              "stable_id": "gsm8k:eval_doc_index=38",
+              "doc_sha256_canonical_json": "225c5d0dbade4474e82947485d2e88a6d9a188620cfcca235e8da2ab6a18c14a"
+            },
+            {
+              "eval_doc_index": 39,
+              "stable_id": "gsm8k:eval_doc_index=39",
+              "doc_sha256_canonical_json": "f17de81cb77d1bad596fbf3b097119c991f1f526bab23104cf25d6dae9914088"
+            },
+            {
+              "eval_doc_index": 40,
+              "stable_id": "gsm8k:eval_doc_index=40",
+              "doc_sha256_canonical_json": "00f3ac1719be04ebdf35fb5ead74da3c4015c4efa267110a3a08acd3fc651135"
+            },
+            {
+              "eval_doc_index": 41,
+              "stable_id": "gsm8k:eval_doc_index=41",
+              "doc_sha256_canonical_json": "790d280afee941fb06ea5f27428d2d68887e30445d6b4a0a898e6bcb76d96886"
+            },
+            {
+              "eval_doc_index": 42,
+              "stable_id": "gsm8k:eval_doc_index=42",
+              "doc_sha256_canonical_json": "58434d3eb64578e651fb85c9993b014447f926514b2da900235bd773c7b7ab2c"
+            },
+            {
+              "eval_doc_index": 43,
+              "stable_id": "gsm8k:eval_doc_index=43",
+              "doc_sha256_canonical_json": "931f3e0efdacb850149c323a75a54e4831ef6807e791577bf141ad3173cd6fbb"
+            },
+            {
+              "eval_doc_index": 44,
+              "stable_id": "gsm8k:eval_doc_index=44",
+              "doc_sha256_canonical_json": "68e62ef1109e7e2c068c6f22126215508851f4cd1bb5e026b9f97fda1d3725f2"
+            },
+            {
+              "eval_doc_index": 45,
+              "stable_id": "gsm8k:eval_doc_index=45",
+              "doc_sha256_canonical_json": "1390df16de5c9c2d30f7481c4f88f5ae9767d952cb2bc9bd080f480c06756385"
+            },
+            {
+              "eval_doc_index": 46,
+              "stable_id": "gsm8k:eval_doc_index=46",
+              "doc_sha256_canonical_json": "3d6b80937dd1971957e72373ebeda7209f75822a92c2880f75e9c2085b29699c"
+            },
+            {
+              "eval_doc_index": 47,
+              "stable_id": "gsm8k:eval_doc_index=47",
+              "doc_sha256_canonical_json": "7c0a03821687ad85aab768bd4197cd2fb90f7ad02c061f95524aedad0265dd41"
+            },
+            {
+              "eval_doc_index": 48,
+              "stable_id": "gsm8k:eval_doc_index=48",
+              "doc_sha256_canonical_json": "80d95d16005a6769685726ea8eff2f701c01e5d9f32c93baa7897d37db120363"
+            },
+            {
+              "eval_doc_index": 49,
+              "stable_id": "gsm8k:eval_doc_index=49",
+              "doc_sha256_canonical_json": "e895b7240eeeed307fae5ba00af3203f7666696495d1c7cd72bcbf7306ae4ab8"
+            },
+            {
+              "eval_doc_index": 50,
+              "stable_id": "gsm8k:eval_doc_index=50",
+              "doc_sha256_canonical_json": "7710226d68ac538730c2b8a3690009014b6617fe21243ef940949b7972899db8"
+            },
+            {
+              "eval_doc_index": 51,
+              "stable_id": "gsm8k:eval_doc_index=51",
+              "doc_sha256_canonical_json": "f92f5a56bdcb8fc2598f9f86bab22852444c35b014cf0e2b03656dcbb36275ac"
+            },
+            {
+              "eval_doc_index": 52,
+              "stable_id": "gsm8k:eval_doc_index=52",
+              "doc_sha256_canonical_json": "5e591ed2a5c2f5c4ed14c518af3a518133da71cd7936fd52a143dc9a17c54011"
+            },
+            {
+              "eval_doc_index": 53,
+              "stable_id": "gsm8k:eval_doc_index=53",
+              "doc_sha256_canonical_json": "3725813d513cf4d20bdff4581564611238abc86ad925391448b57ae0491cae7f"
+            },
+            {
+              "eval_doc_index": 54,
+              "stable_id": "gsm8k:eval_doc_index=54",
+              "doc_sha256_canonical_json": "a100b15b78ba031f3a20ec4e5944b962aab0eef1c3bea23af3e89f227fa89797"
+            }
+          ]
+        }
+      }
+    },
+    "ifeval": {
+      "dataset_id": "google/IFEval",
+      "dataset_revision": "966cd89545d6b6acfd7638bc708b98261ca58e84",
+      "task_version": "4.0",
+      "harness_tasks": [
+        "ifeval"
+      ],
+      "selection_rule": "Disjoint next examples after the non-evidentiary smoke set: MMLU-Pro filtered indices 1-3 in each of 14 categories; GSM8K and IFEval indices 5-54; HellaSwag indices 5-104. Sample sizes were chosen only from smoke runtime feasibility before substantive scoring.",
+      "sample_count": 50,
+      "tasks": {
+        "ifeval": {
+          "task_version": "4.0",
+          "output_type": "generate_until",
+          "available_eval_docs": 541,
+          "selected_samples": [
+            {
+              "eval_doc_index": 5,
+              "stable_id": "ifeval:key=102",
+              "doc_sha256_canonical_json": "38cbd0e1bb36f7e207a68bcad1b161ba18909d49d4270031acfee39d30532780"
+            },
+            {
+              "eval_doc_index": 6,
+              "stable_id": "ifeval:key=1021",
+              "doc_sha256_canonical_json": "8ce4688cd232a42afc629b09f0576c3671a9aa6f090bfba211d8adc8cf461ba2"
+            },
+            {
+              "eval_doc_index": 7,
+              "stable_id": "ifeval:key=1040",
+              "doc_sha256_canonical_json": "b2c3bdb0731e420f62989adff70b22a80b976f78bfeee9430e2d64215fe02145"
+            },
+            {
+              "eval_doc_index": 8,
+              "stable_id": "ifeval:key=1051",
+              "doc_sha256_canonical_json": "0faf8fbb5e585417f212e2af730282f4461d1e7ed7c3efe5443edd2e6bf72971"
+            },
+            {
+              "eval_doc_index": 9,
+              "stable_id": "ifeval:key=1069",
+              "doc_sha256_canonical_json": "eb5e98bb24f70d476c36b25060d7fd3f32f0e549dbb98dd94a7419063f3828f9"
+            },
+            {
+              "eval_doc_index": 10,
+              "stable_id": "ifeval:key=1072",
+              "doc_sha256_canonical_json": "9a7ac9b3bd2731fb4bbb14ff7145118ca4b08298f36f83116a5db51c98474097"
+            },
+            {
+              "eval_doc_index": 11,
+              "stable_id": "ifeval:key=1075",
+              "doc_sha256_canonical_json": "4abed70347dbc5e81af1a2335d7402274253a5107412c3c16e2ff93cd07d5862"
+            },
+            {
+              "eval_doc_index": 12,
+              "stable_id": "ifeval:key=1082",
+              "doc_sha256_canonical_json": "53041510301aca99d38b45298d548b67adcfc584796b8cc04a05318e795c71d4"
+            },
+            {
+              "eval_doc_index": 13,
+              "stable_id": "ifeval:key=1087",
+              "doc_sha256_canonical_json": "074e161c44e331dad8e7d504b8823cff7112abf26a92e4d8a3eabb7d6b412059"
+            },
+            {
+              "eval_doc_index": 14,
+              "stable_id": "ifeval:key=1092",
+              "doc_sha256_canonical_json": "7e0131c5e381ab2abaace47290428dc311d4651fcce887957962651efe44eed3"
+            },
+            {
+              "eval_doc_index": 15,
+              "stable_id": "ifeval:key=1094",
+              "doc_sha256_canonical_json": "bb13a992339d23444d5b26f5f6545edb4e4ec0f90648892c70fea085ce3afc14"
+            },
+            {
+              "eval_doc_index": 16,
+              "stable_id": "ifeval:key=1098",
+              "doc_sha256_canonical_json": "826b714b37cbb9df5370c2030d259523b948b2d89eff5e37f5246899e5889a7f"
+            },
+            {
+              "eval_doc_index": 17,
+              "stable_id": "ifeval:key=1107",
+              "doc_sha256_canonical_json": "9384610bfea31b5b7d43a30b6ee5c21826a985328d78b47a8ba27ad2d5c2a4b6"
+            },
+            {
+              "eval_doc_index": 18,
+              "stable_id": "ifeval:key=1108",
+              "doc_sha256_canonical_json": "1d4445bba0b1afbd7a3fb0d300934bb836e67afa5ef15223334a23995bbb3f05"
+            },
+            {
+              "eval_doc_index": 19,
+              "stable_id": "ifeval:key=1122",
+              "doc_sha256_canonical_json": "6dd13be065f7fa996e8177b47e496b06c37a2f72ead293f43f103824c77b5101"
+            },
+            {
+              "eval_doc_index": 20,
+              "stable_id": "ifeval:key=1127",
+              "doc_sha256_canonical_json": "3d12f37f9ed3c42ebbca636a0a6bb659e110336c3b12b8e56831abdadc6a5d50"
+            },
+            {
+              "eval_doc_index": 21,
+              "stable_id": "ifeval:key=1128",
+              "doc_sha256_canonical_json": "7604d55cc2cef261893a403187ab8ec210291bf60ec39858acdff206a4a1a9c9"
+            },
+            {
+              "eval_doc_index": 22,
+              "stable_id": "ifeval:key=1129",
+              "doc_sha256_canonical_json": "8adfca9ec6358d2a78b52f8eac3d5eff9d0704ee66ee8dff8882bac032c7dbd9"
+            },
+            {
+              "eval_doc_index": 23,
+              "stable_id": "ifeval:key=1130",
+              "doc_sha256_canonical_json": "bd9fb738445e8a494a74d9509905b5092aaa89dd374a73dc1b2fca63364f67f3"
+            },
+            {
+              "eval_doc_index": 24,
+              "stable_id": "ifeval:key=1131",
+              "doc_sha256_canonical_json": "b48884cce61cc8efd1351704cf9d326f5467ae9b24272d10569ac076ffd45e60"
+            },
+            {
+              "eval_doc_index": 25,
+              "stable_id": "ifeval:key=1132",
+              "doc_sha256_canonical_json": "0d293c454c1d26894df725bc5e238058436e3ceb2ca2e6a6766eddd03375d72a"
+            },
+            {
+              "eval_doc_index": 26,
+              "stable_id": "ifeval:key=1137",
+              "doc_sha256_canonical_json": "c052af4de62f3b9d5eff1da766fed6f70cb4c55836f658be34ce3e787dc98c20"
+            },
+            {
+              "eval_doc_index": 27,
+              "stable_id": "ifeval:key=1139",
+              "doc_sha256_canonical_json": "6770fbf33e879df23bea2851a68a205d9fdfff74d16e2d803adf5c291d593516"
+            },
+            {
+              "eval_doc_index": 28,
+              "stable_id": "ifeval:key=1147",
+              "doc_sha256_canonical_json": "fbc7b4aa7531e221a103b86c071ec5f980a7f358b4e961d0f6b54bccc2724ebf"
+            },
+            {
+              "eval_doc_index": 29,
+              "stable_id": "ifeval:key=1148",
+              "doc_sha256_canonical_json": "a505af33bd829f9d9981624a3e552f15fa2eb06d44f8a3e46a77b743fe711203"
+            },
+            {
+              "eval_doc_index": 30,
+              "stable_id": "ifeval:key=1153",
+              "doc_sha256_canonical_json": "2734f6ad844474b3b3a4c6e07bde6f079ff04e4d7dce55a03391e5914bfbc07b"
+            },
+            {
+              "eval_doc_index": 31,
+              "stable_id": "ifeval:key=1154",
+              "doc_sha256_canonical_json": "94999738ae2aee6379350c4658600fe858c8bc3750180d4d82cbbd6078b66229"
+            },
+            {
+              "eval_doc_index": 32,
+              "stable_id": "ifeval:key=1162",
+              "doc_sha256_canonical_json": "47d23cc75f46a1e8788061174161657c510d280ef94fc0770a52f0c6df42d745"
+            },
+            {
+              "eval_doc_index": 33,
+              "stable_id": "ifeval:key=1174",
+              "doc_sha256_canonical_json": "45d690a0abc34fda05c273e8ff9611477904b29bbeb22f67c2f04ccb8ff07e92"
+            },
+            {
+              "eval_doc_index": 34,
+              "stable_id": "ifeval:key=1180",
+              "doc_sha256_canonical_json": "7efcd76f307749cdfe00c1c0ab4b4cd48c6a7e890417246e538ca5a60ab43dac"
+            },
+            {
+              "eval_doc_index": 35,
+              "stable_id": "ifeval:key=1187",
+              "doc_sha256_canonical_json": "fa5254f046d4a32b1464bc37a025cb6ae9961147b1c354fd56cf49b2e18a1cc5"
+            },
+            {
+              "eval_doc_index": 36,
+              "stable_id": "ifeval:key=1203",
+              "doc_sha256_canonical_json": "e0a56736189b5dec8c2191da271892aee03a29ad7a0b00df20a7fd42d95510ec"
+            },
+            {
+              "eval_doc_index": 37,
+              "stable_id": "ifeval:key=1216",
+              "doc_sha256_canonical_json": "452b88f7a01f8e26a3a173f15ffd1accb82c74b252acb77e467c1b9547f7386a"
+            },
+            {
+              "eval_doc_index": 38,
+              "stable_id": "ifeval:key=1217",
+              "doc_sha256_canonical_json": "47247ba9e8000924777b03cdb2bcd9cbcdcc92d8e0380688605b7e61cc902f3b"
+            },
+            {
+              "eval_doc_index": 39,
+              "stable_id": "ifeval:key=1219",
+              "doc_sha256_canonical_json": "7e0209ba33cc4bab0ccdd95e99b95ef8a3e963dfc29b29f01e63ceea2502797b"
+            },
+            {
+              "eval_doc_index": 40,
+              "stable_id": "ifeval:key=122",
+              "doc_sha256_canonical_json": "2c4986cd8eaf85c016903787b6be597b45ba8c3f00804c5051d6af99be91f3c0"
+            },
+            {
+              "eval_doc_index": 41,
+              "stable_id": "ifeval:key=1220",
+              "doc_sha256_canonical_json": "bc9ede16c1572efce77aeaa72bf6f89336a6cb76f9995866057642ababd4621d"
+            },
+            {
+              "eval_doc_index": 42,
+              "stable_id": "ifeval:key=1233",
+              "doc_sha256_canonical_json": "81db5201934937fd791746db7531821e2d54a0dd6da352f6e366d71bda913be9"
+            },
+            {
+              "eval_doc_index": 43,
+              "stable_id": "ifeval:key=1236",
+              "doc_sha256_canonical_json": "f9b82aa5ab62584c8b7ce89e590b4e717770f325e4065b16524b07743fb29a2e"
+            },
+            {
+              "eval_doc_index": 44,
+              "stable_id": "ifeval:key=1237",
+              "doc_sha256_canonical_json": "07500e48d590cd417080a7c983ac873285641608aa2c9198f483debbf5a718d7"
+            },
+            {
+              "eval_doc_index": 45,
+              "stable_id": "ifeval:key=1242",
+              "doc_sha256_canonical_json": "5fbcac964b0ca1c6d69fa42af3168cac627077d5c5e4d476e1d9646b5ea39063"
+            },
+            {
+              "eval_doc_index": 46,
+              "stable_id": "ifeval:key=1246",
+              "doc_sha256_canonical_json": "ef0a0dd8b9ab3eccfa1fcfb8212bc6696edf575bc6c0619a35987c402092d049"
+            },
+            {
+              "eval_doc_index": 47,
+              "stable_id": "ifeval:key=1248",
+              "doc_sha256_canonical_json": "f1f1f86cdbefa6b870bad45b78946cd91d87681ffaac8f5714fece6ef2f55c5a"
+            },
+            {
+              "eval_doc_index": 48,
+              "stable_id": "ifeval:key=1251",
+              "doc_sha256_canonical_json": "19a0047cbe2a88be87e46b1540f13b64d978efdaaec4d433af9c650d9d5844e1"
+            },
+            {
+              "eval_doc_index": 49,
+              "stable_id": "ifeval:key=1258",
+              "doc_sha256_canonical_json": "ab009bc99e5bcdedba233355f4ef6d57de709d41bccfdf2c2fa7266ea172b124"
+            },
+            {
+              "eval_doc_index": 50,
+              "stable_id": "ifeval:key=1259",
+              "doc_sha256_canonical_json": "7f7c4262f78609a6afd1936b20e4013c097d1bf20063d9b05e3c9f58f2750012"
+            },
+            {
+              "eval_doc_index": 51,
+              "stable_id": "ifeval:key=1262",
+              "doc_sha256_canonical_json": "0dabd9fb88b47e4729c2ab2998b7097d01796327775be48180c86378c6935d3d"
+            },
+            {
+              "eval_doc_index": 52,
+              "stable_id": "ifeval:key=1265",
+              "doc_sha256_canonical_json": "302a2f06f0c53997303b5e4bf38fcc0673a3f98060f286197f1ab4330f43357e"
+            },
+            {
+              "eval_doc_index": 53,
+              "stable_id": "ifeval:key=1268",
+              "doc_sha256_canonical_json": "1b3e92659337a1be43181c3272fe83a7a32f5d0ae38af4c52f709e79e8103b47"
+            },
+            {
+              "eval_doc_index": 54,
+              "stable_id": "ifeval:key=127",
+              "doc_sha256_canonical_json": "bedb84c1487c0af29a54526e69f0ffcc5e92fa1de3b22d4c422e7d8406f8bee6"
+            }
+          ]
+        }
+      }
+    },
+    "hellaswag": {
+      "dataset_id": "Rowan/hellaswag",
+      "dataset_revision": "218ec52e09a7e7462a5400043bb9a69a41d06b76",
+      "task_version": "1.0",
+      "harness_tasks": [
+        "hellaswag"
+      ],
+      "selection_rule": "Disjoint next examples after the non-evidentiary smoke set: MMLU-Pro filtered indices 1-3 in each of 14 categories; GSM8K and IFEval indices 5-54; HellaSwag indices 5-104. Sample sizes were chosen only from smoke runtime feasibility before substantive scoring.",
+      "sample_count": 100,
+      "tasks": {
+        "hellaswag": {
+          "task_version": "1.0",
+          "output_type": "multiple_choice",
+          "available_eval_docs": 10042,
+          "selected_samples": [
+            {
+              "eval_doc_index": 5,
+              "stable_id": "hellaswag:ind=117",
+              "doc_sha256_canonical_json": "4c75ad912d60f4339446ff3e465258fae273970d1be2ea084db3e52d33f85e8b"
+            },
+            {
+              "eval_doc_index": 6,
+              "stable_id": "hellaswag:ind=149",
+              "doc_sha256_canonical_json": "8b8d27895989ddedbbaff02647c304734255c06b5e3a7bf05cb5814c2e1aa110"
+            },
+            {
+              "eval_doc_index": 7,
+              "stable_id": "hellaswag:ind=170",
+              "doc_sha256_canonical_json": "95deb7b458cffa2a181064ed5106d5d18f38b7529778498af575dafd1ea7ee89"
+            },
+            {
+              "eval_doc_index": 8,
+              "stable_id": "hellaswag:ind=180",
+              "doc_sha256_canonical_json": "55de8954316c42d9d55a04c7da3e3011479e9a747cc8534a70758bfedef87be1"
+            },
+            {
+              "eval_doc_index": 9,
+              "stable_id": "hellaswag:ind=182",
+              "doc_sha256_canonical_json": "0015f6006e0aa2b9012c70a2f56821926d3771e07e3239b281ac4e133010c55d"
+            },
+            {
+              "eval_doc_index": 10,
+              "stable_id": "hellaswag:ind=185",
+              "doc_sha256_canonical_json": "7c8b807b98a2a32b8df50c7977878ab358c2282c3207b8552496ee780dfd8406"
+            },
+            {
+              "eval_doc_index": 11,
+              "stable_id": "hellaswag:ind=186",
+              "doc_sha256_canonical_json": "d31ca6267f1148d3c39a7adf78563b1f4a73d2df9282961d2decee9cc648452b"
+            },
+            {
+              "eval_doc_index": 12,
+              "stable_id": "hellaswag:ind=187",
+              "doc_sha256_canonical_json": "22d6774e83f3f7f983566f07ccd9b267987c0c400f45793c9152540ac30cf695"
+            },
+            {
+              "eval_doc_index": 13,
+              "stable_id": "hellaswag:ind=188",
+              "doc_sha256_canonical_json": "8a0fff228591847918db75263d8f55d179af6a11b169779d60d49b250f88c748"
+            },
+            {
+              "eval_doc_index": 14,
+              "stable_id": "hellaswag:ind=192",
+              "doc_sha256_canonical_json": "0f92033a6df0f5861d63283a40d7524771d58ee303239b782f11883632719607"
+            },
+            {
+              "eval_doc_index": 15,
+              "stable_id": "hellaswag:ind=200",
+              "doc_sha256_canonical_json": "939f074ac7aac6d72c7fc7ff6c41223821cac50cf96566559b7d4e92c7c683ae"
+            },
+            {
+              "eval_doc_index": 16,
+              "stable_id": "hellaswag:ind=225",
+              "doc_sha256_canonical_json": "dcf3264a43ecf9d06e865f86d0269bab494e154bb5de715c923dd64a21237546"
+            },
+            {
+              "eval_doc_index": 17,
+              "stable_id": "hellaswag:ind=245",
+              "doc_sha256_canonical_json": "04cbbfdf6fae6812331dd337c2babe15c76e220c688910d474a66ad37ece6fdc"
+            },
+            {
+              "eval_doc_index": 18,
+              "stable_id": "hellaswag:ind=246",
+              "doc_sha256_canonical_json": "9bcb8f426732ab3a5067b3fb1f857e549509393bae1985760d60890e6179e421"
+            },
+            {
+              "eval_doc_index": 19,
+              "stable_id": "hellaswag:ind=247",
+              "doc_sha256_canonical_json": "286d86a9ec57a542ca9ea70f65cda3fd5da7e02173e4717a927ac11a1065e98a"
+            },
+            {
+              "eval_doc_index": 20,
+              "stable_id": "hellaswag:ind=282",
+              "doc_sha256_canonical_json": "5530821b09e405459a6ed9594c9fb0bc085962ab35095f323ee956f2f4f15f35"
+            },
+            {
+              "eval_doc_index": 21,
+              "stable_id": "hellaswag:ind=354",
+              "doc_sha256_canonical_json": "b1708f4bfe086655afd835a54db2d54aff149228c62360ee19977e680c94b269"
+            },
+            {
+              "eval_doc_index": 22,
+              "stable_id": "hellaswag:ind=378",
+              "doc_sha256_canonical_json": "0b0ff8b60f5b2b9cfad5200ff028b92d81b7de8a3d73428203988f8c005cc4f8"
+            },
+            {
+              "eval_doc_index": 23,
+              "stable_id": "hellaswag:ind=380",
+              "doc_sha256_canonical_json": "97cc080021c3eb93dbc90a79a0467c5d698c24e2918a16c989ede10cbd4b8fec"
+            },
+            {
+              "eval_doc_index": 24,
+              "stable_id": "hellaswag:ind=385",
+              "doc_sha256_canonical_json": "12a059d1d48ec5247804f76435ea7dce73fecbae39affca2247902e83ceddabd"
+            },
+            {
+              "eval_doc_index": 25,
+              "stable_id": "hellaswag:ind=386",
+              "doc_sha256_canonical_json": "5cc4d8853f36574fe6580bbe9990052387d089dbac8aa3831baecfb23d652c3d"
+            },
+            {
+              "eval_doc_index": 26,
+              "stable_id": "hellaswag:ind=393",
+              "doc_sha256_canonical_json": "dc7ae5ae5051e145af038e9c394edf88e396e4cf626840c3bbacefc5aff0049f"
+            },
+            {
+              "eval_doc_index": 27,
+              "stable_id": "hellaswag:ind=398",
+              "doc_sha256_canonical_json": "a118b05ff28a5021616ed94e7c4d560ae54e2c6f23a87140757ce491def7a049"
+            },
+            {
+              "eval_doc_index": 28,
+              "stable_id": "hellaswag:ind=399",
+              "doc_sha256_canonical_json": "76dd641f767268b2f58f52c8a440dd40172628df6f4ae5456b18f1b089150666"
+            },
+            {
+              "eval_doc_index": 29,
+              "stable_id": "hellaswag:ind=400",
+              "doc_sha256_canonical_json": "06de5bb0c1436cf6e305aa3130d6ddf5eaec6e4705f43a0d7913712b9cc4cb29"
+            },
+            {
+              "eval_doc_index": 30,
+              "stable_id": "hellaswag:ind=402",
+              "doc_sha256_canonical_json": "00b28210bb4f8fd7f81f5633d165643e3ab737308955d3b729f8672b3bc5dd95"
+            },
+            {
+              "eval_doc_index": 31,
+              "stable_id": "hellaswag:ind=478",
+              "doc_sha256_canonical_json": "c1fb0c2ad58a6664cafb5b2544ac4fef8ea8b3d935fdf42e4595aca24c09f004"
+            },
+            {
+              "eval_doc_index": 32,
+              "stable_id": "hellaswag:ind=479",
+              "doc_sha256_canonical_json": "5eea8bd8bb113723ac47adda87cc1a66d56ad73fe7cb37700b174ce9a978b81e"
+            },
+            {
+              "eval_doc_index": 33,
+              "stable_id": "hellaswag:ind=491",
+              "doc_sha256_canonical_json": "0f8e151bfd21f59f30d3e4d1057057569f1aa58c2d93c5adad10e7e337d3b5c2"
+            },
+            {
+              "eval_doc_index": 34,
+              "stable_id": "hellaswag:ind=492",
+              "doc_sha256_canonical_json": "1d849830daffc170faa7a2f1f5eb904c53f5d9e1865da02a992bc8c79edcd194"
+            },
+            {
+              "eval_doc_index": 35,
+              "stable_id": "hellaswag:ind=493",
+              "doc_sha256_canonical_json": "8fa31672a9cd031e946f590ee52a689d5faf0be887d63d3b5b70b703dd8d0e01"
+            },
+            {
+              "eval_doc_index": 36,
+              "stable_id": "hellaswag:ind=503",
+              "doc_sha256_canonical_json": "e4ad94cb73528799de5a881ecc74a71295759fc29354c279b3d650c680cfb995"
+            },
+            {
+              "eval_doc_index": 37,
+              "stable_id": "hellaswag:ind=527",
+              "doc_sha256_canonical_json": "274b6b004364556df758aa7df37aae654344b16b1553636d815eee60d7cb4db0"
+            },
+            {
+              "eval_doc_index": 38,
+              "stable_id": "hellaswag:ind=529",
+              "doc_sha256_canonical_json": "60985d0f079ed1ba83a1c5f78b2768cc185e83133e1f98ba7e66522a1d6acf98"
+            },
+            {
+              "eval_doc_index": 39,
+              "stable_id": "hellaswag:ind=560",
+              "doc_sha256_canonical_json": "b135c06df247dea1820d6b56ecc59ff0281e6e5794ace2e4944ebc64ce228e2f"
+            },
+            {
+              "eval_doc_index": 40,
+              "stable_id": "hellaswag:ind=586",
+              "doc_sha256_canonical_json": "9eac11dd292ad2a36c95c4c2fdfb7faf5a25630c7afeff077639050ef7cf6709"
+            },
+            {
+              "eval_doc_index": 41,
+              "stable_id": "hellaswag:ind=604",
+              "doc_sha256_canonical_json": "8d9f554a28b5894d71086e23413865ebf1bdc281b237cf1f81f6122b56d55a91"
+            },
+            {
+              "eval_doc_index": 42,
+              "stable_id": "hellaswag:ind=605",
+              "doc_sha256_canonical_json": "51b88f611fe8d281891a9ed47d434a22479ecbfaa0ee19916dfd33a0844ddc91"
+            },
+            {
+              "eval_doc_index": 43,
+              "stable_id": "hellaswag:ind=606",
+              "doc_sha256_canonical_json": "06498fd8fa28621777a9cac7c4fb6b39210d47a4a6c0e19568d19913f323e222"
+            },
+            {
+              "eval_doc_index": 44,
+              "stable_id": "hellaswag:ind=615",
+              "doc_sha256_canonical_json": "dfcbfa4be848a256ed9b7cf881f497cc4ed94bbeb5f62eed30219073c156b3e8"
+            },
+            {
+              "eval_doc_index": 45,
+              "stable_id": "hellaswag:ind=616",
+              "doc_sha256_canonical_json": "175c37acd52a2feee90b825a4f1ffc57a2812ac7478387ecf411e84fbcab1a26"
+            },
+            {
+              "eval_doc_index": 46,
+              "stable_id": "hellaswag:ind=618",
+              "doc_sha256_canonical_json": "0780f0c54eff0d5fb1820d9e1e393d60a338309a7c483355257afc3e562fabd9"
+            },
+            {
+              "eval_doc_index": 47,
+              "stable_id": "hellaswag:ind=619",
+              "doc_sha256_canonical_json": "86e921088f34e2c469ed843a826bae26a5f3ed17349bced60f84bebc51e7669b"
+            },
+            {
+              "eval_doc_index": 48,
+              "stable_id": "hellaswag:ind=689",
+              "doc_sha256_canonical_json": "29c18982a82e17a876fd5c4b9d8fe65f686527ebb2dc99def6df229c41f1ad1a"
+            },
+            {
+              "eval_doc_index": 49,
+              "stable_id": "hellaswag:ind=708",
+              "doc_sha256_canonical_json": "30b126b704c5214b9ea610e01e31b84093997aba8980ce288bbe5a6cb4b05a98"
+            },
+            {
+              "eval_doc_index": 50,
+              "stable_id": "hellaswag:ind=712",
+              "doc_sha256_canonical_json": "47cde11393a25fb6c7f2ebc085fcc975b0e3ea75e9ad3fadf18f35b5fc85dc86"
+            },
+            {
+              "eval_doc_index": 51,
+              "stable_id": "hellaswag:ind=748",
+              "doc_sha256_canonical_json": "c69a13bc0b6ca3615bb94b62623e35c204f6dd5fd3f2abe861a8884b5e47981d"
+            },
+            {
+              "eval_doc_index": 52,
+              "stable_id": "hellaswag:ind=801",
+              "doc_sha256_canonical_json": "78243820dd9dd45b84f593d62c06561cefdf831b80905020c85fc0075d79e726"
+            },
+            {
+              "eval_doc_index": 53,
+              "stable_id": "hellaswag:ind=818",
+              "doc_sha256_canonical_json": "2586eaedfe94f8e6f477b27bc310dddff781a9f2345e82427522c7a21ef1a2f8"
+            },
+            {
+              "eval_doc_index": 54,
+              "stable_id": "hellaswag:ind=819",
+              "doc_sha256_canonical_json": "c0e4cfbda94ebe9b46ae4e40daed762bb2c910782d2a8a46edf455728c8247fb"
+            },
+            {
+              "eval_doc_index": 55,
+              "stable_id": "hellaswag:ind=854",
+              "doc_sha256_canonical_json": "e8cb647967d3f28d1158dc7cfa07f1cc23e5521ebe096bbcc83434a33548c24c"
+            },
+            {
+              "eval_doc_index": 56,
+              "stable_id": "hellaswag:ind=855",
+              "doc_sha256_canonical_json": "13edf56699a2c14875a77d63be808f6b7cce12f48ba54d228559e7e15a489c53"
+            },
+            {
+              "eval_doc_index": 57,
+              "stable_id": "hellaswag:ind=858",
+              "doc_sha256_canonical_json": "db2f3183c3cae1716681b1388e75f6dd6a8345db14580610d9ed0a21a91ce17e"
+            },
+            {
+              "eval_doc_index": 58,
+              "stable_id": "hellaswag:ind=859",
+              "doc_sha256_canonical_json": "e8554382ee6b604bdd2c5cb38f132bd2c2985406c864cd0610abbab72bd2a5b8"
+            },
+            {
+              "eval_doc_index": 59,
+              "stable_id": "hellaswag:ind=875",
+              "doc_sha256_canonical_json": "3bb19dd32c0dd55e51b8dc0084368acd5c5f6ca98c9d5867cf2e0d1876fb1437"
+            },
+            {
+              "eval_doc_index": 60,
+              "stable_id": "hellaswag:ind=876",
+              "doc_sha256_canonical_json": "236dc811661473b4fad8bf38a0a54bcb5fe0d4af086919e29aef4160a184e26b"
+            },
+            {
+              "eval_doc_index": 61,
+              "stable_id": "hellaswag:ind=883",
+              "doc_sha256_canonical_json": "55f43a39842e28ac04679798be86d8894c0b612a213c32fdb3cce68a432e9860"
+            },
+            {
+              "eval_doc_index": 62,
+              "stable_id": "hellaswag:ind=884",
+              "doc_sha256_canonical_json": "86a5c6f7e5209852c08b169710658665dd758e992cbb899e5ebfc3cade88855a"
+            },
+            {
+              "eval_doc_index": 63,
+              "stable_id": "hellaswag:ind=886",
+              "doc_sha256_canonical_json": "2d297d7529be36771e4ca207a95b7a9d9cd858377a2ff588306780a9cd789185"
+            },
+            {
+              "eval_doc_index": 64,
+              "stable_id": "hellaswag:ind=887",
+              "doc_sha256_canonical_json": "b2a9be7414453da7b7d0883515024a8e2a758cd73ba59c278b1e7a526dfdba27"
+            },
+            {
+              "eval_doc_index": 65,
+              "stable_id": "hellaswag:ind=888",
+              "doc_sha256_canonical_json": "34007c6fa21e96907067df8a4852582be75dadc0ccd1134154e3398ac0bd9400"
+            },
+            {
+              "eval_doc_index": 66,
+              "stable_id": "hellaswag:ind=923",
+              "doc_sha256_canonical_json": "1ad45e4b82b0ce3038f7bfefe5d99defcc4ff2fba6d967c27f000b7129d6571c"
+            },
+            {
+              "eval_doc_index": 67,
+              "stable_id": "hellaswag:ind=924",
+              "doc_sha256_canonical_json": "add925658aabbd7e114540248c9007cb5f7c86f6c35725307b2d7a9bf41c037c"
+            },
+            {
+              "eval_doc_index": 68,
+              "stable_id": "hellaswag:ind=942",
+              "doc_sha256_canonical_json": "5a349e8748ecb6375b56e966abfb23efbec4082c58a981ea49c7d6953999e58d"
+            },
+            {
+              "eval_doc_index": 69,
+              "stable_id": "hellaswag:ind=950",
+              "doc_sha256_canonical_json": "f59a2e862622c000133e37ff78ec4d1bfb0166a2142e96306d7d1140d3c48066"
+            },
+            {
+              "eval_doc_index": 70,
+              "stable_id": "hellaswag:ind=951",
+              "doc_sha256_canonical_json": "d0da6ca5c3493e6ff5b0f43dd5ad650559e2f3f79871d3900e9bbb54ff4c63b0"
+            },
+            {
+              "eval_doc_index": 71,
+              "stable_id": "hellaswag:ind=989",
+              "doc_sha256_canonical_json": "d5330c0edb1bb1601f352dad82128025784331400d6d54f92b3b1e0bfa3337f3"
+            },
+            {
+              "eval_doc_index": 72,
+              "stable_id": "hellaswag:ind=992",
+              "doc_sha256_canonical_json": "bf8e353e92b37e15b7ae6af7dfdcabbf5decc3821215d1c8854eeb92d38282d3"
+            },
+            {
+              "eval_doc_index": 73,
+              "stable_id": "hellaswag:ind=1005",
+              "doc_sha256_canonical_json": "1d6bac19606b7bd51752e764b75eb9b06b401d5d660552ddd5aebb0fac975c28"
+            },
+            {
+              "eval_doc_index": 74,
+              "stable_id": "hellaswag:ind=1012",
+              "doc_sha256_canonical_json": "371a37493cd08df1ef70800b89367ac2253ef044c77a7a160e958b3f1e7a8c70"
+            },
+            {
+              "eval_doc_index": 75,
+              "stable_id": "hellaswag:ind=1045",
+              "doc_sha256_canonical_json": "25bb1a14ff8f70fb515408965ed5d1e36ae79eff0201bfd19bc153b10b1e25aa"
+            },
+            {
+              "eval_doc_index": 76,
+              "stable_id": "hellaswag:ind=1046",
+              "doc_sha256_canonical_json": "641e7140df65c40884feca26a43d7cfba433e1aaee6c071142ec809ea9ecb81a"
+            },
+            {
+              "eval_doc_index": 77,
+              "stable_id": "hellaswag:ind=1047",
+              "doc_sha256_canonical_json": "561aef09a64e9ff455876f5757165d43d8bed1089427da57123ba1d90593a558"
+            },
+            {
+              "eval_doc_index": 78,
+              "stable_id": "hellaswag:ind=1050",
+              "doc_sha256_canonical_json": "ee6f237220bfd631d6c0854571354e2d3fc0af48fb704d3903146ffbed5f1509"
+            },
+            {
+              "eval_doc_index": 79,
+              "stable_id": "hellaswag:ind=1052",
+              "doc_sha256_canonical_json": "4b6903e739e961f94e8b4504a9b2a6b4239c233a7450433234603a62e229e29b"
+            },
+            {
+              "eval_doc_index": 80,
+              "stable_id": "hellaswag:ind=1053",
+              "doc_sha256_canonical_json": "74ace591e77471c2c57b4f5da6bf8fa3403757be257e8ededc9832907381303b"
+            },
+            {
+              "eval_doc_index": 81,
+              "stable_id": "hellaswag:ind=1065",
+              "doc_sha256_canonical_json": "e75534e67a4047ea95ea193c1ba8402bbbdab92fbad3362672d2bc85d08bd22d"
+            },
+            {
+              "eval_doc_index": 82,
+              "stable_id": "hellaswag:ind=1066",
+              "doc_sha256_canonical_json": "12375f33ecc4effa0df32a41fdbebeba837b24ef0b6f33730eadf064ac264e2a"
+            },
+            {
+              "eval_doc_index": 83,
+              "stable_id": "hellaswag:ind=1067",
+              "doc_sha256_canonical_json": "731a8cc4b570b4c519fd62c4c0cea1847c7e861a2a9522e98d0198e10d5127ff"
+            },
+            {
+              "eval_doc_index": 84,
+              "stable_id": "hellaswag:ind=1084",
+              "doc_sha256_canonical_json": "1e9bd4ce90822a42a04f28969eed1c7db00c0b2fe348576294ab2370c7f0648c"
+            },
+            {
+              "eval_doc_index": 85,
+              "stable_id": "hellaswag:ind=1085",
+              "doc_sha256_canonical_json": "6a1c170145a69b2e4f74cd7a311387b25d2097d9ce3b47dbe5b00d28b870d814"
+            },
+            {
+              "eval_doc_index": 86,
+              "stable_id": "hellaswag:ind=1087",
+              "doc_sha256_canonical_json": "e483de278d29cfa2b8b7ae8b09a3f4e982472aa3bd86b8b143ea8218f3da9b6d"
+            },
+            {
+              "eval_doc_index": 87,
+              "stable_id": "hellaswag:ind=1112",
+              "doc_sha256_canonical_json": "422eb90baff4f4f6ea6c60592bfa4cd58f788f534585bbbfd504e2c1418e3922"
+            },
+            {
+              "eval_doc_index": 88,
+              "stable_id": "hellaswag:ind=1115",
+              "doc_sha256_canonical_json": "d95420ac2d0c4e315e85107332e560c104466dd9bca0c36b04c88e536a91ecff"
+            },
+            {
+              "eval_doc_index": 89,
+              "stable_id": "hellaswag:ind=1117",
+              "doc_sha256_canonical_json": "5c4b4a26aab359036db12c80f534c00bbc3cf83733096caabc7934aeb179bb0d"
+            },
+            {
+              "eval_doc_index": 90,
+              "stable_id": "hellaswag:ind=1119",
+              "doc_sha256_canonical_json": "e0cae6196f42bb9ce351961d15230f5547e55d9552650703711cb70bdb387c02"
+            },
+            {
+              "eval_doc_index": 91,
+              "stable_id": "hellaswag:ind=1140",
+              "doc_sha256_canonical_json": "ebba1881fb16666f55822f4934ee19278445347b795cda1331a1e1f298b2f958"
+            },
+            {
+              "eval_doc_index": 92,
+              "stable_id": "hellaswag:ind=1189",
+              "doc_sha256_canonical_json": "4729e8d1444180b5aabae1fb0f57b2ce83f8fc40d3e6524156d48bf21a5a0c46"
+            },
+            {
+              "eval_doc_index": 93,
+              "stable_id": "hellaswag:ind=1199",
+              "doc_sha256_canonical_json": "5728cf6032afba858b1fa8ed3476e01aaa217254a6796d6c55523312b4434e6a"
+            },
+            {
+              "eval_doc_index": 94,
+              "stable_id": "hellaswag:ind=1200",
+              "doc_sha256_canonical_json": "010defa0eb772381eddf72ff43cb8863443ad2d0ea8f65d49f938f97f08661ae"
+            },
+            {
+              "eval_doc_index": 95,
+              "stable_id": "hellaswag:ind=1201",
+              "doc_sha256_canonical_json": "dfe5ded86a7f56b6845d760e467a858155cb7d0eed894f9bc7daf62b8fbc7924"
+            },
+            {
+              "eval_doc_index": 96,
+              "stable_id": "hellaswag:ind=1203",
+              "doc_sha256_canonical_json": "59e0fd499d4880cd6fedb0548a7f752350ec17626f7f42a1720705792f5e7729"
+            },
+            {
+              "eval_doc_index": 97,
+              "stable_id": "hellaswag:ind=1204",
+              "doc_sha256_canonical_json": "29b6907204fd05af0d89eae0150d94917a7c5857bc11f4f5b53ac84af796160a"
+            },
+            {
+              "eval_doc_index": 98,
+              "stable_id": "hellaswag:ind=1248",
+              "doc_sha256_canonical_json": "90db876cb9a2ba73974259ed9cd86c583e9d62c36c5aab6ce05140ef383cfc24"
+            },
+            {
+              "eval_doc_index": 99,
+              "stable_id": "hellaswag:ind=1277",
+              "doc_sha256_canonical_json": "d2651c2bca7ab1155d21a950fc537a11c3c23be038abab9308ab04d39a758264"
+            },
+            {
+              "eval_doc_index": 100,
+              "stable_id": "hellaswag:ind=1283",
+              "doc_sha256_canonical_json": "2643fa5f165b05e945a8f3712142da78b5c5107144917383749ddbaf94a2c914"
+            },
+            {
+              "eval_doc_index": 101,
+              "stable_id": "hellaswag:ind=1301",
+              "doc_sha256_canonical_json": "3674583951a37bed22bff5e4140ae07d7661092eb8da5f6be45ebbe26ae60256"
+            },
+            {
+              "eval_doc_index": 102,
+              "stable_id": "hellaswag:ind=1321",
+              "doc_sha256_canonical_json": "023215ddf1f9a3747f94d21c4205eb23abc2a1d17f8de3b1b22f6e77d0cec7a6"
+            },
+            {
+              "eval_doc_index": 103,
+              "stable_id": "hellaswag:ind=1322",
+              "doc_sha256_canonical_json": "6d64ca7860c32707b6fefbdd91b7232d4eedf490ff3c7e1bf014466f182b4b4b"
+            },
+            {
+              "eval_doc_index": 104,
+              "stable_id": "hellaswag:ind=1486",
+              "doc_sha256_canonical_json": "8e4a7ae5cc10877d0fdff0122d5e79632344c02541c63bafa8a3a36357197743"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "manifest_sha256_without_self_hash": "00837cc4e6e514372c78262aa226eb1bd57c339f8050503bc46bdd3e68e65f56"
+}
