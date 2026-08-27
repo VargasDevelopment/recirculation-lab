@@ -363,6 +363,29 @@ def _timing(result: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _mmlu_categories(
+    baseline: dict[str, Any], recirculation: dict[str, Any]
+) -> list[dict[str, Any]]:
+    metric = PRIMARY_METRICS["mmlu_pro"]
+    categories = []
+    for task in sorted(baseline["harness_results"]):
+        if not task.startswith("mmlu_pro_"):
+            continue
+        ordinary = baseline["harness_results"][task]
+        recurrent = recirculation["harness_results"][task]
+        categories.append(
+            {
+                "category": task.removeprefix("mmlu_pro_"),
+                "sample_count": int(ordinary["sample_len"]),
+                "baseline_score": float(ordinary[metric]),
+                "recirculation_score": float(recurrent[metric]),
+                "absolute_delta_percentage_points": 100.0
+                * (float(recurrent[metric]) - float(ordinary[metric])),
+            }
+        )
+    return categories
+
+
 def summarize(manifest_path: Path, results_dir: Path) -> dict[str, Any]:
     manifest = _load(manifest_path)
     benchmark_summaries = {}
@@ -378,16 +401,35 @@ def summarize(manifest_path: Path, results_dir: Path) -> dict[str, Any]:
             metric: _summarize_metric(baseline, recirculation, metric)
             for metric in METRICS[benchmark]
         }
+        baseline_timing = _timing(baseline)
+        recirculation_timing = _timing(recirculation)
+        sample_count = verification["sample_count"]
         benchmark_summaries[benchmark] = {
             "primary_metric": primary_metric,
             "classification": metrics[primary_metric]["classification"],
             "metrics": metrics,
+            "per_category": (
+                _mmlu_categories(baseline, recirculation)
+                if benchmark == "mmlu_pro"
+                else None
+            ),
             "changed_examples_primary_metric": _changed_examples(
                 benchmark, baseline, recirculation, primary_metric
             ),
             "timing": {
-                "baseline": _timing(baseline),
-                "recirculation": _timing(recirculation),
+                "baseline": baseline_timing,
+                "recirculation": recirculation_timing,
+                "baseline_evaluator_seconds_per_example": baseline_timing[
+                    "evaluator_wall_seconds"
+                ]
+                / sample_count,
+                "recirculation_evaluator_seconds_per_example": (
+                    recirculation_timing["evaluator_wall_seconds"] / sample_count
+                ),
+                "evaluator_runtime_ratio_recirculation_over_baseline": (
+                    recirculation_timing["evaluator_wall_seconds"]
+                    / baseline_timing["evaluator_wall_seconds"]
+                ),
             },
             "verification": verification,
         }
@@ -402,10 +444,16 @@ def summarize(manifest_path: Path, results_dir: Path) -> dict[str, Any]:
     else:
         overall = "MIXED"
 
-    total_evaluator_seconds = sum(
-        lane["evaluator_wall_seconds"]
+    baseline_evaluator_seconds = sum(
+        benchmark["timing"]["baseline"]["evaluator_wall_seconds"]
         for benchmark in benchmark_summaries.values()
-        for lane in benchmark["timing"].values()
+    )
+    recirculation_evaluator_seconds = sum(
+        benchmark["timing"]["recirculation"]["evaluator_wall_seconds"]
+        for benchmark in benchmark_summaries.values()
+    )
+    total_evaluator_seconds = (
+        baseline_evaluator_seconds + recirculation_evaluator_seconds
     )
     return {
         "schema_version": 1,
@@ -425,9 +473,14 @@ def summarize(manifest_path: Path, results_dir: Path) -> dict[str, Any]:
         },
         "benchmarks": benchmark_summaries,
         "performance": {
+            "baseline_evaluator_wall_seconds": baseline_evaluator_seconds,
+            "recirculation_evaluator_wall_seconds": recirculation_evaluator_seconds,
             "sum_of_evaluator_wall_seconds_all_eight_lanes": total_evaluator_seconds,
             "sum_of_evaluator_wall_hours_all_eight_lanes": total_evaluator_seconds
             / 3600.0,
+            "aggregate_evaluator_runtime_ratio_recirculation_over_baseline": (
+                recirculation_evaluator_seconds / baseline_evaluator_seconds
+            ),
         },
         "statistical_scope": (
             "Paired tests and bootstraps describe the locked deterministic subsets. "
