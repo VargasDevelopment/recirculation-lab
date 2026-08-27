@@ -9,6 +9,7 @@ from recirculation.run_capability import _json_safe
 
 ROOT = Path(__file__).parents[1]
 SMOKE = ROOT / "results" / "capability_smoke"
+LOCKED = ROOT / "results" / "capability"
 
 
 def test_capability_token_hash_has_explicit_little_endian_u32_encoding() -> None:
@@ -62,3 +63,21 @@ def test_real_capability_verification_passes_every_required_check() -> None:
     assert verification["causal_unchanged_prefix_max_abs_logit_difference"] == 0
     assert verification["configured_destination_layer_zero_based"] == 4
     assert verification["configured_source_layer_zero_based"] == 11
+
+
+def test_locked_capability_comparison_is_complete_and_verified() -> None:
+    comparison = json.loads((LOCKED / "comparison.json").read_text())
+    assert comparison["overall_classification"] == "MIXED"
+    assert comparison["verification"]["all_benchmark_pairs_passed"] is True
+    expected = {
+        "mmlu_pro": (42, "IMPROVED"),
+        "gsm8k": (50, "REGRESSED"),
+        "ifeval": (50, "REGRESSED"),
+        "hellaswag": (100, "IMPROVED"),
+    }
+    for benchmark, (count, classification) in expected.items():
+        result = comparison["benchmarks"][benchmark]
+        primary = result["metrics"][result["primary_metric"]]
+        assert primary["paired_prompt_or_document_clusters"] == count
+        assert result["classification"] == classification
+        assert result["verification"]["passed"] is True

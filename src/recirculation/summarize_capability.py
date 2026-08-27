@@ -37,6 +37,13 @@ def _sha256_file(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def _canonical_json_sha256(value: Any) -> str:
+    encoded = json.dumps(
+        value, sort_keys=True, separators=(",", ":"), ensure_ascii=False
+    ).encode()
+    return hashlib.sha256(encoded).hexdigest()
+
+
 def _load(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text())
 
@@ -202,7 +209,14 @@ def _validate_pair(
     recirculation_samples = _samples(recirculation)
     if baseline_samples.keys() != recirculation_samples.keys():
         raise ValueError(f"{benchmark}: lane sample identities differ")
-    identity_fields = ["doc_hash", "prompt_hash", "target_hash", "arguments", "target"]
+    identity_fields = [
+        "doc",
+        "doc_hash",
+        "prompt_hash",
+        "target_hash",
+        "arguments",
+        "target",
+    ]
     for key in baseline_samples:
         for field in identity_fields:
             if baseline_samples[key].get(field) != recirculation_samples[key].get(
@@ -237,10 +251,24 @@ def _validate_pair(
         raise ValueError(
             f"{benchmark}: expected {expected_count} documents, found {len(unique_docs)}"
         )
+    expected_document_hashes = {
+        (task, int(sample["eval_doc_index"])): sample["doc_sha256_canonical_json"]
+        for task, task_metadata in manifest["benchmarks"][benchmark]["tasks"].items()
+        for sample in task_metadata["selected_samples"]
+    }
+    actual_document_hashes = {
+        (task, doc_id): _canonical_json_sha256(sample["doc"])
+        for (task, doc_id, _), sample in baseline_samples.items()
+    }
+    if actual_document_hashes != expected_document_hashes:
+        raise ValueError(
+            f"{benchmark}: evaluated documents differ from locked manifest"
+        )
     return {
         "passed": True,
         "sample_count": expected_count,
         "sample_identities_equal": True,
+        "locked_manifest_document_hashes_match": True,
         "prompt_hashes_equal": True,
         "rendered_arguments_equal": True,
         "model_call_token_hashes_equal": True,
@@ -343,6 +371,12 @@ def _changed_examples(
 
 def _timing(result: dict[str, Any]) -> dict[str, Any]:
     events = result["call_events"]
+    generation_events = [
+        event for event in events if event["operation"] == "generation"
+    ]
+    generated_tokens = sum(
+        event.get("generated_tokens", 0) for event in generation_events
+    )
     return {
         "model_load_seconds": result["model_load_seconds"],
         "evaluator_wall_seconds": result["evaluation_seconds"],
@@ -352,6 +386,10 @@ def _timing(result: dict[str, Any]) -> dict[str, Any]:
         "call_count": len(events),
         "mean_model_call_seconds": (
             sum(event["runtime_seconds"] for event in events) / len(events)
+        ),
+        "generated_tokens_total": generated_tokens,
+        "mean_generated_tokens_per_generation": (
+            generated_tokens / len(generation_events) if generation_events else None
         ),
         "peak_process_rss_bytes": result["verification"]["process_peak_rss_bytes"],
         "max_observed_mps_driver_allocated_bytes": result["verification"][
@@ -384,6 +422,32 @@ def _mmlu_categories(
             }
         )
     return categories
+
+
+def _generation_length_comparison(
+    baseline: dict[str, Any], recirculation: dict[str, Any]
+) -> dict[str, Any] | None:
+    ordinary = [
+        event["generated_tokens"]
+        for event in baseline["call_events"]
+        if event["operation"] == "generation"
+    ]
+    recurrent = [
+        event["generated_tokens"]
+        for event in recirculation["call_events"]
+        if event["operation"] == "generation"
+    ]
+    if not ordinary and not recurrent:
+        return None
+    if len(ordinary) != len(recurrent):
+        raise ValueError("paired generation-event counts differ")
+    return {
+        "paired_generations": len(ordinary),
+        "recirculation_longer": sum(b > a for a, b in zip(ordinary, recurrent)),
+        "recirculation_shorter": sum(b < a for a, b in zip(ordinary, recurrent)),
+        "equal_length": sum(b == a for a, b in zip(ordinary, recurrent)),
+        "net_generated_token_difference": sum(recurrent) - sum(ordinary),
+    }
 
 
 def summarize(manifest_path: Path, results_dir: Path) -> dict[str, Any]:
@@ -429,6 +493,9 @@ def summarize(manifest_path: Path, results_dir: Path) -> dict[str, Any]:
                 "evaluator_runtime_ratio_recirculation_over_baseline": (
                     recirculation_timing["evaluator_wall_seconds"]
                     / baseline_timing["evaluator_wall_seconds"]
+                ),
+                "paired_generation_length_comparison": (
+                    _generation_length_comparison(baseline, recirculation)
                 ),
             },
             "verification": verification,

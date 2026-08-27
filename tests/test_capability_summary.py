@@ -1,3 +1,4 @@
+import hashlib
 import json
 from pathlib import Path
 
@@ -21,6 +22,7 @@ def _result(condition: str, values: list[float]) -> dict:
                 "filter": "none",
                 "metrics": ["acc"],
                 "acc": value,
+                "doc": {"id": doc_id},
                 "doc_hash": f"doc-{doc_id}",
                 "prompt_hash": f"prompt-{doc_id}",
                 "target_hash": f"target-{doc_id}",
@@ -97,7 +99,28 @@ def test_pair_validation_rejects_prompt_mismatch(tmp_path: Path) -> None:
     manifest = {
         "phase": "locked",
         "harness": {"revision": "harness"},
-        "benchmarks": {"fixture": {"sample_count": 2}},
+        "benchmarks": {
+            "fixture": {
+                "sample_count": 2,
+                "tasks": {
+                    "fixture_task": {
+                        "selected_samples": [
+                            {
+                                "eval_doc_index": index,
+                                "doc_sha256_canonical_json": hashlib.sha256(
+                                    json.dumps(
+                                        {"id": index},
+                                        sort_keys=True,
+                                        separators=(",", ":"),
+                                    ).encode()
+                                ).hexdigest(),
+                            }
+                            for index in range(2)
+                        ]
+                    }
+                },
+            }
+        },
     }
     manifest_path.write_text(json.dumps(manifest))
     baseline = _result("baseline", [0, 1])
