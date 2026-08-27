@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark">
   <meta name="theme-color" content="#171816">
-  <meta name="description" content="A locked eight-book validation of fixed recirculation on frozen Gemma 3 1B PT: 13.503% lower perplexity.">
+  <meta name="description" content="Fixed recirculation on Gemma 3 1B: 13.503% lower locked PG-19 perplexity, followed by mixed downstream capability transfer on Gemma 3 1B IT.">
   <meta property="og:title" content="Recirculation // Confirmatory M3 Field Report">
-  <meta property="og:description" content="Eight unseen books. Same frozen Gemma 3 1B PT. 13.503% lower perplexity with fixed recirculation.">
+  <meta property="og:description" content="13.503% lower locked PG-19 perplexity; mixed transfer across MMLU-Pro, GSM8K, IFEval, and HellaSwag.">
   <meta property="og:image" content="https://vargasdevelopment.github.io/recirculation-lab/og.png">
   <meta property="og:image:alt" content="Pixel-art desert field report showing 13.503% lower perplexity on the confirmatory experiment.">
   <meta property="og:type" content="article">
@@ -384,8 +384,12 @@
     .book-table th, .book-table td { padding: 13px 12px; border-bottom: 2px solid var(--line); text-align: right; }
     .book-table th { color: var(--sand); font-size: .66rem; letter-spacing: .08em; text-transform: uppercase; }
     .book-table th:nth-child(2), .book-table td:nth-child(2) { text-align: left; }
+    .book-table.cap-table th:first-child, .book-table.cap-table td:first-child { text-align: left; }
+    .book-table.cap-table th:nth-child(2), .book-table.cap-table td:nth-child(2) { text-align: right; }
     .book-table tbody tr:last-child td { border-bottom: 0; }
     .book-table .gain { color: var(--lime); font-weight: 900; }
+    .book-table .loss { color: #ef8768; font-weight: 900; }
+    .book-table .flat { color: var(--muted); font-weight: 900; }
     .pattern-note { margin: 20px 0 0; padding: 20px 24px; border-left: 6px solid var(--rust); background: #121411; color: #c8bea5; font-family: ui-sans-serif, system-ui, sans-serif; }
 
     .mechanism {
@@ -569,7 +573,7 @@
 <body>
   <header class="rail">
     <div class="wrap">
-      <span>FIELD REPORT // RC-1B-PT // 2608.17981</span>
+      <span>FIELD REPORT // RC-1B-PT+IT // 2608.17981</span>
       <span class="rail-status"><a href="https://github.com/VargasDevelopment/recirculation-lab">VIEW SOURCE / REPRODUCE ON GITHUB</a></span>
     </div>
   </header>
@@ -751,9 +755,64 @@
       </div>
     </section>
 
-    <section class="section" aria-labelledby="caveat-title">
+    <section class="section" aria-labelledby="capability-title">
       <div class="section-head">
         <div class="section-index">07</div>
+        <div><h2 id="capability-title">The loop hits the road</h2><p class="section-sub">Locked Gemma 3 1B IT transfer // two signals, two regressions</p></div>
+      </div>
+
+      <p class="pattern-note"><strong>Capability status: MIXED.</strong> The exact PT-calibrated mechanism moved MMLU-Pro and normalized HellaSwag upward, but GSM8K and IFEval downward. Lower PG-19 perplexity did not transfer uniformly into useful-task accuracy.</p>
+
+      <div class="metrics" style="margin-top:20px">
+        <article class="panel metric"><span class="metric-label">MMLU-Pro</span><strong class="metric-value good">+2.38</strong><span class="metric-unit">POINTS // 42</span></article>
+        <article class="panel metric"><span class="metric-label">HellaSwag norm</span><strong class="metric-value good">+2.00</strong><span class="metric-unit">POINTS // 100</span></article>
+        <article class="panel metric"><span class="metric-label">GSM8K flexible</span><strong class="metric-value" style="color:#ef8768">−10.00</strong><span class="metric-unit">POINTS // 50</span></article>
+        <article class="panel metric"><span class="metric-label">IFEval strict</span><strong class="metric-value" style="color:#ef8768">−4.00</strong><span class="metric-unit">POINTS // 50</span></article>
+      </div>
+
+      <div class="panel table-wrap" style="margin-top:20px">
+        <table class="book-table cap-table">
+          <thead><tr><th>Locked primary metric</th><th>Baseline</th><th>RC</th><th>Delta</th><th>Flips + / −</th><th>Paired p</th><th>Call</th></tr></thead>
+          <tbody>
+            <tr><td>MMLU-Pro exact match</td><td>9.524%</td><td>11.905%</td><td class="gain">+2.381 pp</td><td>2 / 1</td><td>1.000</td><td class="gain">IMPROVED</td></tr>
+            <tr><td>GSM8K flexible exact match</td><td>40.000%</td><td>30.000%</td><td class="loss">−10.000 pp</td><td>3 / 8</td><td>0.227</td><td class="loss">REGRESSED</td></tr>
+            <tr><td>IFEval prompt strict</td><td>58.000%</td><td>54.000%</td><td class="loss">−4.000 pp</td><td>3 / 5</td><td>0.727</td><td class="loss">REGRESSED</td></tr>
+            <tr><td>HellaSwag normalized</td><td>41.000%</td><td>43.000%</td><td class="gain">+2.000 pp</td><td>6 / 4</td><td>0.754</td><td class="gain">IMPROVED</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="two-col" style="margin-top:20px">
+        <article class="panel ledger">
+          <h3>What changed</h3>
+          <dl>
+            <div class="ledger-row"><dt>MMLU</dt><dd>One gain was stricter answer formatting: baseline knew D but the extractor rejected bold D; recirculation emitted (D).</dd></div>
+            <div class="ledger-row"><dt>GSM8K</dt><dd>Three wrong→right flips were outweighed by eight right→wrong flips, including double-counting dozen prices.</dd></div>
+            <div class="ledger-row"><dt>IFEval</dt><dd>Extra text sometimes completed structure, but also added forbidden capitals, surplus answers, or a postamble.</dd></div>
+            <div class="ledger-row"><dt>HellaSwag</dt><dd>Normalized choice scoring gained two net items; raw accuracy stayed exactly 43% → 43%.</dd></div>
+          </dl>
+        </article>
+        <article class="panel ledger">
+          <h3>Capability shop cost</h3>
+          <dl>
+            <div class="ledger-row"><dt>Baseline</dt><dd>1,690.40 s evaluator time</dd></div>
+            <div class="ledger-row"><dt>Recirculation</dt><dd>6,111.64 s evaluator time</dd></div>
+            <div class="ledger-row"><dt>Combined</dt><dd>2 h 10 m 2 s // 3.62× lane ratio</dd></div>
+            <div class="ledger-row"><dt>Output length</dt><dd>Longer on 91 / 142 generative pairs; +5,868 tokens net</dd></div>
+            <div class="ledger-row"><dt>Verification</dt><dd>All prompt, token, config, score, frozen-weight, cache, and causal checks passed</dd></div>
+          </dl>
+        </article>
+      </div>
+
+      <details style="margin-top:20px">
+        <summary>Capability uncertainty // no clean transfer claim</summary>
+        <div class="detail-body"><p>Every paired-bootstrap interval includes zero and every exact paired p-value is at least 0.227. These fixed subsets are directional evidence, not full-benchmark estimates. The two positive primary movements are small; the 10-point GSM8K regression is the largest capability delta observed. Read the <a href="https://github.com/VargasDevelopment/recirculation-lab/blob/main/results/capability/REPORT.md">full paired report</a> or inspect the <a href="https://github.com/VargasDevelopment/recirculation-lab/blob/main/results/capability/comparison.json">machine-readable comparison</a>.</p></div>
+      </details>
+    </section>
+
+    <section class="section" aria-labelledby="caveat-title">
+      <div class="section-head">
+        <div class="section-index">08</div>
         <div><h2 id="caveat-title">Dust in the bearings</h2><p class="section-sub">What this result does and does not establish</p></div>
       </div>
 
@@ -778,8 +837,8 @@
         <div class="detail-body"><p>The paper does not pin software, model, tokenizer, data revisions, dtype, or device. It introduces the 1B ten-token ramp but does not explicitly state whether Table 1 includes it. The confirmatory whole-book bootstrap is 10.70%–16.12%, but these are sequential rather than randomly sampled books, so it is descriptive stability evidence—not population-level confidence.</p></div>
       </details>
       <details>
-        <summary>Perplexity is not downstream capability</summary>
-        <div class="detail-body"><p>This artifact establishes lower perplexity on the specified evaluations. It does not establish equivalent gains in reasoning, coding, instruction following, agentic task completion, or general model intelligence. The paper's near-zero generation-latency claim is also not tested here: this implementation measures serial prefill.</p></div>
+        <summary>Perplexity did not transfer cleanly</summary>
+        <div class="detail-body"><p>The PT artifact establishes lower perplexity on its specified evaluations—not an equivalent gain in intelligence. The new IT capability milestone is mixed: two small positive primary deltas coexist with GSM8K and IFEval regressions. It still does not establish broad gains in reasoning, coding, instruction following, agentic task completion, or general model intelligence. The paper's near-zero generation-latency claim is also not tested here: this implementation measures serial reference computation.</p></div>
       </details>
     </section>
 
@@ -788,7 +847,7 @@
   <footer>
     <div class="wrap footer-grid">
       <div><div class="footer-mark">RC//M3 field unit 2099</div><p class="footer-small">Built from committed result JSON. Primary sources: <a href="https://arxiv.org/abs/2608.17981">Mozer et al., arXiv:2608.17981v1</a> and <a href="https://gist.github.com/shoaibahmed/10702acc01cc5a169fdbc1719932438f">Shoaib Ahmed Siddiqui's author reference implementation</a>.</p></div>
-      <div><a href="https://github.com/VargasDevelopment/recirculation-lab">SOURCE / README</a> // <a href="https://github.com/VargasDevelopment/recirculation-lab/blob/main/results/validation_comparison.json">CONFIRMATORY JSON</a> // <a href="https://github.com/VargasDevelopment/recirculation-lab/blob/main/results/comparison.json">EXPLORATORY JSON</a></div>
+      <div><a href="https://github.com/VargasDevelopment/recirculation-lab">SOURCE / README</a> // <a href="https://github.com/VargasDevelopment/recirculation-lab/blob/main/results/capability/comparison.json">CAPABILITY JSON</a> // <a href="https://github.com/VargasDevelopment/recirculation-lab/blob/main/results/validation_comparison.json">CONFIRMATORY JSON</a> // <a href="https://github.com/VargasDevelopment/recirculation-lab/blob/main/results/comparison.json">EXPLORATORY JSON</a></div>
     </div>
   </footer>
 </body>

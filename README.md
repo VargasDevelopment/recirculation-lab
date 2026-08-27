@@ -1,9 +1,11 @@
 # Gemma 3 1B fixed-recirculation reproduction
 
 Independent Apple Silicon / PyTorch reproduction of fixed recirculation from
-[Mozer et al., *Recirculation*](https://arxiv.org/abs/2608.17981), evaluated with
-the frozen [`google/gemma-3-1b-pt`](https://huggingface.co/google/gemma-3-1b-pt)
-checkpoint.
+[Mozer et al., *Recirculation*](https://arxiv.org/abs/2608.17981). The core
+perplexity experiments use frozen
+[`google/gemma-3-1b-pt`](https://huggingface.co/google/gemma-3-1b-pt) weights; a
+separate locked capability-transfer milestone uses frozen
+[`google/gemma-3-1b-it`](https://huggingface.co/google/gemma-3-1b-it) weights.
 
 Normally, information moves through a transformer once from early layers to
 late layers. Fixed recirculation takes a residual representation from a deeper
@@ -11,8 +13,9 @@ layer, rescales it to match an earlier representation's magnitude, mixes the two
 and sends that state through the intervening layers one additional time. The
 weights never change; only the inference computation does.
 
-**Measured outcome:** perplexity on pinned PG-19 windows. This is not a claim of
-an equivalent improvement in general model quality or intelligence.
+**Measured outcomes:** perplexity on pinned PG-19 windows and accuracy on four
+small, locked downstream benchmark subsets. Neither is a percentage measure of
+general model quality or intelligence.
 
 ## Confirmatory outcome
 
@@ -65,6 +68,31 @@ Machine-readable artifacts:
 Browse the [HTML field report](https://vargasdevelopment.github.io/recirculation-lab/)
 for the visual methodology, verification evidence, and caveats.
 
+## Capability-transfer outcome (Gemma 3 1B IT)
+
+**MIXED.** With the same mechanism unchanged, two primary metrics moved up and
+two moved down. The confirmed perplexity reduction did not transfer uniformly
+into downstream task performance.
+
+| Locked primary metric | N | Baseline | Recirculation | Delta | Favorable / unfavorable flips | Classification |
+|---|---:|---:|---:|---:|---:|---|
+| MMLU-Pro exact match | 42 | 9.524% | 11.905% | +2.381 pp | 2 / 1 | IMPROVED |
+| GSM8K flexible exact match | 50 | 40.000% | 30.000% | −10.000 pp | 3 / 8 | REGRESSED |
+| IFEval prompt-level strict | 50 | 58.000% | 54.000% | −4.000 pp | 3 / 5 | REGRESSED |
+| HellaSwag normalized accuracy | 100 | 41.000% | 43.000% | +2.000 pp | 6 / 4 | IMPROVED |
+
+None of the paired deltas is conventionally statistically significant on these
+subsets. HellaSwag raw accuracy was unchanged at 43%; GSM8K strict exact match
+fell from 16% to 8%. The most informative behavioral pattern was increased
+verbosity: recirculation produced longer output on 91 of 142 generative
+examples. That sometimes repaired required formatting, but also introduced
+extra answers, forbidden capitalization, and arithmetic detours.
+
+See the [full capability report](results/capability/REPORT.md),
+[machine-readable comparison](results/capability/comparison.json), and
+[pre-outcome locked protocol](experiments/capability_locked_protocol.md). The
+original smoke artifacts remain separately labeled non-evidentiary.
+
 ### Per-book results
 
 | Record | Book | Baseline PPL | Recirculation PPL | Reduction | Improving windows |
@@ -110,6 +138,14 @@ ordered hashes, exactly 40,920 targets, frozen mechanism fields, matched softwar
 and checkpoint fields, and zero document/hash overlap with the exploratory
 manifest.
 
+The capability milestone changes only the checkpoint to
+`google/gemma-3-1b-it` at model/tokenizer revision
+`dcc83ea841ab6100d6b47a070329e1ba4cf78752` (weight SHA-256
+`3d4ef8d71c14db7e448a09ebe891cfb6bf32c57a9b44499ae0d1c098e48516b6`).
+It uses the native Gemma chat template and EleutherAI `lm-evaluation-harness`
+commit `dd417662e5bda6a247489ec28d2ff46a45d1c42c`; the mechanism and numerical
+backend remain unchanged.
+
 ## Fixed mechanism
 
 The public implementation is a compact adapter over the Apache-2.0 Transformers
@@ -153,15 +189,18 @@ The real-checkpoint verification additionally records:
   sliding-attention layers and 529 for full-attention layers
 - unchanged parameter version counters and no trainable parameters
 
-See [`results/verification.json`](results/verification.json) and the 25 tests in
-[`tests/`](tests/).
+See [`results/verification.json`](results/verification.json), the IT
+[`results/capability_verification.json`](results/capability_verification.json),
+and the 42 weight-free tests in [`tests/`](tests/).
 
 ## What this does not establish
 
-The current experiments do not establish equivalent improvements in reasoning,
-coding, instruction following, agentic task completion, or general model
-"intelligence." They establish lower perplexity on the specified evaluation
-windows. Downstream capability evaluation has not yet been run.
+The PT experiments establish lower perplexity only on their specified PG-19
+windows. The IT milestone measures four modest locked subsets and is mixed; it
+does not establish broad improvements in reasoning, coding, instruction
+following, agentic task completion, or general model "intelligence." In
+particular, a percentage reduction in perplexity is not an equivalent percentage
+increase in any downstream capability.
 
 ## Reproduce
 
@@ -196,6 +235,12 @@ uv run python -m recirculation.summarize_validation \
   --recirculation results/validation_recirculation.json \
   --manifest experiments/pg19_validation_books_2_9.json \
   --output results/validation_comparison.json
+
+# Gemma 3 1B IT preflight and complete locked capability suite.
+uv run python -m recirculation.verify_capability \
+  --smoke-dir results/capability_smoke \
+  --output results/capability_verification.json
+./scripts/run_locked_capability_suite.sh
 ```
 
 `HF_HUB_DISABLE_PROGRESS_BARS=1` may be prefixed to model commands for quiet
@@ -249,11 +294,11 @@ inside this project's `.venv`.
 
 ## Most interesting next experiment (not run)
 
-Run a locked zero-shot HellaSwag paired evaluation with the same frozen Gemma 3
-1B PT checkpoint and unchanged recirculation mechanism, scoring every answer
-choice by conditional log-likelihood and reporting both accuracy and per-item
-margin changes. This is the cleanest next test of whether the robust language-
-modeling gain transfers to a downstream commonsense-completion capability.
+Run the full HellaSwag validation split with the same frozen Gemma 3 1B IT
+configuration. Likelihood scoring avoids generative format effects, and the
+locked 100-item subset produced the cleanest positive capability direction
+(normalized accuracy 41% → 43%) while raw accuracy was unchanged. No parameter,
+prompt, or sample-dependent tuning should precede that run.
 
 ## Sources, licensing, and citation
 

@@ -141,7 +141,7 @@
       "should_decontaminate": false,
       "metadata": {
         "version": 3.1,
-        "config_source": "/Users/josephvargas/Documents/Projects/recirculation/.venv/lib/python3.12/site-packages/lm_eval/tasks/mmlu_pro/mmlu_pro_biology.yaml"
+        "config_source": "lm_eval/tasks/mmlu_pro/mmlu_pro_biology.yaml"
       }
     },
     "mmlu_pro_business": {
@@ -225,7 +225,7 @@
       "should_decontaminate": false,
       "metadata": {
         "version": 3.1,
-        "config_source": "/Users/josephvargas/Documents/Projects/recirculation/.venv/lib/python3.12/site-packages/lm_eval/tasks/mmlu_pro/mmlu_pro_business.yaml"
+        "config_source": "lm_eval/tasks/mmlu_pro/mmlu_pro_business.yaml"
       }
     },
     "mmlu_pro_chemistry": {
@@ -309,7 +309,7 @@
       "should_decontaminate": false,
       "metadata": {
         "version": 3.1,
-        "config_source": "/Users/josephvargas/Documents/Projects/recirculation/.venv/lib/python3.12/site-packages/lm_eval/tasks/mmlu_pro/mmlu_pro_chemistry.yaml"
+        "config_source": "lm_eval/tasks/mmlu_pro/mmlu_pro_chemistry.yaml"
       }
     },
     "mmlu_pro_computer_science": {
@@ -393,7 +393,7 @@
       "should_decontaminate": false,
       "metadata": {
         "version": 3.1,
-        "config_source": "/Users/josephvargas/Documents/Projects/recirculation/.venv/lib/python3.12/site-packages/lm_eval/tasks/mmlu_pro/mmlu_pro_computer_science.yaml"
+        "config_source": "lm_eval/tasks/mmlu_pro/mmlu_pro_computer_science.yaml"
       }
     },
     "mmlu_pro_economics": {
@@ -477,7 +477,7 @@
       "should_decontaminate": false,
       "metadata": {
         "version": 3.1,
-        "config_source": "/Users/josephvargas/Documents/Projects/recirculation/.venv/lib/python3.12/site-packages/lm_eval/tasks/mmlu_pro/mmlu_pro_economics.yaml"
+        "config_source": "lm_eval/tasks/mmlu_pro/mmlu_pro_economics.yaml"
       }
     }
   },

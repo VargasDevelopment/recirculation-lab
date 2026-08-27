@@ -1,7 +1,7 @@
 [project]
 name = "gemma-recirculation-reproduction"
-version = "0.1.0"
-description = "Reproducible fixed-recirculation experiments on frozen Gemma 3 1B PT"
+version = "0.2.0"
+description = "Reproducible fixed-recirculation experiments on frozen Gemma 3 1B PT and IT"
 readme = "README.md"
 license = "Apache-2.0"
 authors = [{ name = "Joseph Vargas" }]

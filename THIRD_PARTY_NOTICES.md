@@ -32,10 +32,12 @@ identical. Hashes and exact checks are in
 ## Gemma 3 weights
 
 No model weights, tokenizer files, or Hugging Face cache contents are included.
-Users download `google/gemma-3-1b-pt` directly after accepting Google's Gemma
-terms. The repository's Apache-2.0 license does not relicense Gemma.
+Users download `google/gemma-3-1b-pt` or `google/gemma-3-1b-it` directly after
+accepting Google's Gemma terms. The repository's Apache-2.0 license does not
+relicense Gemma.
 
 - Model page and terms gate: <https://huggingface.co/google/gemma-3-1b-pt>
+- Instruction-tuned model page: <https://huggingface.co/google/gemma-3-1b-it>
 
 ## PG-19 data
 

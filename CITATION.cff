@@ -8,8 +8,8 @@ authors:
 repository-code: "https://github.com/VargasDevelopment/recirculation-lab"
 url: "https://vargasdevelopment.github.io/recirculation-lab/"
 license: Apache-2.0
-version: 0.1.0
-date-released: 2026-08-25
+version: 0.2.0
+date-released: 2026-08-26
 preferred-citation:
   type: article
   title: "Recirculation"

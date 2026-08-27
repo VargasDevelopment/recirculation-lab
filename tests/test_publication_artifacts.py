@@ -39,6 +39,11 @@ def test_report_distinguishes_exploratory_and_confirmatory_runs() -> None:
         "13.676%",
         "8 of 10 windows improved",
         "VIEW SOURCE / REPRODUCE ON GITHUB",
+        "Capability status: MIXED",
+        "MMLU-Pro exact match",
+        "GSM8K flexible exact match",
+        "IFEval prompt strict",
+        "HellaSwag normalized",
     ]
     assert all(text in report for text in required)
     assert "Move to eight unseen PG-19 books" not in report
@@ -55,6 +60,7 @@ def test_report_public_links_are_release_ready() -> None:
         "https://gist.github.com/shoaibahmed/10702acc01cc5a169fdbc1719932438f",
         "https://github.com/VargasDevelopment/recirculation-lab/blob/main/results/validation_comparison.json",
         "https://github.com/VargasDevelopment/recirculation-lab/blob/main/results/comparison.json",
+        "https://github.com/VargasDevelopment/recirculation-lab/blob/main/results/capability/comparison.json",
     }
     assert required_links <= set(parser.links)
     assert (
@@ -74,3 +80,16 @@ def test_result_artifacts_remain_distinct_and_complete() -> None:
     assert confirmatory["consistency"]["books_improved"] == 8
     assert round(confirmatory["aggregate"]["percent_perplexity_reduction"], 3) == 13.503
     assert len(confirmatory["per_window"]) == 40
+
+
+def test_public_artifacts_contain_no_machine_specific_paths() -> None:
+    public_artifacts = [
+        *ROOT.glob("results/**/*.json"),
+        *ROOT.glob("experiments/**/*.json"),
+        ROOT / "report/index.html",
+        ROOT / "README.md",
+    ]
+    forbidden = ("/Users/", "Documents/Projects", ".venv/lib/")
+    for artifact in public_artifacts:
+        text = artifact.read_text()
+        assert not any(fragment in text for fragment in forbidden), artifact

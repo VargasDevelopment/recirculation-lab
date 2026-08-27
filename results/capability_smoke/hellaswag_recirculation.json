@@ -78,7 +78,7 @@
       "should_decontaminate": false,
       "metadata": {
         "version": 1.0,
-        "config_source": "/Users/josephvargas/Documents/Projects/recirculation/.venv/lib/python3.12/site-packages/lm_eval/tasks/hellaswag/hellaswag.yaml"
+        "config_source": "lm_eval/tasks/hellaswag/hellaswag.yaml"
       }
     }
   },

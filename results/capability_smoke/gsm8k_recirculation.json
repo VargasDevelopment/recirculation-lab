@@ -117,7 +117,7 @@
       "should_decontaminate": false,
       "metadata": {
         "version": 3.0,
-        "config_source": "/Users/josephvargas/Documents/Projects/recirculation/.venv/lib/python3.12/site-packages/lm_eval/tasks/gsm8k/gsm8k.yaml"
+        "config_source": "lm_eval/tasks/gsm8k/gsm8k.yaml"
       }
     }
   },
