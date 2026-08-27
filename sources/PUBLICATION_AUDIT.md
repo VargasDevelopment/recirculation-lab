@@ -4,7 +4,7 @@ Audit date: 2026-08-26
 
 ## Security and artifact boundary
 
-- Scanned the complete ten-commit public history (100 unique blobs) for common
+- Scanned every pre-release Git blob plus all release-candidate files for common
   Hugging Face, GitHub, OpenAI, AWS, and Slack token forms and private-key
   headers. No credential-shaped matches were found. Capability smoke artifacts
   added after the original release audit contained an absolute local harness
