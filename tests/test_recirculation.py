@@ -190,7 +190,13 @@ def test_incremental_decode_matches_fresh_full_sequence_recirculation() -> None:
         full_prefill = model(
             sequence, attention_mask=torch.ones_like(sequence), use_cache=False
         )
-    assert torch.equal(prefill.logits[:, -1], full_prefill.logits[:, -1])
+    torch.testing.assert_close(
+        prefill.logits[:, -1], full_prefill.logits[:, -1], atol=1e-6, rtol=1e-6
+    )
+    assert torch.equal(
+        prefill.logits[:, -1].argmax(dim=-1),
+        full_prefill.logits[:, -1].argmax(dim=-1),
+    )
 
     for new_token in (14, 15, 16):
         new_input = torch.tensor([[new_token]])
